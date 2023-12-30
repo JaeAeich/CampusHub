@@ -1,0 +1,15 @@
+openapi: '3.0.0'
+info:
+  title: 'CampusHub API'
+  version: '1.0.0'
+paths:
+  /hello:
+    get:
+      summary: 'Endpoint to say hello'
+      operationId: server.controller.hello
+      responses:
+        '200':
+          description: 'A successful response'
+          content:
+            application/json:
+              example: { 'message': 'Hello, CampusHub!' }
