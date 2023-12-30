@@ -20,7 +20,7 @@ tags:
     description: Operations related to notifications (Get, Get by ID)
 
 paths:
-  /api/register:
+  /register:
     post:
       summary: User registration.
       operationId: authentication.register_user
@@ -35,7 +35,7 @@ paths:
         '200':
           description: Successful registration.
 
-  /api/login:
+  /login:
     post:
       summary: User login.
       operationId: authentication.login_user
@@ -50,7 +50,7 @@ paths:
         '200':
           description: Successful login.
 
-  /api/forgot-password:
+  /forgot-password:
     post:
       summary: Password recovery.
       operationId: authentication.forgot_password
@@ -65,7 +65,7 @@ paths:
         '200':
           description: Password recovery initiated.
 
-  /api/services:
+  /services:
     get:
       summary: Get a list of available services.
       operationId: services.get_services
@@ -92,7 +92,7 @@ paths:
         '200':
           description: Service added successfully.
 
-  /api/services/{id}:
+  /services/{id}:
     get:
       summary: Get details of a specific service.
       operationId: services.get_service_by_id
@@ -148,7 +148,7 @@ paths:
         '200':
           description: Service deleted successfully.
 
-  /api/orders:
+  /orders:
     get:
       summary: Get order history for a user.
       operationId: order.get_order_history
@@ -175,7 +175,7 @@ paths:
         '200':
           description: Order placed successfully.
 
-  /api/orders/{id}:
+  /orders/{id}:
     get:
       summary: Get details of a specific order.
       operationId: order.get_order_by_id
@@ -211,7 +211,7 @@ paths:
         '200':
           description: Order canceled successfully.
 
-  /api/payments/initiate:
+  /payments/initiate:
     post:
       summary: Initiate a payment.
       operationId: payment.initiate_payment
@@ -226,7 +226,7 @@ paths:
         '200':
           description: Payment initiated successfully.
 
-  /api/payments/verify:
+  /payments/verify:
     post:
       summary: Verify payment status.
       operationId: payment.verify_payment
@@ -241,7 +241,7 @@ paths:
         '200':
           description: Payment status verified successfully.
 
-  /api/notifications:
+  /notifications:
     get:
       summary: Get notifications for a user.
       operationId: notifications.get_notifications
@@ -255,7 +255,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotificationList'
 
-  /api/notifications/{id}:
+  /notifications/{id}:
     get:
       summary: Get details of a specific notification.
       operationId: notifications.get_notification_by_id
