@@ -1,0 +1,362 @@
+openapi: 3.0.0
+info:
+  title: CampusHub
+  description: "API documentation for CampusHub"
+  version: 0.0.0
+
+servers:
+  - url: /campus_hub/v1
+
+tags:
+  - name: Authentication
+    description: Operations related to user authentication (Register, Login, Forgot Password)
+  - name: Services
+    description: Operations related to services (Get, Add, Update, Delete)
+  - name: Orders
+    description: Operations related to orders (Get History, Place Order, Cancel Order)
+  - name: Payments
+    description: Operations related to payments (Initiate Payment, Verify Payment)
+  - name: Notifications
+    description: Operations related to notifications (Get, Get by ID)
+
+paths:
+  /register:
+    post:
+      summary: User registration.
+      operationId: authentication.register_user
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          description: Successful registration.
+
+  /login:
+    post:
+      summary: User login.
+      operationId: authentication.login_user
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Successful login.
+
+  /forgot-password:
+    post:
+      summary: Password recovery.
+      operationId: authentication.forgot_password
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+      responses:
+        '200':
+          description: Password recovery initiated.
+
+  /services:
+    get:
+      summary: Get a list of available services.
+      operationId: services.get_services
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceList'
+    post:
+      summary: Add a new service.
+      operationId: services.add_service
+      tags:
+        - Services
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+      responses:
+        '200':
+          description: Service added successfully.
+
+  /services/{id}:
+    get:
+      summary: Get details of a specific service.
+      operationId: services.get_service_by_id
+      tags:
+        - Services
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Service ID.
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+    put:
+      summary: Update a service.
+      operationId: services.update_service
+      tags:
+        - Services
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Service ID.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+      responses:
+        '200':
+          description: Service updated successfully.
+    delete:
+      summary: Delete a service.
+      operationId: services.delete_service
+      tags:
+        - Services
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Service ID.
+      responses:
+        '200':
+          description: Service deleted successfully.
+
+  /orders:
+    get:
+      summary: Get order history for a user.
+      operationId: order.get_order_history
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+    post:
+      summary: Place a new order.
+      operationId: order.place_order
+      tags:
+        - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Order placed successfully.
+
+  /orders/{id}:
+    get:
+      summary: Get details of a specific order.
+      operationId: order.get_order_by_id
+      tags:
+        - Orders
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Order ID.
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    delete:
+      summary: Cancel an order.
+      operationId: order.cancel_order
+      tags:
+        - Orders
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Order ID.
+      responses:
+        '200':
+          description: Order canceled successfully.
+
+  /payments/initiate:
+    post:
+      summary: Initiate a payment.
+      operationId: payment.initiate_payment
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInitiation'
+      responses:
+        '200':
+          description: Payment initiated successfully.
+
+  /payments/verify:
+    post:
+      summary: Verify payment status.
+      operationId: payment.verify_payment
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentVerification'
+      responses:
+        '200':
+          description: Payment status verified successfully.
+
+  /notifications:
+    get:
+      summary: Get notifications for a user.
+      operationId: notifications.get_notifications
+      tags:
+        - Notifications
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationList'
+
+  /notifications/{id}:
+    get:
+      summary: Get details of a specific notification.
+      operationId: notifications.get_notification_by_id
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Notification ID.
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    UserLogin:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    ForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+
+    ServiceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Service'
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+
+    OrderList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Order'
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        serviceId:
+          type: integer
+        userId:
+          type: integer
+        status:
+          type: string
+
+    PaymentInitiation:
+      type: object
+      properties:
+        orderId:
+          type: integer
+        amount:
+          type: number
+
+    PaymentVerification:
+      type: object
+      properties:
+        orderId:
+          type: integer
+        transactionId:
+          type: string
+
+    NotificationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Notification'
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
