@@ -1,0 +1,31 @@
+name: Server CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+
+      - name: Install Backend Dependencies
+        run: |
+          pip install ruff
+
+      - name: Lint Backend Code
+        run: |
+          cd server
+          ruff check .
