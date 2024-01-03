@@ -30,6 +30,8 @@ module.exports = {
       'error',
       { devDependencies: false, optionalDependencies: false, peerDependencies: false },
     ],
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
   settings: {
     'import/resolver': {
