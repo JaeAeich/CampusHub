@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # MongoDB container
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+
+  # Server container
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    env:
+      DB_URL: mongodb://mongodb/campushub
+
+  # Client container
+  client:
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - server
