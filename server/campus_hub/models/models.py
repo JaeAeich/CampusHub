@@ -1,62 +1,79 @@
 """campus_hub schema models."""
 
 from typing import List, Tuple, Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
-class ServiceModel(BaseModel):
-
+class Service(BaseModel):
     """Pydantic model representing a service. A service represents
     a category of shops that can be offered by a campus, like food,
     laundry, etc.
 
     Attributes:
-        service_id (str): A unique identifier for the service.
-        service_name (str): The name of the service.
-        pics (str): Pictures or image references related to the service.
-        service_cat (List[str]): Categories associated with the service.
-        description (str): A description of the service.
+        service_id: A unique identifier for the service.
+        service_name: The name of the service.
+        pics: Pictures or image references related to the service.
+        service_category: Categories associated with the service.
+        description: A description of the service.
     """
 
     service_id: str
     service_name: str
     pics: str
-    service_cat: List[str]
+    service_category: List[str]
     description: str
 
 
-class StoreModel(BaseModel):
+class Store(BaseModel):
     """
     Pydantic model representing a store. A store represents a shop
     that is associated with a service. For example, a store can be
     a restaurant that offers food service.
 
     Attributes:
-        store_id (str): Unique identifier for the store.
-        seller_id (str): Identifier for the seller associated with the store.
-        service_id (str): Identifier for the service related to the store.
-        name (str): Name of the store.
-        service_cat (List[str]): Categories offered by this store specifically.
-        store_pic (str): Picture or image reference of the store.
-        descr (str): Description of the store.
-        prod (List[str]): List of product IDs associated with the store.
-        location (Tuple[float, float]): Coordinates representing the location of the store.
-        stripe_public_key (str): Store's unique stripe key that can be published.
+        store_id: Unique identifier for the store.
+        seller_id: Identifier for the seller associated with the store.
+        service_id: Identifier for the service related to the store.
+        name: Name of the store.
+        service_category: Categories offered by this store specifically.
+        store_pic: Picture or image reference of the store.
+        description: Description of the store.
+        product_ids: List of product IDs associated with the store.
+        location: Coordinates representing the location of the store.
+        stripe_public_key: Store's unique stripe key that can be published.
     """
 
     store_id: str
     seller_id: str
     service_id: str
     name: str
-    service_cat: List[str]
+    service_category: List[str]
     store_pic: str
     descr: str
-    prod: List[str]
+    product_ids: List[str]
     location: Tuple[float, float]
     stripe_public_key: str
 
+    @validator(
+        "store_id",
+        "seller_id",
+        "service_id",
+        "stripe_public_key",
+        pre=True,
+        always=True,
+    )
+    def validate_required_fields(cls, value):
+        """
+        Validator to ensure that all required fields (IDs and stripe_public_key) are always present.
+        """
+        if not value:
+            raise ValueError(
+                "store_id, seller_id, service_id, stripe_public_key are required and cannot be empty for store."
+            )
+        return value
 
-class ProductModel(BaseModel):
+
+class Product(BaseModel):
     """
     Pydantic model representing a product. A product represents a
     product that is associated with a store. For example, a product
