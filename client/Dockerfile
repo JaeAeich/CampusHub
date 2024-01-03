@@ -1,6 +1,4 @@
-# Use a lightweight Node version
-FROM node:16-alpine
-
+FROM node:18-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -17,9 +15,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Expose the port on which your application will run
-EXPOSE 8082
-
 # Command to run the application
+# TODO: vite preview is for development only, change to vite build for production
 CMD ["npm", "run", "preview"]
 
