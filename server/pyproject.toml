@@ -14,6 +14,7 @@ flask = "2.2.5"
 swagger-ui-bundle = "0.0.6"
 werkzeug = ">=2.2.2,<3.0.0"
 typing = "3.7.4.1"
+pydantic = "^2.5.3"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.9"
