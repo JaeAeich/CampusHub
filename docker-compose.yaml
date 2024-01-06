@@ -19,8 +19,8 @@ services:
     restart: unless-stopped
     depends_on:
       - mongodb
-    env:
-      DB_URL: mongodb://mongodb/campushub
+    environment:
+      DB_URL: mongodb://mongodb:27017/campushub  
 
   # Client container
   client:
