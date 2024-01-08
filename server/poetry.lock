@@ -408,6 +408,17 @@ files = [
 ]
 
 [[package]]
+name = "mongo-types"
+version = "0.15.1"
+description = "Type stubs for mongoengine w/ basic support for bson and pymongo"
+optional = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "mongo-types-0.15.1.tar.gz", hash = "sha256:0a9deeb7733ea7da5db3711d92e22d93556b522f860bbff82e5df44c53bd06a9"},
+    {file = "mongo_types-0.15.1-py3-none-any.whl", hash = "sha256:9417ae5b9a759c09630b5ec7d66904cc333c2d2fcfe75e2760a332ed5e267309"},
+]
+
+[[package]]
 name = "mypy"
 version = "1.8.0"
 description = "Optional static typing for Python"
@@ -853,4 +864,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "e140fba36fa5804409c1b648c654b38b7d6a72b18bb81ddfa94b7ebe40db9900"
+content-hash = "5b4da93f121f5aca0a4c097036e8baef17bca38327b75b398bf95c411921acc1"
