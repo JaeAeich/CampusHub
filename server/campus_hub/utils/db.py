@@ -7,10 +7,10 @@ class DBConnector:
         """
         Initializes the DBConnector object and establishes a connection to MongoDB using the provided environment variables.
         """
-        self.username: str = os.environ.get("MONGO_USERNAME")
-        self.password: str = os.environ.get("MONGO_PASSWORD")
-        self.db_name: str = os.environ.get("MONGO_DB_NAME")
-        self.url: str = os.environ.get("MONGO_URL")
+        self.username: str = os.environ.get("MONGO_USERNAME", "root")
+        self.password: str = os.environ.get("MONGO_PASSWORD", "password")
+        self.db_name: str = os.environ.get("MONGO_DB_NAME", "campus_hub")
+        self.url: str = os.environ.get("MONGO_URL", "mongodb://localhost:27017/")
 
         self.client: MongoClient = MongoClient(
             self.url, username=self.username, password=self.password
