@@ -19,9 +19,9 @@ class Service(BaseModel):
     service_id: str
     store_ids: List[str]
     service_name: str
-    service_description: str
+    service_description: Optional[str]
     service_images: List[str]
-    service_categories: Optional[List[str]] = None
+    service_categories: Optional[List[str]]
 
     @validator(
         "service_id",
@@ -78,30 +78,32 @@ class Store(BaseModel):
     store_id: str
     store_name: str
     store_images: List[str]
-    store_description: str
+    store_description: Optional[str]
     store_phonenumber: float  # added this field
     store_email: EmailStr  # added this field
-    store_categories: Optional[List[str]] = None
-    customer_order_ids: Optional[List[str]] = None  # added this field
-    product_ids: List[str]
+    store_categories: Optional[List[str]] # is it fine?
+    customer_order_ids: Optional[List[str]]  # added this field
+    product_ids: Optional[List[str]]
     seller_id: str
     service_id: str
     coordinates: Tuple[float, float]
     store_address: str
     stripe_public_key: str
+    timings: Optional[Tuple[float, float]]
+    overall_rating: Optional[float]
 
     @validator(
         "store_id",
         "seller_id",
         "service_id",
+        "store_images",
         "store_phonenumber",
         "store_email",
         "store_name",
-        "store_categories",
         "coordinates",
         "store_address",
         "stripe_public_key",
-        "customer_order_ids",
+        
         pre=True,
         always=True,
     )
@@ -114,13 +116,11 @@ class Store(BaseModel):
             "seller_id",
             "service_id",
             "store_name",
-            "store_categories",
             "coordinates",
             "store_address",
             "stripe_public_key",
             "store_phonenumber",
-            "store_email",
-            "customer_order_ids",
+            "store_email", "store images"
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
@@ -152,21 +152,22 @@ class Product(BaseModel):
     product_id: str
     product_categories: List[
         str
-    ]  # Will retrieving products from a specific category be easy, if we use a list?
+    ]  
     product_name: str
+    service_id: str
     store_id: str
-    product_image: str
+    product_image: Optional[str]
     product_cost: float
-    product_discount: float
-    product_description: str
+    product_description: Optional[str]
     stock: float
-    product_specifications: Dict
+    product_specifications: Optional[Dict]
 
     @validator(
         "product_id",
         "product_categories",
         "product_name",
-        "store_id",
+        "store_id", 
+        "service_id",
         "product_cost",
         "stock",
         pre=True,
@@ -180,9 +181,10 @@ class Product(BaseModel):
             "product_id",
             "product_categories",
             "product_name",
-            "store_id",
+            "store_id", 
+            "service_id",
             "product_cost",
-            "stock",
+            "stock"
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
@@ -204,18 +206,18 @@ class Review(BaseModel):
         rating: Rating given in the review.
         review_images: Image references in the review.
     """
-
+    comment_headline = str
     comment: str  # This being empty is fine right? What if users are too busy to comment, but only to give rate.
     user_id: str
     rating: float
-    review_images: List[str]
+    review_images: Optional[List[str]]
 
-    @validator("user_id", "rating", pre=True, always=True)
+    @validator("user_id", "rating", "comment_headline", "comment", pre=True, always=True)
     def validate_required_fields(cls, value):
         """
         Validator to ensure that required fields (user_id, rating) are always present.
         """
-        required_fields = ["user_id", "rating"]
+        required_fields = ["user_id", "rating", "comment_headline", "comment"]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
         if missing_fields:
@@ -234,16 +236,16 @@ class Reviews(BaseModel):
         product_id: Identifier for the product associated with the reviews.
         reviews: List of reviews.
     """
-
+    store_id: str
     product_id: str
-    reviews: Optional[List[Review]] = None
+    reviews: List[Review]
 
-    @validator("product_id", "reviews", pre=True, always=True)
+    @validator("product_id", "reviews", "store_id", pre=True, always=True)
     def validate_required_fields(cls, value):
         """
         Validator to ensure that required fields (product_id, reviews) are always present.
         """
-        required_fields = ["product_id", "reviews"]
+        required_fields = ["product_id", "reviews", "store_id"]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
         if missing_fields:
@@ -266,7 +268,7 @@ class CartItem(BaseModel):
 
     product_id: str
     quantity: float
-    wishlisted_price: float
+    wishlisted_price: Optional[float]
 
     @validator("product_id", "quantity", pre=True, always=True)
     def validate_required_fields(cls, value):
@@ -284,7 +286,7 @@ class CartItem(BaseModel):
         return value
 
 
-class Carts(BaseModel):
+class Cart(BaseModel):
     """
     Pydantic model representing a collection of carts.
 
@@ -293,22 +295,21 @@ class Carts(BaseModel):
         carts: List of carts.
     """
 
-    user_id: str
-    carts: Optional[List[str]] = None
+    cart_id: str
+    carts: Optional[List[str]] 
 
     @validator(
-        "user_id",
-        "carts",
+        "cart_id",
         pre=True,
         always=True,
     )
     def validate_user_id(cls, value):
         """
-        Validator to ensure that user_id, carts is not empty.
+        Validator to ensure that carts is not empty.
         """
         if not value:
             raise ValueError(
-                "user_id and carts is required and cannot be empty for carts."
+                "cart_id is required and cannot be empty for carts."
             )
         return value
 
@@ -331,17 +332,20 @@ class User(BaseModel):
     user_name: str
     user_phone_number: float
     user_email: EmailStr
-    order_ids: Optional[List[str]] = None
-    user_image: str
+    user_gender: str
+    order_ids: Optional[List[str]] 
+    user_image: Optional[str]
     address: str
+    cart_id: str
+    wishlist_cart_id: str
 
     @validator(
         "user_id",
         "user_name",
         "user_phone_number",
         "user_email",
-        "address",
-        "order_ids",
+        "gender",
+        "address", "cart_id", "wishlist_cart_id",
         pre=True,
         always=True,
     )
@@ -351,11 +355,11 @@ class User(BaseModel):
         """
         required_fields = [
             "user_id",
-            "user_name",
-            "user_phone_number",
-            "user_email",
-            "address",
-            "order_ids",
+        "user_name",
+        "user_phone_number",
+        "user_email",
+        "gender",
+        "address", "cart_id", "wishlist_cart_id"
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
@@ -379,15 +383,17 @@ class Seller(User):
     seller_name: str
     seller_phone_number: float
     seller_email: EmailStr
-    seller_image: str
+    gender: str
+    order_ids: List[str]
+    seller_image: Optional[str]
     address: str
     seller_id: str
-    store_ids: Optional[List[str]] = None
+    store_ids: List[str]
 
     @validator(
         "seller_name",
         "seller_phone_number",
-        "seller_email",
+        "seller_email", "gender", "order_ids", "address",
         "seller_id",
         "store_ids",
         pre=True,
@@ -399,10 +405,10 @@ class Seller(User):
         """
         required_fields = [
             "seller_name",
-            "seller_phone_number",
-            "seller_email",
-            "seller_id",
-            "store_ids",
+        "seller_phone_number",
+        "seller_email", "gender", "order_ids", "address",
+        "seller_id",
+        "store_ids"
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
@@ -432,8 +438,10 @@ class Order(BaseModel):
 
     order_id: str
     user_id: str
+    email_id: str
     product_list: List[CartItem]
     store_id: str
+    store_name: str
     order_status: str
     amount_paid: float
     transaction_id: str
@@ -443,8 +451,8 @@ class Order(BaseModel):
     @validator(
         "order_id",
         "user_id",
-        "product_list",
-        "store_id",
+        "product_list", "email_id"
+        "store_id", "store_name",
         "order_status",
         "amount_paid",
         "transaction_id",
@@ -459,14 +467,14 @@ class Order(BaseModel):
         """
         required_fields = [
             "order_id",
-            "user_id",
-            "product_list",
-            "store_id",
-            "order_status",
-            "amount_paid",
-            "transaction_id",
-            "delivery_address",
-            "seller_id",
+        "user_id",
+        "product_list", "email_id"
+        "store_id", "store_name",
+        "order_status",
+        "amount_paid",
+        "transaction_id",
+        "delivery_address",
+        "seller_id"
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
@@ -527,6 +535,80 @@ class Payment(BaseModel):
             "currency",
             "upi_id",
             "payment_status",
+        ]
+        missing_fields = [field for field in required_fields if not value.get(field)]
+
+        if missing_fields:
+            raise ValueError(
+                f"The following fields are required and cannot be empty for payment: {', '.join(missing_fields)}"
+            )
+
+        return value
+
+class Offers(BaseModel):
+    """
+    Pydantic model representing a payment.
+
+    Attributes:
+        product_ids: product id of the product
+        store_id: store_id of the product
+        discount: discount amount for the product
+        expiration_time: expiration date of the discount
+        offer_id: offer id for the product
+    """
+
+    product_id: str
+    store_id: str
+    discount: float
+    expiration_time: float
+    offer_id: str
+
+    @validator(
+        "product_id", "store_id", "discount", "expiration_time", "offer_id",
+        pre=True,
+        always=True,
+    )
+    def validate_required_fields(cls, value):
+        """
+        Validator to ensure that required fields (transaction_id, payment_mode, amount, description, source, currency, upi_id, payment_status) are always present.
+        """
+        required_fields = [
+            "product_id", "store_id", "discount", "expiration_time", "offer_id"
+        ]
+        missing_fields = [field for field in required_fields if not value.get(field)]
+
+        if missing_fields:
+            raise ValueError(
+                f"The following fields are required and cannot be empty for payment: {', '.join(missing_fields)}"
+            )
+
+        return value
+
+class Notification(BaseModel):
+    """
+    Pydantic model representing a payment.
+
+    Attributes:
+        recipient_id: The id of the seller/buyer
+        message: The message to be sent 
+        seen_status: Seen status
+    """
+
+    recipient_id: str
+    message: str
+    seen_status: Optional[str]
+
+    @validator(
+        "recipient_id", "message",
+        pre=True,
+        always=True,
+    )
+    def validate_required_fields(cls, value):
+        """
+        Validator to ensure that required fields (transaction_id, payment_mode, amount, description, source, currency, upi_id, payment_status) are always present.
+        """
+        required_fields = [
+            "recipient_id", "message"
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
