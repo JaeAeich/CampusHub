@@ -1,0 +1,5 @@
+# ignore mongo data
+data/
+
+# ignore env file
+*.env
