@@ -1,6 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel, validator
 
+
 class Review(BaseModel):
     """
     Pydantic model representing a review.
@@ -12,8 +13,9 @@ class Review(BaseModel):
         rating: Rating given in the review.
         review_images: Image references in the review.
     """
+
     comment_headline = str
-    comment: Optional[str]  
+    comment: Optional[str]
     user_id: str
     rating: float
     review_images: List[str]
@@ -43,6 +45,7 @@ class Reviews(BaseModel):
         product_id: Identifier for the product associated with the reviews.
         reviews: List of reviews.
     """
+
     store_id: str
     product_id: str
     reviews: List[Review]
@@ -61,4 +64,3 @@ class Reviews(BaseModel):
             )
 
         return value
-

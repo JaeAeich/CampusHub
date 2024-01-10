@@ -1,6 +1,7 @@
 from pydantic import BaseModel, validator
 from datetime import timedelta
 
+
 class Offers(BaseModel):
     """
     Pydantic model representing a payment.
@@ -20,7 +21,11 @@ class Offers(BaseModel):
     offer_id: str
 
     @validator(
-        "product_id", "store_id", "discount", "validity_duration", "offer_id",
+        "product_id",
+        "store_id",
+        "discount",
+        "validity_duration",
+        "offer_id",
         pre=True,
         always=True,
     )
@@ -29,7 +34,11 @@ class Offers(BaseModel):
         Validator to ensure that required fields (product_id, store_id, discount, validity_duration, offer_id) are always present.
         """
         required_fields = [
-            "product_id", "store_id", "discount", "validity_duration", "offer_id"
+            "product_id",
+            "store_id",
+            "discount",
+            "validity_duration",
+            "offer_id",
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
@@ -39,6 +48,3 @@ class Offers(BaseModel):
             )
 
         return value
-
-
-

@@ -1,5 +1,8 @@
-from typing import List, Optional, Union
+from typing import List, Optional, Literal
 from pydantic import BaseModel, validator, EmailStr
+from pydantic_extra_types.phone_numbers import PhoneNumber
+
+
 class Seller(BaseModel):
     """
     Pydantic model representing a seller. A seller is an individual or entity
@@ -18,9 +21,9 @@ class Seller(BaseModel):
     """
 
     seller_name: str
-    seller_phone_number: str
+    seller_phone_number: PhoneNumber
     seller_email: EmailStr
-    seller_gender: Union['Male', 'Female', 'Other']
+    seller_gender: Literal["Male", "Female", "Other"]
     order_ids: List[str]
     seller_image: Optional[str]
     seller_address: str
@@ -30,7 +33,10 @@ class Seller(BaseModel):
     @validator(
         "seller_name",
         "seller_phone_number",
-        "seller_email", "seller_gender", "order_ids", "seller_address",
+        "seller_email",
+        "seller_gender",
+        "order_ids",
+        "seller_address",
         "seller_id",
         "store_ids",
         pre=True,
@@ -43,9 +49,12 @@ class Seller(BaseModel):
         required_fields = [
             "seller_name",
             "seller_phone_number",
-            "seller_email", "seller_gender", "order_ids", "seller_address",
+            "seller_email",
+            "seller_gender",
+            "order_ids",
+            "seller_address",
             "seller_id",
-            "store_ids"
+            "store_ids",
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 

@@ -1,5 +1,7 @@
 from typing import List, Optional, Tuple
 from pydantic import BaseModel, validator, EmailStr
+from pydantic_extra_types.phone_numbers import PhoneNumber
+
 
 class Store(BaseModel):
     """
@@ -26,10 +28,10 @@ class Store(BaseModel):
     store_name: str
     store_images: List[str]
     store_description: Optional[str]
-    store_phone_number: str 
-    store_email: EmailStr 
+    store_phone_number: PhoneNumber
+    store_email: EmailStr
     store_categories: List[str]
-    customer_order_ids:List[str] 
+    customer_order_ids: List[str]
     product_ids: List[str]
     seller_id: str
     service_id: str
@@ -45,12 +47,14 @@ class Store(BaseModel):
         "service_id",
         "store_images",
         "store_phone_number",
-        "store_email","store_categories",
-        "store_name", "customer_order_ids",
+        "store_email",
+        "store_categories",
+        "store_name",
+        "customer_order_ids",
         "coordinates",
         "store_address",
-        "stripe_public_key", "product_ids",
-        
+        "stripe_public_key",
+        "product_ids",
         pre=True,
         always=True,
     )
@@ -60,15 +64,18 @@ class Store(BaseModel):
         """
         required_fields = [
             "store_id",
-        "seller_id",
-        "service_id",
-        "store_images",
-        "store_phone_number",
-        "store_email","store_categories",
-        "store_name", "customer_order_ids",
-        "coordinates",
-        "store_address",
-        "stripe_public_key", "product_ids"
+            "seller_id",
+            "service_id",
+            "store_images",
+            "store_phone_number",
+            "store_email",
+            "store_categories",
+            "store_name",
+            "customer_order_ids",
+            "coordinates",
+            "store_address",
+            "stripe_public_key",
+            "product_ids",
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 

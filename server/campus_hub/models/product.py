@@ -1,5 +1,7 @@
 from typing import List, Dict, Optional
-from pydantic import BaseModel, validator, EmailStr
+from pydantic import BaseModel, validator
+
+
 class Product(BaseModel):
     """
     Pydantic model representing a product.
@@ -14,44 +16,44 @@ class Product(BaseModel):
         product_cost: Cost of the product.
         product_description: Description of the product.
         product_discount: Discount for the product.
-        stock: Available quantity of the product.
+        stocks: Available quantity of the product.
         product_specifications: Dictionary of product specifications.
     """
 
     product_id: str
-    product_categories: List[str]  
+    product_categories: List[str]
     product_name: str
     service_id: str
     store_id: str
     product_image: List[str]
     product_cost: float
     product_description: Optional[str]
-    stock: int
+    stocks: int
     product_specifications: Optional[Dict]
 
     @validator(
         "product_id",
         "product_categories",
         "product_name",
-        "store_id", 
+        "store_id",
         "service_id",
         "product_cost",
-        "stock",
+        "stocks",
         pre=True,
         always=True,
     )
     def validate_required_fields(cls, value):
         """
-        Validator to ensure that all required fields (product_id, product_categories, product_name, store_id, product_cost, stock) are always present.
+        Validator to ensure that all required fields (product_id, product_categories, product_name, store_id, product_cost, stocks) are always present.
         """
         required_fields = [
             "product_id",
             "product_categories",
             "product_name",
-            "store_id", 
+            "store_id",
             "service_id",
             "product_cost",
-            "stock"
+            "stocks",
         ]
         missing_fields = [field for field in required_fields if not value.get(field)]
 

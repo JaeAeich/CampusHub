@@ -1,13 +1,14 @@
 from typing import Optional
 from pydantic import BaseModel, validator
 
+
 class Notification(BaseModel):
     """
     Pydantic model representing a payment.
 
     Attributes:
         recipient_id: The id of the seller/buyer
-        message: The message to be sent 
+        message: The message to be sent
         seen_status: Seen status
     """
 
@@ -16,7 +17,8 @@ class Notification(BaseModel):
     seen_status: Optional[bool]
 
     @validator(
-        "recipient_id", "message",
+        "recipient_id",
+        "message",
         pre=True,
         always=True,
     )
@@ -24,9 +26,7 @@ class Notification(BaseModel):
         """
         Validator to ensure that required fields (recipient_id, message) are always present.
         """
-        required_fields = [
-            "recipient_id", "message"
-        ]
+        required_fields = ["recipient_id", "message"]
         missing_fields = [field for field in required_fields if not value.get(field)]
 
         if missing_fields:
