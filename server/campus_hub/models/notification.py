@@ -1,4 +1,3 @@
-from typing import Optional
 from pydantic import BaseModel, validator
 
 
@@ -14,7 +13,7 @@ class Notification(BaseModel):
 
     recipient_id: str
     message: str
-    seen_status: Optional[bool]
+    seen_status: bool = False
 
     @validator(
         "recipient_id",

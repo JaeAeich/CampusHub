@@ -7,7 +7,7 @@ class Review(BaseModel):
     Pydantic model representing a review.
 
     Attributes:
-    comment_headline: Headline of comment
+        comment_headline: Headline of comment
         comment: Comment body.
         user_id: User identifier.
         rating: Rating given in the review.

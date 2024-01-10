@@ -28,9 +28,9 @@ class Store(BaseModel):
     store_name: str
     store_images: List[str]
     store_description: Optional[str]
+    store_categories: List[str]
     store_phone_number: PhoneNumber
     store_email: EmailStr
-    store_categories: List[str]
     customer_order_ids: List[str]
     product_ids: List[str]
     seller_id: str

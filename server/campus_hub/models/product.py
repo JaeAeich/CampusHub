@@ -15,7 +15,6 @@ class Product(BaseModel):
         product_image: Image reference of the product.
         product_cost: Cost of the product.
         product_description: Description of the product.
-        product_discount: Discount for the product.
         stocks: Available quantity of the product.
         product_specifications: Dictionary of product specifications.
     """
@@ -23,8 +22,8 @@ class Product(BaseModel):
     product_id: str
     product_categories: List[str]
     product_name: str
-    service_id: str
     store_id: str
+    service_id: str
     product_image: List[str]
     product_cost: float
     product_description: Optional[str]

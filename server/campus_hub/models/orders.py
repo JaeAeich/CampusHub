@@ -13,6 +13,7 @@ class Order(BaseModel):
         email_id: Email address for the order
         product_list: List of cart items in the order.
         store_id: Identifier for the store associated with the order.
+        store_name: Name of the store
         delivery_status: Delivery status of the order
         amount_paid: Amount paid for the order.
         transaction_id: Identifier for the transaction related to the order.
