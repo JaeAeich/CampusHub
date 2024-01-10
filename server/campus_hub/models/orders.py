@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel, validator, EmailStr
-from carts import CartItem
+from campus_hub.models.carts import CartItem
 
 
 class Order(BaseModel):
