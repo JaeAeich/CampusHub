@@ -23,7 +23,7 @@ paths:
   /services:
     get:
       summary: Get a list of all services.
-      operationId: services.get_services
+      operationId: get_services
       tags:
         - Services
       responses:
@@ -37,7 +37,7 @@ paths:
           description: Not Found
     post:
       summary: Add a new service 
-      operationId: services.add_service
+      operationId: post_service
       tags:
         - Services
       requestBody:
@@ -61,7 +61,7 @@ paths:
   
     put:
       summary: Update a service
-      operationId: services.update_service
+      operationId: update_service
       tags:
         - Services
       parameters:
@@ -88,7 +88,7 @@ paths:
     
     delete:
       summary: Delete an service
-      operationId: services.delete_service
+      operationId: delete_service
       tags:
         - Services
       parameters:
@@ -107,7 +107,7 @@ paths:
   /stores:
     get:
       summary: Get a list of all stores.
-      operationId: stores.get_stores
+      operationId: get_stores
       tags:
         - Stores
       parameters:
@@ -126,7 +126,7 @@ paths:
           description: Not Found
     post:
       summary: Add a new store 
-      operationId: stores.add_store
+      operationId: post_store
       tags:
         - Stores
       requestBody:
@@ -150,7 +150,7 @@ paths:
   /stores/{store_id}: 
     get:
       summary: Get a specific store.
-      operationId: stores.get_store_by_id
+      operationId: get_store_by_id
       tags:
         - Stores
       parameters:
@@ -171,7 +171,7 @@ paths:
           description: Not Found
     put:
       summary: Update a store
-      operationId: stores.update_store
+      operationId: update_store
       tags:
         - Stores
       parameters:
@@ -198,7 +198,7 @@ paths:
     
     delete:
       summary: Delete an store
-      operationId: stores.delete_store
+      operationId: delete_store
       tags:
         - Stores
       parameters:
@@ -217,12 +217,15 @@ paths:
   /products:
     get:
       summary: Get a list of all products.
-      operationId: products.get_products
+      operationId: get_products
       tags:
         - Stores
       parameters:
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/store_id'
+        - $ref: '#/components/parameters/product_id'
+        - $ref: '#/components/parameters/max_rating'
+        - $ref: '#/components/parameters/max_price'
       responses:
         '200':
           description: Success
@@ -232,11 +235,32 @@ paths:
                 $ref: '#/components/schemas/ProductList'
         '404':
           description: Not Found
+    post:
+      summary: Add a new product 
+      operationId: add_product
+      tags:
+        - Product
+      requestBody:
+        description: product object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        '405':
+          description: Invalid Input.
+        '201':
+          description: Success
+          content:                                       #if we want to get the posted object in response.
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
 
   /products/{product_id}: 
     get:
       summary: Get a specific product.
-      operationId: products.get_product_by_id
+      operationId: get_product_by_id
       tags:
         - Products
       parameters:
@@ -257,7 +281,7 @@ paths:
           description: Not Found
     put:
       summary: Update a product
-      operationId: products.update_product
+      operationId: update_product
       tags:
         - Products
       parameters:
@@ -284,7 +308,7 @@ paths:
     
     delete:
       summary: Delete a product 
-      operationId: products.delete_product
+      operationId: delete_product
       tags:
         - Products
       parameters:
@@ -445,6 +469,14 @@ components:
       required: false
       schema:
         type: string
+    
+    product_id:
+      name: product_id
+      in: query
+      description: product_id of the entity
+      required: false
+      schema:
+        type: string
   
     product_category:
       name: product_category
@@ -466,7 +498,16 @@ components:
     max_rating:
       name: max_rating 
       in: query
-      description: max rating of the store
+      description: max rating of the entity
+      required: false
+      schema:
+        type: number
+        format: float
+        
+    max_price:
+      name: max_price 
+      in: query
+      description: max price of the product
       required: false
       schema:
         type: number
