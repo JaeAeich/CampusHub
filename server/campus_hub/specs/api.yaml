@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '../models/schema/service.yaml#/ServiceList'
+                $ref: '#/components/schemas/ServiceList'
         '404':
           description: Not Found
     post:
@@ -46,7 +46,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../models/schema/service.yaml#/Service"
+              $ref: "#/components/schemas/Service"
       responses:
         '405':
           description: Invalid Input.
@@ -55,28 +55,34 @@ paths:
           content:                                       #if we want to get the posted object in response.
             application/json:
               schema:
-                $ref: "../models/schema/service.yaml#/Service"  
+                $ref: "#/components/schemas/Service"  
           
-  /services/{service_id}:  
+  /services/{service_id}: 
+  
     put:
       summary: Update a service
       operationId: update_service
       tags:
         - Services
       parameters:
-        $ref: "../models/schema/service.yaml#/parameters" 
+        - name: service_id
+          in: path
+          description: ID of store to put
+          required: true
+          schema: 
+            type: string 
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "../models/schema/service.yaml#/Service"
+              $ref: "#/components/schemas/Service"
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "../models/schema/service.yaml#/Service"
+                $ref: "#/components/schemas/Service"
         '404':
           description: Not Found
     
@@ -86,13 +92,17 @@ paths:
       tags:
         - Services
       parameters:
-        $ref: "../models/schema/service.yaml#/parameters"  
+        - name: service_id
+          in: path
+          description: ID of store to delete
+          required: true
+          schema: 
+            type: string 
       responses:
         '204':
           description: Success
         '404':
           description: Not Found
-
 
   /stores:
     get:
@@ -100,13 +110,18 @@ paths:
       operationId: get_stores
       tags:
         - Stores
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/product_category'
+        - $ref: '#/components/parameters/max_distance'
+        - $ref: '#/components/parameters/max_rating'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '../models/schema/store.yaml#/StoreList'
+                $ref: '#/components/schemas/StoreList'
         '404':
           description: Not Found
     post:
@@ -120,7 +135,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../models/schema/store.yaml#/Store"
+              $ref: "#/components/schemas/Store"
       responses:
         '405':
           description: Invalid Input.
@@ -129,28 +144,55 @@ paths:
           content:                                       #if we want to get the posted object in response.
             application/json:
               schema:
-                $ref: "../models/schema/store.yaml#/Store"  
+                $ref: "#/components/schemas/Store"
+    
           
-  /stores/{store_id}:  
-    put:
-      summary: Update a store
-      operationId: update_store
+  /stores/{store_id}: 
+    get:
+      summary: Get a specific store.
+      operationId: get_store_by_id
       tags:
         - Stores
       parameters:
-        $ref: "../models/schema/store.yaml#/parameters" 
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "../models/schema/store.yaml#/Store"
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema: 
+            type: string
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "../models/schema/store.yaml#/Store"
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Not Found
+    put:
+      summary: Update a store
+      operationId: update_store
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to put
+          required: true
+          schema: 
+            type: string 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Store"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Store"
         '404':
           description: Not Found
     
@@ -160,10 +202,146 @@ paths:
       tags:
         - Stores
       parameters:
-        $ref: "../models/schema/store.yaml#/parameters"  
+        - name: store_id
+          in: path
+          description: ID of store to delete
+          required: true
+          schema: 
+            type: string   
       responses:
         '204':
           description: Success
         '404':
           description: Not Found
+  
+components:
+  schemas:
+    ServiceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Service'
+  
+    Service:
+      type: object
+      properties:
+        service_id:
+          type: string
+        store_ids:
+          type: array
+          items:
+            type: string
+        service_name:
+          type: string
+        service_description:
+          type: string
+          nullable: true
+        service_images:
+          type: array
+          items:
+            type: string
+        service_categories:
+          type: array            
+          items:
+            type: string
+            
+    StoreList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Store'
 
+    Store:
+      type: object
+      properties:
+        store_id:
+          type: string 
+        store_name:
+          type: string
+        store_images:
+          type: array
+          items:
+            type: string
+        store_description:
+          type: string
+          nullable: true
+        store_categories:
+          type: array
+          items:
+            type: string
+        store_phone_number:
+          type: string #passed as string  , no phoneNumber type in yaml
+        store_email:   
+          type: string
+          format: email
+        customer_order_ids:
+          type: array
+          items:
+            type: string
+        product_ids:
+          type: array
+          items:
+            type: string
+        seller_id:
+          type: string
+        service_id:
+          type: string
+        coordinates:
+          type: array     #passed as array, no tuple in yaml
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+        store_address:
+          type: string
+        stripe_public_key:
+          type: string
+        timings:
+          type: array     #passed as array, no tuple in yaml
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+          nullable: true
+        overall_rating:
+          type: number
+          format: float
+          nullable: true
+
+  parameters:
+    service_id:
+      name: service_id
+      in: query
+      description: service_id of the entity
+      required: false
+      schema:
+        type: string
+  
+    product_category:
+      name: product_category
+      in: query
+      description: required product_category
+      required: false
+      schema:
+        type: string
+    
+    max_distance:
+      name: max_distance 
+      in: query
+      description: max distance of store
+      required: false
+      schema:
+        type: number
+        format: float
+    
+    max_rating:
+      name: max_rating 
+      in: query
+      description: max rating of the store
+      required: false
+      schema:
+        type: number
+        format: float
+        
+   
+          
