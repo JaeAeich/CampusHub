@@ -20,343 +20,307 @@ tags:
     description: Operations related to notifications (Get, Get by ID)
 
 paths:
-  /register:
-    post:
-      summary: User registration.
-      operationId: authentication.register_user
-      tags:
-        - Authentication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRegistration'
-      responses:
-        '200':
-          description: Successful registration.
-
-  /login:
-    post:
-      summary: User login.
-      operationId: authentication.login_user
-      tags:
-        - Authentication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLogin'
-      responses:
-        '200':
-          description: Successful login.
-
-  /forgot-password:
-    post:
-      summary: Password recovery.
-      operationId: authentication.forgot_password
-      tags:
-        - Authentication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ForgotPassword'
-      responses:
-        '200':
-          description: Password recovery initiated.
-
   /services:
     get:
-      summary: Get a list of available services.
-      operationId: services.get_services
+      summary: Get a list of all services.
+      operationId: get_services
       tags:
         - Services
       responses:
         '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceList'
+        '404':
+          description: Not Found
     post:
-      summary: Add a new service.
-      operationId: services.add_service
+      summary: Add a new service 
+      operationId: post_service
       tags:
         - Services
       requestBody:
+        description: Service object to be added
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Service'
+              $ref: "#/components/schemas/Service"
       responses:
-        '200':
-          description: Service added successfully.
-
-  /services/{id}:
-    get:
-      summary: Get details of a specific service.
-      operationId: services.get_service_by_id
-      tags:
-        - Services
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Service ID.
-      responses:
-        '200':
-          description: Successful operation.
-          content:
+        '405':
+          description: Invalid Input.
+        '201':
+          description: Success
+          content:                                       #if we want to get the posted object in response.
             application/json:
               schema:
-                $ref: '#/components/schemas/Service'
+                $ref: "#/components/schemas/Service"  
+          
+  /services/{service_id}: 
+  
     put:
-      summary: Update a service.
-      operationId: services.update_service
+      summary: Update a service
+      operationId: update_service
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
+          description: ID of store to put
           required: true
-          schema:
-            type: integer
-          description: Service ID.
+          schema: 
+            type: string 
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Service'
+              $ref: "#/components/schemas/Service"
       responses:
         '200':
-          description: Service updated successfully.
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+        '404':
+          description: Not Found
+    
     delete:
-      summary: Delete a service.
-      operationId: services.delete_service
+      summary: Delete an service
+      operationId: delete_service
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
+          description: ID of store to delete
           required: true
-          schema:
-            type: integer
-          description: Service ID.
+          schema: 
+            type: string 
       responses:
-        '200':
-          description: Service deleted successfully.
+        '204':
+          description: Success
+        '404':
+          description: Not Found
 
-  /orders:
+  /stores:
     get:
-      summary: Get order history for a user.
-      operationId: order.get_order_history
+      summary: Get a list of all stores.
+      operationId: get_stores
       tags:
-        - Orders
+        - Stores
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/product_category'
+        - $ref: '#/components/parameters/max_distance'
+        - $ref: '#/components/parameters/max_rating'
       responses:
         '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderList'
+                $ref: '#/components/schemas/StoreList'
+        '404':
+          description: Not Found
     post:
-      summary: Place a new order.
-      operationId: order.place_order
+      summary: Add a new store 
+      operationId: post_store
       tags:
-        - Orders
+        - Stores
+      requestBody:
+        description: Store object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Store"
+      responses:
+        '405':
+          description: Invalid Input.
+        '201':
+          description: Success
+          content:                                       #if we want to get the posted object in response.
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Store"
+    
+          
+  /stores/{store_id}:  
+    put:
+      summary: Update a store
+      operationId: update_store
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to put
+          required: true
+          schema: 
+            type: string 
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: "#/components/schemas/Store"
       responses:
         '200':
-          description: Order placed successfully.
-
-  /orders/{id}:
-    get:
-      summary: Get details of a specific order.
-      operationId: order.get_order_by_id
-      tags:
-        - Orders
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Order ID.
-      responses:
-        '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: "#/components/schemas/Store"
+        '404':
+          description: Not Found
+    
     delete:
-      summary: Cancel an order.
-      operationId: order.cancel_order
+      summary: Delete an store
+      operationId: delete_store
       tags:
-        - Orders
+        - Stores
       parameters:
-        - name: id
+        - name: store_id
           in: path
+          description: ID of store to delete
           required: true
-          schema:
-            type: integer
-          description: Order ID.
+          schema: 
+            type: string   
       responses:
-        '200':
-          description: Order canceled successfully.
-
-  /payments/initiate:
-    post:
-      summary: Initiate a payment.
-      operationId: payment.initiate_payment
-      tags:
-        - Payments
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PaymentInitiation'
-      responses:
-        '200':
-          description: Payment initiated successfully.
-
-  /payments/verify:
-    post:
-      summary: Verify payment status.
-      operationId: payment.verify_payment
-      tags:
-        - Payments
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PaymentVerification'
-      responses:
-        '200':
-          description: Payment status verified successfully.
-
-  /notifications:
-    get:
-      summary: Get notifications for a user.
-      operationId: notifications.get_notifications
-      tags:
-        - Notifications
-      responses:
-        '200':
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotificationList'
-
-  /notifications/{id}:
-    get:
-      summary: Get details of a specific notification.
-      operationId: notifications.get_notification_by_id
-      tags:
-        - Notifications
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Notification ID.
-      responses:
-        '200':
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Notification'
-
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  
 components:
   schemas:
-    UserRegistration:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-
-    UserLogin:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-
-    ForgotPassword:
-      type: object
-      properties:
-        email:
-          type: string
-
     ServiceList:
       type: array
       items:
         $ref: '#/components/schemas/Service'
-
+  
     Service:
       type: object
       properties:
-        id:
-          type: integer
-        name:
+        service_id:
           type: string
-        description:
+        store_ids:
+          type: array
+          items:
+            type: string
+        service_name:
           type: string
-
-    OrderList:
+        service_description:
+          type: string
+          nullable: true
+        service_images:
+          type: array
+          items:
+            type: string
+        service_categories:
+          type: array            
+          items:
+            type: string
+            
+    StoreList:
       type: array
       items:
-        $ref: '#/components/schemas/Order'
+        $ref: '#/components/schemas/Store'
 
-    Order:
+    Store:
       type: object
       properties:
-        id:
-          type: integer
-        serviceId:
-          type: integer
-        userId:
-          type: integer
-        status:
+        store_id:
+          type: string 
+        store_name:
           type: string
-
-    PaymentInitiation:
-      type: object
-      properties:
-        orderId:
-          type: integer
-        amount:
+        store_images:
+          type: array
+          items:
+            type: string
+        store_description:
+          type: string
+          nullable: true
+        store_categories:
+          type: array
+          items:
+            type: string
+        store_phone_number:
+          type: string #passed as string  , no phoneNumber type in yaml
+        store_email:   
+          type: string
+          format: email
+        customer_order_ids:
+          type: array
+          items:
+            type: string
+        product_ids:
+          type: array
+          items:
+            type: string
+        seller_id:
+          type: string
+        service_id:
+          type: string
+        coordinates:
+          type: array     #passed as array, no tuple in yaml
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+        store_address:
+          type: string
+        stripe_public_key:
+          type: string
+        timings:
+          type: array     #passed as array, no tuple in yaml
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+          nullable: true
+        overall_rating:
           type: number
+          format: float
+          nullable: true
 
-    PaymentVerification:
-      type: object
-      properties:
-        orderId:
-          type: integer
-        transactionId:
-          type: string
-
-    NotificationList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Notification'
-
-    Notification:
-      type: object
-      properties:
-        id:
-          type: integer
-        message:
-          type: string
+  parameters:
+    service_id:
+      name: service_id
+      in: query
+      description: service_id of the entity
+      required: false
+      schema:
+        type: string
+  
+    product_category:
+      name: product_category
+      in: query
+      description: required product_category
+      required: false
+      schema:
+        type: string
+    
+    max_distance:
+      name: max_distance 
+      in: query
+      description: max distance of store
+      required: false
+      schema:
+        type: number
+        format: float
+    
+    max_rating:
+      name: max_rating 
+      in: query
+      description: max rating of the store
+      required: false
+      schema:
+        type: number
+        format: float
+        
+   
+          
