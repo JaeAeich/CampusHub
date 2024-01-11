@@ -23,7 +23,7 @@ paths:
   /services:
     get:
       summary: Get a list of all services.
-      operationId: get_services
+      operationId: services.get_services
       tags:
         - Services
       responses:
@@ -37,7 +37,7 @@ paths:
           description: Not Found
     post:
       summary: Add a new service 
-      operationId: post_service
+      operationId: services.add_service
       tags:
         - Services
       requestBody:
@@ -61,7 +61,7 @@ paths:
   
     put:
       summary: Update a service
-      operationId: update_service
+      operationId: services.update_service
       tags:
         - Services
       parameters:
@@ -88,7 +88,7 @@ paths:
     
     delete:
       summary: Delete an service
-      operationId: delete_service
+      operationId: services.delete_service
       tags:
         - Services
       parameters:
@@ -107,7 +107,7 @@ paths:
   /stores:
     get:
       summary: Get a list of all stores.
-      operationId: get_stores
+      operationId: stores.get_stores
       tags:
         - Stores
       parameters:
@@ -126,7 +126,7 @@ paths:
           description: Not Found
     post:
       summary: Add a new store 
-      operationId: post_store
+      operationId: stores.add_store
       tags:
         - Stores
       requestBody:
@@ -150,7 +150,7 @@ paths:
   /stores/{store_id}: 
     get:
       summary: Get a specific store.
-      operationId: get_store_by_id
+      operationId: stores.get_store_by_id
       tags:
         - Stores
       parameters:
@@ -171,7 +171,7 @@ paths:
           description: Not Found
     put:
       summary: Update a store
-      operationId: update_store
+      operationId: stores.update_store
       tags:
         - Stores
       parameters:
@@ -198,13 +198,99 @@ paths:
     
     delete:
       summary: Delete an store
-      operationId: delete_store
+      operationId: stores.delete_store
       tags:
         - Stores
       parameters:
         - name: store_id
           in: path
           description: ID of store to delete
+          required: true
+          schema: 
+            type: string   
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+
+  /products:
+    get:
+      summary: Get a list of all products.
+      operationId: products.get_products
+      tags:
+        - Stores
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/store_id'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+        '404':
+          description: Not Found
+
+  /products/{product_id}: 
+    get:
+      summary: Get a specific product.
+      operationId: products.get_product_by_id
+      tags:
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to get
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
+    put:
+      summary: Update a product
+      operationId: products.update_product
+      tags:
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to put
+          required: true
+          schema: 
+            type: string 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        '404':
+          description: Not Found
+    
+    delete:
+      summary: Delete a product 
+      operationId: products.delete_product
+      tags:
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to delete
           required: true
           schema: 
             type: string   
@@ -307,12 +393,55 @@ components:
           type: number
           format: float
           nullable: true
+    Product:
+      type: object
+      properties:
+        product_id:
+          type: string
+        product_categories:
+          type: array
+          items:
+            type: string
+        product_name:
+          type: string
+        store_id:
+          type: string
+        service_id:
+          type: string
+        product_image:
+          type: array
+          items:
+            type: string
+        product_cost:
+          type: number
+          format: float
+        product_description:
+          type: string
+          nullable: true
+        stocks:
+          type: integer
+        product_specifications:
+          type: object
+          additionalProperties:
+            type: string
+    ProductList: 
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
 
   parameters:
     service_id:
       name: service_id
       in: query
       description: service_id of the entity
+      required: false
+      schema:
+        type: string
+        
+    store_id:
+      name: store_id
+      in: query
+      description: store_id of the entity
       required: false
       schema:
         type: string
@@ -342,6 +471,6 @@ components:
       schema:
         type: number
         format: float
-        
-   
+          
+  
           
