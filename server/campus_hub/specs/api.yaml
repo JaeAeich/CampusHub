@@ -164,6 +164,8 @@ paths:
           schema:
             type: string
       requestBody:
+        description: Service object to be added
+        required: true
         content:
           application/json:
             schema:
