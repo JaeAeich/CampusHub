@@ -92,18 +92,18 @@ paths:
         '200':
           description: Service added successfully.
 
-  /services/{id}:
+  /services/{service_id}:
     get:
       summary: Get details of a specific service.
       operationId: services.get_service_by_id
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
           description: Service ID.
       responses:
         '200':
@@ -118,11 +118,11 @@ paths:
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
           description: Service ID.
       requestBody:
         content:
@@ -138,11 +138,11 @@ paths:
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
           description: Service ID.
       responses:
         '200':
@@ -308,12 +308,24 @@ components:
     Service:
       type: object
       properties:
-        id:
-          type: integer
-        name:
+        service_id:
           type: string
-        description:
+        service_name:
           type: string
+        service_description:
+          type: string
+        service_images:
+          type: array
+          items:
+            type: string
+        service_categories:
+          type: array
+          items:
+            type: string
+        store_ids:
+          type: array
+          items:
+            type: string
 
     OrderList:
       type: array
