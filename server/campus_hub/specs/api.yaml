@@ -1,129 +1,75 @@
 openapi: 3.0.0
 info:
   title: CampusHub
-  description: "API documentation for CampusHub"
-  version: 0.0.0
-
+  description: API documentation for CampusHub
+  version: 1.0.0
 servers:
   - url: /campus_hub/v1
-
 tags:
   - name: Authentication
-    description: Operations related to user authentication (Register, Login, Forgot Password)
+    description: >-
+      Operations related to user authentication (Register, Login, Forgot
+      Password)
   - name: Services
-    description: Operations related to services (Get, Add, Update, Delete)
+    description: 'Operations related to services (Get, Add, Update, Delete)'
   - name: Orders
-    description: Operations related to orders (Get History, Place Order, Cancel Order)
+    description: 'Operations related to orders (Get History, Place Order, Cancel Order)'
   - name: Payments
-    description: Operations related to payments (Initiate Payment, Verify Payment)
+    description: 'Operations related to payments (Initiate Payment, Verify Payment)'
   - name: Notifications
-    description: Operations related to notifications (Get, Get by ID)
-
+    description: 'Operations related to notifications (Get, Get by ID)'
+  - name: Offers
+    description: 'Operations related to offers (Get, Get by Id, Get trending)'
 paths:
-  /register:
-    post:
-      summary: User registration.
-      operationId: authentication.register_user
-      tags:
-        - Authentication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRegistration'
-      responses:
-        '200':
-          description: Successful registration.
-
-  /login:
-    post:
-      summary: User login.
-      operationId: authentication.login_user
-      tags:
-        - Authentication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLogin'
-      responses:
-        '200':
-          description: Successful login.
-
-  /forgot-password:
-    post:
-      summary: Password recovery.
-      operationId: authentication.forgot_password
-      tags:
-        - Authentication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ForgotPassword'
-      responses:
-        '200':
-          description: Password recovery initiated.
-
   /services:
     get:
-      summary: Get a list of available services.
+      summary: Get a list of all services.
       operationId: services.get_services
       tags:
         - Services
       responses:
         '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceList'
+        '404':
+          description: Not Found
     post:
-      summary: Add a new service.
+      summary: Add a new service
       operationId: services.add_service
       tags:
         - Services
       requestBody:
+        description: Service object to be added
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Service'
       responses:
-        '200':
-          description: Service added successfully.
-
-  /services/{id}:
-    get:
-      summary: Get details of a specific service.
-      operationId: services.get_service_by_id
-      tags:
-        - Services
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Service ID.
-      responses:
-        '200':
-          description: Successful operation.
+        '201':
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Service'
+        '405':
+          description: Invalid Input.
+  '/services/{service_id}':
     put:
-      summary: Update a service.
+      summary: Update a service
       operationId: services.update_service
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
+          description: ID of store to put
           required: true
           schema:
-            type: integer
-          description: Service ID.
+            type: string
       requestBody:
         content:
           application/json:
@@ -131,232 +77,846 @@ paths:
               $ref: '#/components/schemas/Service'
       responses:
         '200':
-          description: Service updated successfully.
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '404':
+          description: Not Found
     delete:
-      summary: Delete a service.
+      summary: Delete an service
       operationId: services.delete_service
       tags:
         - Services
       parameters:
-        - name: id
+        - name: service_id
           in: path
+          description: ID of store to delete
           required: true
           schema:
-            type: integer
-          description: Service ID.
+            type: string
       responses:
-        '200':
-          description: Service deleted successfully.
-
-  /orders:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  '/services/{service_id}/stores':
     get:
-      summary: Get order history for a user.
-      operationId: order.get_order_history
+      summary: Get a list of all stores of a service.
+      operationId: services.get_stores_by_service_id
       tags:
-        - Orders
+        - Services
+      parameters:
+        - name: service_id
+          in: path
+          description: ID of service to get
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: Successful operation.
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreList'
+        '404':
+          description: Not Found
+    post:
+      summary: Add a new store by service_id
+      operationId: products.add_store_by_service_id
+      tags:
+        - Services
+      parameters:
+        - name: service_id
+          in: path
+          description: ID of service to get
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Store object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Store'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '405':
+          description: Invalid Input.
+    put:
+      summary: Update a store by service_id
+      operationId: services.update_store_by_service_id
+      tags:
+        - Services
+      parameters:
+        - name: service_id
+          in: path
+          description: ID of service to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Store'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a store by service_id
+      operationId: services.delete_store_by_service_id
+      tags:
+        - Services
+      parameters:
+        - name: service_id
+          in: path
+          description: ID of service to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  '/services/{service_id}/products':
+    get:
+      summary: Get a list of all products of a service.
+      operationId: services.get_products_by_service_id
+      tags:
+        - Services
+      parameters:
+        - name: service_id
+          in: path
+          description: ID of service to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+        '404':
+          description: Not Found
+  '/stores/{store_id}':
+    get:
+      summary: Get a specific store.
+      operationId: stores.get_store_by_id
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Not Found
+    put:
+      summary: Update a store
+      operationId: stores.update_store
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Store'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a store
+      operationId: stores.delete_store
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  /stores/trending:
+    get:
+      summary: Get trending stores.
+      operationId: stores.get_trending_stores
+      tags:
+        - Stores
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreList'
+        '404':
+          description: Not Found
+  '/stores/{store_id}/offers':
+    get:
+      summary: Get a list of all offers from a store.
+      operationId: stores.get_offers_by_store_id
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferList'
+        '404':
+          description: Not Found
+    post:
+      summary: Add a new offer
+      operationId: offers.add_offer
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Offer object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Offer'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '405':
+          description: Invalid Input.
+  '/stores/{store_id}/reviews':
+    get:
+      summary: Get a list of all reviews of a store.
+      operationId: stores.get_reviews_by_store_id
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewList'
+        '404':
+          description: Not Found
+  '/stores/{store_id}/orders':
+    get:
+      summary: Get a list of all orders of a store.
+      operationId: stores.get_orders_by_store_id
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderList'
-    post:
-      summary: Place a new order.
-      operationId: order.place_order
+        '404':
+          description: Not Found
+  '/stores/{store_id}/products':
+    get:
+      summary: Get a list of all products of a store.
+      operationId: stores.get_products_by_store_id
       tags:
-        - Orders
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+        '404':
+          description: Not Found
+    post:
+      summary: Add a new product
+      operationId: products.add_product
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Product object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '405':
+          description: Invalid Input.
+    put:
+      summary: Update a product
+      operationId: stores.update_product
+      tags:
+        - Stores
+      parameters:
+        - name: store_id
+          in: path
+          description: ID of store to put
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/Product'
       responses:
         '200':
-          description: Order placed successfully.
-
-  /orders/{id}:
-    get:
-      summary: Get details of a specific order.
-      operationId: order.get_order_by_id
-      tags:
-        - Orders
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Order ID.
-      responses:
-        '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
     delete:
-      summary: Cancel an order.
-      operationId: order.cancel_order
+      summary: Delete a product
+      operationId: stores.delete_product
       tags:
-        - Orders
+        - Stores
       parameters:
-        - name: id
+        - name: store_id
           in: path
+          description: ID of product to delete
           required: true
           schema:
-            type: integer
-          description: Order ID.
+            type: string
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  /products:
+    get:
+      summary: Get a list of all products.
+      operationId: products.get_products
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/store_id'
+        - $ref: '#/components/parameters/product_id'
+        - $ref: '#/components/parameters/max_rating'
+        - $ref: '#/components/parameters/max_price'
       responses:
         '200':
-          description: Order canceled successfully.
-
-  /payments/initiate:
-    post:
-      summary: Initiate a payment.
-      operationId: payment.initiate_payment
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+        '404':
+          description: Not Found
+  '/products/{product_id}':
+    get:
+      summary: Get a specific product.
+      operationId: products.get_product_by_id
       tags:
-        - Payments
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
+    put:
+      summary: Update a product
+      operationId: products.update_product
+      tags:
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to put
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentInitiation'
+              $ref: '#/components/schemas/Product'
       responses:
         '200':
-          description: Payment initiated successfully.
-
-  /payments/verify:
-    post:
-      summary: Verify payment status.
-      operationId: payment.verify_payment
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a product
+      operationId: products.delete_product
       tags:
-        - Payments
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  /offers:
+    get:
+      summary: Get a list of all offers.
+      operationId: offers.get_offers
+      tags:
+        - Offers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferList'
+        '404':
+          description: Not Found
+  '/offers/{offer_id}':
+    put:
+      summary: Update an offer
+      operationId: offers.update_offer
+      tags:
+        - Offers
+      parameters:
+        - name: offer_id
+          in: path
+          description: ID of offer to update
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentVerification'
+              $ref: '#/components/schemas/Offer'
       responses:
         '200':
-          description: Payment status verified successfully.
-
-  /notifications:
-    get:
-      summary: Get notifications for a user.
-      operationId: notifications.get_notifications
-      tags:
-        - Notifications
-      responses:
-        '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationList'
-
-  /notifications/{id}:
-    get:
-      summary: Get details of a specific notification.
-      operationId: notifications.get_notification_by_id
+                $ref: '#/components/schemas/Offer'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a offer
+      operationId: offers.delete_offer
       tags:
-        - Notifications
+        - Offers
       parameters:
-        - name: id
+        - name: offer_id
           in: path
+          description: ID of offer to delete
           required: true
           schema:
-            type: integer
-          description: Notification ID.
+            type: string
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+  /offers/trending:
+    get:
+      summary: Get trending offers.
+      operationId: offers.get_trending_offers
+      tags:
+        - Offers
       responses:
         '200':
-          description: Successful operation.
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Notification'
-
+                $ref: '#/components/schemas/OfferList'
+        '404':
+          description: Not Found
 components:
   schemas:
-    UserRegistration:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-
-    UserLogin:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-
-    ForgotPassword:
-      type: object
-      properties:
-        email:
-          type: string
-
     ServiceList:
       type: array
       items:
         $ref: '#/components/schemas/Service'
-
     Service:
       type: object
       properties:
-        id:
+        service_id:
+          type: string
+        store_ids:
+          type: array
+          items:
+            type: string
+        service_name:
+          type: string
+        service_description:
+          type: string
+          nullable: true
+        service_images:
+          type: array
+          items:
+            type: string
+        service_categories:
+          type: array
+          items:
+            type: string
+    StoreList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Store'
+    Store:
+      type: object
+      properties:
+        store_id:
+          type: string
+        store_name:
+          type: string
+        store_images:
+          type: array
+          items:
+            type: string
+        store_description:
+          type: string
+          nullable: true
+        store_categories:
+          type: array
+          items:
+            type: string
+        store_phone_number:
+          type: string
+        store_email:
+          type: string
+          format: email
+        customer_order_ids:
+          type: array
+          items:
+            type: string
+        product_ids:
+          type: array
+          items:
+            type: string
+        seller_id:
+          type: string
+        service_id:
+          type: string
+        coordinates:
+          type: array
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+        store_address:
+          type: string
+        stripe_public_key:
+          type: string
+        timings:
+          type: array
+          items:
+            type: number
+            format: float
+          minItems: 2
+          maxItems: 2
+          nullable: true
+        overall_rating:
+          type: number
+          format: float
+          nullable: true
+        offer_available:
+          type: boolean
+        offer_available:
+          type: boolean
+    Product:
+      type: object
+      properties:
+        product_id:
+          type: string
+        product_categories:
+          type: array
+          items:
+            type: string
+        product_name:
+          type: string
+        store_id:
+          type: string
+        service_id:
+          type: string
+        product_image:
+          type: array
+          items:
+            type: string
+        product_cost:
+          type: number
+          format: float
+        product_description:
+          type: string
+          nullable: true
+        stocks:
           type: integer
-        name:
+        product_specifications:
+          type: object
+          additionalProperties:
+            type: string
+    ProductList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+    OfferList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Offer'
+    Offer:
+      type: object
+      properties:
+        product_id:
           type: string
-        description:
+        store_id:
           type: string
-
+        discount:
+          type: number
+          format: float
+        validity_duration:
+          type: string
+        offer_id:
+          type: string
+        service_id:
+          type: string
+    Review:
+      type: object
+      properties:
+        comment_headline:
+          type: string
+        comment:
+          type: string
+        user_id:
+          type: string
+        rating:
+          type: number
+          format: float
+        review_images:
+          type: array
+          items:
+            type: string
+    ReviewList:
+      type: object
+      properties:
+        store_id:
+          type: string
+        product_id:
+          type: string
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
     OrderList:
       type: array
       items:
         $ref: '#/components/schemas/Order'
-
     Order:
       type: object
       properties:
-        id:
-          type: integer
-        serviceId:
-          type: integer
-        userId:
-          type: integer
-        status:
+        order_id:
           type: string
-
-    PaymentInitiation:
-      type: object
-      properties:
-        orderId:
-          type: integer
-        amount:
+        user_id:
+          type: string
+        email_id:
+          type: string
+        product_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        store_id:
+          type: string
+        store_name:
+          type: string
+        delivery_status:
+          type: boolean
+        amount_paid:
           type: number
-
-    PaymentVerification:
-      type: object
-      properties:
-        orderId:
-          type: integer
-        transactionId:
+          format: float
+        transaction_id:
           type: string
-
-    NotificationList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Notification'
-
-    Notification:
-      type: object
-      properties:
-        id:
-          type: integer
-        message:
+        delivery_address:
           type: string
+        seller_id:
+          type: string
+  parameters:
+    service_id:
+      name: service_id
+      in: query
+      description: service_id of the entity
+      required: false
+      schema:
+        type: string
+    store_id:
+      name: store_id
+      in: query
+      description: store_id of the entity
+      required: false
+      schema:
+        type: string
+    product_id:
+      name: product_id
+      in: query
+      description: product_id of the entity
+      required: false
+      schema:
+        type: string
+    product_category:
+      name: product_category
+      in: query
+      description: required product_category
+      required: false
+      schema:
+        type: string
+    max_distance:
+      name: max_distance
+      in: query
+      description: max distance of store
+      required: false
+      schema:
+        type: number
+        format: float
+    max_rating:
+      name: max_rating
+      in: query
+      description: max rating of the entity
+      required: false
+      schema:
+        type: number
+        format: float
+    max_price:
+      name: max_price
+      in: query
+      description: max price of the product
+      required: false
+      schema:
+        type: number
+        format: float
+    x_user_location:
+      name: x_user_location
+      in: query
+      description: x coordinate of user
+      required: false
+      schema:
+        type: number
+        format: float
+    y_user_location:
+      name: y_user_location
+      in: query
+      description: y coordinate of user
+      required: false
+      schema:
+        type: number
+        format: float
