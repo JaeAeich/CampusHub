@@ -1,6 +1,6 @@
-from pydantic import BaseModel, validator, List
+from pydantic import BaseModel, validator
 from datetime import timedelta
-
+from typing import List
 
 class Offers(BaseModel):
     """
