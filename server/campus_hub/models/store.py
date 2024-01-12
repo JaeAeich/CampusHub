@@ -36,6 +36,7 @@ class Store(BaseModel):
     seller_id: str
     service_id: str
     coordinates: Tuple[float, float]
+    offer_available: Optional[bool]
     store_address: str
     stripe_public_key: str
     timings: Optional[Tuple[float, float]]
