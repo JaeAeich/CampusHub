@@ -125,7 +125,7 @@ paths:
           description: Not Found
     post:
       summary: Add a new store by service_id
-      operationId: products.add_store_by_service_id
+      operationId: services.add_store_by_service_id
       tags:
         - Services
       parameters:
@@ -414,7 +414,7 @@ paths:
           description: Not Found
     post:
       summary: Add a new product
-      operationId: products.add_product
+      operationId: stores.add_product
       tags:
         - Stores
       parameters:
@@ -698,7 +698,6 @@ components:
           type: string
         service_description:
           type: string
-          nullable: true
         service_images:
           type: array
           items:
@@ -707,6 +706,12 @@ components:
           type: array
           items:
             type: string
+      required:
+        - service_id
+        - store_ids
+        - service_name
+        - service_images
+        - service_categories
     StoreList:
       type: array
       items:
@@ -724,13 +729,13 @@ components:
             type: string
         store_description:
           type: string
-          nullable: true
         store_categories:
           type: array
           items:
             type: string
         store_phone_number:
-          type: string
+          type: number
+          format: integer
         store_email:
           type: string
           format: email
@@ -761,16 +766,28 @@ components:
           type: array
           items:
             type: number
-            format: float
+            format: integer
           minItems: 2
           maxItems: 2
-          nullable: true
         overall_rating:
           type: number
           format: float
-          nullable: true
         offer_available:
           type: boolean
+      required:
+        - store_id
+        - seller_id
+        - service_id
+        - store_images
+        - store_name
+        - store_phone_number
+        - store_email
+        - store_categories
+        - coordinates
+        - store_address
+        - stripe_public_key
+        - customer_order_ids
+        - product_ids
     Product:
       type: object
       properties:
@@ -795,13 +812,22 @@ components:
           format: float
         product_description:
           type: string
-          nullable: true
         stocks:
           type: integer
         product_specifications:
           type: object
           additionalProperties:
             type: string
+        offer_id: 
+          type: string
+      required:
+        - product_id
+        - product_categories
+        - product_name
+        - store_id
+        - service_id
+        - product_cost
+        - stocks
     ProductList:
       type: array
       items:
@@ -813,19 +839,32 @@ components:
     Offer:
       type: object
       properties:
-        product_id:
-          type: string
+        product_ids:
+          type: array
+          items:
+            type: string
         store_id:
           type: string
         discount:
           type: number
           format: float
         validity_duration:
-          type: string
+          type: number
+          format: integer
         offer_id:
           type: string
         service_id:
           type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - product_ids
+        - store_id
+        - discount
+        - validity_duration
+        - offer_id
+        - service_id
     Review:
       type: object
       properties:
@@ -842,6 +881,10 @@ components:
           type: array
           items:
             type: string
+      required:
+        - user_id
+        - rating
+        - comment_headline
     ReviewList:
       type: object
       properties:
@@ -853,6 +896,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Review'
+      required:
+        - product_id
+        - reviews
+        - store_id
     OrderList:
       type: array
       items:
@@ -866,6 +913,7 @@ components:
           type: string
         email_id:
           type: string
+          format: email
         product_list:
           type: array
           items:
@@ -885,15 +933,32 @@ components:
           type: string
         seller_id:
           type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - order_id
+        - user_id
+        - email_id
+        - product_list
+        - store_id
+        - store_name
+        - delivery_status
+        - amount_paid
+        - transaction_id
+        - delivery_address
+        - seller_id
     Seller:
       type: object
       properties:
         seller_name: 
           type: string
         seller_phone_number: 
-          type: string
+          type: number
+          format: integer
         seller_email: 
           type: string
+          format: email
         seller_gender: 
           type: string
           enum: 
@@ -904,7 +969,7 @@ components:
           type: array
           items:
             type: string
-        seller_image?: 
+        seller_image: 
           type: string
         seller_address: 
           type: string
@@ -914,6 +979,15 @@ components:
           type: array
           items:
             type: string
+      required:
+        - seller_name
+        - seller_phone_number
+        - seller_email
+        - seller_id
+        - store_ids
+        - seller_gender
+        - order_ids
+        - seller_address
     SellerList:
       type: array
       items:

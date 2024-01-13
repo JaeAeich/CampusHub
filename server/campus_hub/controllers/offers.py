@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from campus_hub.utils.db import db_connector
 from datetime import datetime, timedelta
+from collections import Counter
 
 
 def get_offers():
@@ -133,16 +134,29 @@ def get_trending_offers():
         ]
 
         # Execute the aggregation pipeline on the "orders" collection
-        trending_offers = db_connector.db[orders_collection_name].aggregate(pipeline)
+        trending_offers_result = db_connector.db[orders_collection_name].aggregate(
+            pipeline
+        )
+        print("hiiiiiiiiiii", trending_offers_result)
+        # Extract offer_ids and corresponding total_orders from the aggregation result
+        offer_orders_counter = Counter(
+            {result["_id"]: result["total_orders"] for result in trending_offers_result}
+        )
 
-        # Get the offer details based on the aggregated results
+        # Sort offer_ids based on total_orders in descending order
+        sorted_offer_ids = [
+            offer_id for offer_id, _ in offer_orders_counter.most_common()
+        ]
+
+        # Get offer details based on sorted offer_ids
         trending_offers_data = []
-        for result in trending_offers:
-            offer_id = result["_id"]
+
+        for offer_id in sorted_offer_ids:
             offer_details = db_connector.query_data(
                 offers_collection_name, {"offer_id": offer_id}
             )
             if offer_details:
+                offer_details[0]["_id"] = str(offer_details[0]["_id"])
                 trending_offers_data.append(offer_details[0])
 
         return jsonify({"trending_offers": trending_offers_data}), 200

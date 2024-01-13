@@ -43,7 +43,7 @@ class Product(BaseModel):
     )
     def validate_required_fields(cls, value):
         """
-        Validator to ensure that all required fields (product_id, product_categories, product_name, store_id, product_cost, stocks) are always present.
+        Validator to ensure that all required fields (product_id, product_categories, product_name, store_id, service_id, product_cost, stocks) are always present.
         """
         required_fields = [
             "product_id",
