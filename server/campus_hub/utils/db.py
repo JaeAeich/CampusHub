@@ -2,6 +2,7 @@ import os
 import logging
 from pymongo import MongoClient
 from pymongo.collection import Collection
+from pymongo.database import Database
 from pymongo.errors import ConnectionFailure, PyMongoError
 from werkzeug.exceptions import InternalServerError
 from campus_hub.utils.errors import error
@@ -21,7 +22,7 @@ class DBConnector:
             self.client = MongoClient(
                 self.url, username=self.username, password=self.password
             )
-            self.db = self.client[self.db_name]
+            self.db: Database = self.client[self.db_name]
 
         except ConnectionFailure as e:
             raise ConnectionError(f"Failed to connect to MongoDB: {e}")
@@ -53,7 +54,7 @@ class DBConnector:
         Closes the connection to MongoDB.
         """
         try:
-            self.client.close()
+            self.client.close() # type: ignore[operator]
             self.logger.info("MongoDB connection closed.")
         except PyMongoError as e:
             self.logger.error(
@@ -97,7 +98,7 @@ class DBConnector:
         Returns:
             bool: True if the collection exists, False otherwise.
         """
-        return collection.name in self.db.list_collection_names()
+        return collection.name in self.db.list_collection_names()   # type: ignore[operator]
 
     def create_collection(self, collection_name: str) -> None:
         """
@@ -105,9 +106,9 @@ class DBConnector:
 
         Args:
             collection_name (str): Name of the collection to be created.
-        """
+   `     """
         try:
-            self.db.create_collection(collection_name)
+            self.db.create_collection(collection_name)  # type: ignore[operator]
         except PyMongoError as e:
             self.logger.error(
                 error(
