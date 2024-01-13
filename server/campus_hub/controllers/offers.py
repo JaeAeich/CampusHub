@@ -2,6 +2,9 @@ from flask import jsonify, request
 from campus_hub.utils.db import db_connector
 from datetime import datetime, timedelta
 from collections import Counter
+from campus_hub.utils.response import error, info
+from campus_hub.models.offers import Offers
+from campus_hub.utils.data import serialize_model
 
 
 def get_offers():
@@ -12,23 +15,21 @@ def get_offers():
         Flask response: JSON response containing the list of offers or error message.
     """
     try:
-        # Assuming there is a collection named "offers" in your MongoDB database.
-        offers_collection = db_connector.db.offers
+        offers_collection = db_connector.get_collection("offers")
 
         # Fetch all offers from the collection
         offers = list(offers_collection.find())
 
         if not offers:
-            return jsonify({"error": "No offers found"}), 404
+            return error(404, "NotFound", "No offers found.")
 
-        for offer in offers:
-            offer["_id"] = str(offer["_id"])
+        # Serialize each offer
+        serialized_offers = serialize_model(Offers, offers)
 
-        return jsonify({"offers": offers}), 200
+        return serialized_offers
 
     except Exception as e:
-        print(f"Error retrieving offers from MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return error(404, "NotFound", "Offer not found.", e)
 
 
 def update_offer(offer_id):
@@ -52,15 +53,17 @@ def update_offer(offer_id):
         existing_offer = db_connector.query_data(offers_collection_name, query)
 
         if not existing_offer:
-            return jsonify({"error": f"Offer with offer_id {offer_id} not found"}), 404
+            return error(404, "NotFound", f"Offer with {offer_id} not found.")
 
-        db_connector.update_data(offers_collection_name, query, offer_data)
+        try:
+            db_connector.update_data(offers_collection_name, query, offer_data)
+        except Exception as e:
+            return error(500, "ServerError", "Could not update offer.", e)
 
-        return jsonify({"message": "Offer updated successfully"}), 200
+        return info(200, f"Update offer {offer_id}.")
 
     except Exception as e:
-        print(f"Error updating offer in MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return error(500, "ServerError", "Could not update.", e)
 
 
 def delete_offer(offer_id):
@@ -83,15 +86,14 @@ def delete_offer(offer_id):
         existing_offer = db_connector.query_data(offers_collection_name, query)
 
         if not existing_offer:
-            return jsonify({"error": f"Offer with offer_id {offer_id} not found"}), 404
+            return error(404, "NotFound", f"Offer with offer_id {offer_id} not found")
 
         db_connector.delete_data(offers_collection_name, query)
 
-        return jsonify({"message": "Offer deleted successfully"}), 200
+        return info(200, f"Offer {offer_id} deleted.")
 
     except Exception as e:
-        print(f"Error updating offer in MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return error(500, "ServerError", "Could not delete offer.", e)
 
 
 def get_trending_offers():
@@ -156,8 +158,7 @@ def get_trending_offers():
                 offers_collection_name, {"offer_id": offer_id}
             )
             if offer_details:
-                offer_details[0]["_id"] = str(offer_details[0]["_id"])
-                trending_offers_data.append(offer_details[0])
+                trending_offers_data.append(serialize_model(Offers, offer_details[0]))
 
         return jsonify({"trending_offers": trending_offers_data}), 200
 
