@@ -5,7 +5,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import ConnectionFailure, PyMongoError
 from werkzeug.exceptions import InternalServerError
-from campus_hub.utils.errors import error
+from campus_hub.utils.response import error
 
 
 class DBConnector:
@@ -54,12 +54,24 @@ class DBConnector:
         Closes the connection to MongoDB.
         """
         try:
-            self.client.close() # type: ignore[operator]
+            self.client.close()  # type: ignore[operator]
             self.logger.info("MongoDB connection closed.")
         except PyMongoError as e:
             self.logger.error(
                 error(500, "ServerError", "Error closing mongo connection.", e)
             )
+
+    def get_collection(self, collection_name: str) -> Collection:
+        """
+        Get or create a MongoDB collection.
+
+        Args:
+            collection_name (str): Name of the collection.
+
+        Returns:
+            Collection: MongoDB collection object.
+        """
+        return self.client[self.db_name][collection_name]
 
     def insert_data(self, collection_name: str, data: dict) -> None:
         """
@@ -98,15 +110,15 @@ class DBConnector:
         Returns:
             bool: True if the collection exists, False otherwise.
         """
-        return collection.name in self.db.list_collection_names()   # type: ignore[operator]
+        return collection.name in self.db.list_collection_names()  # type: ignore[operator]
 
     def create_collection(self, collection_name: str) -> None:
         """
-        Creates a new collection in the MongoDB database.
+             Creates a new collection in the MongoDB database.
 
-        Args:
-            collection_name (str): Name of the collection to be created.
-   `     """
+             Args:
+                 collection_name (str): Name of the collection to be created.
+        `"""
         try:
             self.db.create_collection(collection_name)  # type: ignore[operator]
         except PyMongoError as e:
