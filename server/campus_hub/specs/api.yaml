@@ -96,10 +96,6 @@ paths:
           required: true
           schema:
             type: string
-<<<<<<< HEAD
-=======
-          description: Service ID.
->>>>>>> c88c28a (feat: add service api logic)
       responses:
         '204':
           description: Success
@@ -287,11 +283,11 @@ paths:
           description: Success
         '404':
           description: Not Found
-  /stores/trending:
+  '/stores/trending':
     get:
       summary: Get trending stores.
       operationId: stores.get_trending_stores
-      tags:
+      tags: 
         - Stores
       responses:
         '200':
