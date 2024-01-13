@@ -2,6 +2,7 @@ from pydantic import BaseModel, validator
 from datetime import timedelta
 from typing import List
 
+
 class Offers(BaseModel):
     """
     Pydantic model representing a payment.
