@@ -735,8 +735,6 @@ components:
           nullable: true
         offer_available:
           type: boolean
-        offer_available:
-          type: boolean
     Product:
       type: object
       properties:
