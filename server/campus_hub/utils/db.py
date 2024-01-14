@@ -71,6 +71,9 @@ class DBConnector:
         Returns:
             Collection: MongoDB collection object.
         """
+        collection = self.db[collection_name]
+        if not self.collection_exists(collection):
+                raise LookupError(f"Collection '{collection_name}' does not exist")
         return self.client[self.db_name][collection_name]
 
     def insert_data(self, collection_name: str, data: dict) -> None:
@@ -148,6 +151,9 @@ class DBConnector:
         try:
             collection = self.db[collection_name]
             result = list(collection.find(query))
+            if not result:
+                raise LookupError(f"No matching documents found for the query: {query}")
+
             return result
         except PyMongoError as e:
             self.logger.error(
@@ -166,10 +172,13 @@ class DBConnector:
         """
         try:
             collection = self.db[collection_name]
-
+            # Ensure the collection exists; return error if not
+            if not self.collection_exists(collection):
+                raise LookupError(f"Collection '{collection_name}' does not exist")
+            
             # Check if the document(s) to update exist
             if collection.count_documents(query) == 0:
-                raise LookupError("No matching records found for the update")
+                raise LookupError("No matching documents found for the update")
 
             # Update the data
             collection.update_many(query, {"$set": update_data})
@@ -188,6 +197,8 @@ class DBConnector:
         """
         try:
             collection = self.db[collection_name]
+            if not self.collection_exists(collection):
+                raise LookupError(f"Collection '{collection_name}' does not exist")
 
             # Check if the document(s) to delete exist
             if collection.count_documents(query) == 0:

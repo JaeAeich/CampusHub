@@ -1,9 +1,19 @@
-from flask import request
+from flask import request, jsonify
 from campus_hub.utils.db import db_connector
 from datetime import datetime, timedelta
 from collections import Counter
 import bson.json_util as json_util
+from campus_hub.utils.response import error, info
+from datetime import datetime, timedelta
+from dateutil.parser import parse
+import pytz
+utc = pytz.UTC
 
+DB = db_connector.db
+storeCollection = "stores"
+productCollection = "products"
+orderCollection = "orders"
+offerCollection = "offers"
 
 def get_offers():
     """
@@ -13,21 +23,19 @@ def get_offers():
         Flask response: JSON response containing the list of offers or error message.
     """
     try:
-        # Assuming there is a collection named "offers" in your MongoDB database.
-        offers_collection = db_connector.db.offers
-
-        # Fetch all offers from the collection
-        offers = list(offers_collection.find())
-
-        if not offers:
-            return json_util.dumps({"error": "No offers found"}), 404
-
-        return json_util.dumps({"offers": offers}), 200
+        if not db_connector.ping():
+            return error(503, "Unable to connect to the MongoDB server")
+        try: 
+            collection = db_connector.get_collection(offerCollection)
+        except LookupError:
+            return error(404, f"{offerCollection} collection not found")
+        
+        offers=collection.find()
+        return info(200,json_util.dumps({offers}))
 
     except Exception as e:
         print(f"Error retrieving offers from MongoDB: {e}")
-        return json_util.dumps({"error": "Internal Server Error"}), 500
-
+        return error(500, "Internal Server Error")
 
 def update_offer(offer_id):
     """
@@ -40,27 +48,34 @@ def update_offer(offer_id):
         Flask response: JSON response containing the updated offer or an error message.
     """
     try:
-        offers_collection_name = "offers"
+        if not db_connector.ping():
+            return error(503, "Unable to connect to the MongoDB server")
+        
+        try: 
+            db_connector.get_collection(offerCollection)
+        except LookupError:
+            return error(404, f"{offerCollection} collection not found")
+        
         offer_data = request.get_json()
 
-        # Create a query dictionary to identify the offer by its offer_id
         query = {"offer_id": offer_id}
 
-        # Check if the offer_id exists in the collection
-        existing_offer = db_connector.query_data(offers_collection_name, query)
+        if not offer_data:
+            return error(400, "Offer data cannot be empty")
 
-        if not existing_offer:
-            return json_util.dumps(
-                {"error": f"Offer with offer_id {offer_id} not found"}
-            ), 404
+        try: 
+            db_connector.query_data(offerCollection, query)
 
-        db_connector.update_data(offers_collection_name, query, offer_data)
+        except LookupError:
+            return error(400, f"Offer with offer_id {offer_id} not found")
 
-        return json_util.dumps({"message": "Offer updated successfully"}), 200
+        db_connector.update_data(offerCollection, query, offer_data)
+
+        return info(200, "Offer updated successfully")
 
     except Exception as e:
         print(f"Error updating offer in MongoDB: {e}")
-        return json_util.dumps({"error": "Internal Server Error"}), 500
+        return error(500, "Internal Server Error")
 
 
 def delete_offer(offer_id):
@@ -74,26 +89,29 @@ def delete_offer(offer_id):
         Flask response: JSON response containing operation success message.
     """
     try:
-        offers_collection_name = "offers"
-
-        # Create a query dictionary to identify the offer by its offer_id
+        if not db_connector.ping():
+            return error(503, "Unable to connect to the MongoDB server")
+        
+        try: 
+            db_connector.get_collection(offerCollection)
+        except LookupError:
+            return error(404, f"{offerCollection} collection not found")
+        
         query = {"offer_id": offer_id}
 
-        # Check if the offer_id exists in the collection
-        existing_offer = db_connector.query_data(offers_collection_name, query)
+        try: 
+            db_connector.query_data(offerCollection, query)
 
-        if not existing_offer:
-            return json_util.dumps(
-                {"error": f"Offer with offer_id {offer_id} not found"}
-            ), 404
+        except LookupError:
+            return error(400, f"Offer with offer_id {offer_id} not found")
 
-        db_connector.delete_data(offers_collection_name, query)
+        db_connector.delete_data(offerCollection, query)
 
-        return json_util.dumps({"message": "Offer deleted successfully"}), 200
+        return info(200, "Offer deleted successfully")
 
     except Exception as e:
-        print(f"Error updating offer in MongoDB: {e}")
-        return json_util.dumps({"error": "Internal Server Error"}), 500
+        print(f"Error deleting offer in MongoDB: {e}")
+        return error(500, "Internal Server Error")
 
 
 def get_trending_offers():
@@ -104,11 +122,19 @@ def get_trending_offers():
         Flask response: JSON response containing the list of trending offers.
     """
     try:
-        # Assuming there are collections named "offers" and "orders" in your MongoDB database.
-        offers_collection_name = "offers"
-        orders_collection_name = "orders"
+        if not db_connector.ping():
+            return error(503, "Unable to connect to the MongoDB server")
+        
+        try: 
+            db_connector.get_collection(offerCollection)
+        except LookupError:
+            return error(404, f"{offerCollection} collection not found")
+        
+        try: 
+            db_connector.get_collection(orderCollection)
+        except LookupError:
+            return error(404, f"{orderCollection} collection not found")
 
-        # Calculate the date 7 days ago from the current date
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
 
         # Aggregate pipeline to get offers with maximum orders in the past 7 days
@@ -136,7 +162,7 @@ def get_trending_offers():
         ]
 
         # Execute the aggregation pipeline on the "orders" collection
-        trending_offers_result = db_connector.db[orders_collection_name].aggregate(
+        trending_offers_result = DB[orderCollection].aggregate(
             pipeline
         )
         # Extract offer_ids and corresponding total_orders from the aggregation result
@@ -148,19 +174,28 @@ def get_trending_offers():
         sorted_offer_ids = [
             offer_id for offer_id, _ in offer_orders_counter.most_common()
         ]
-
-        # Get offer details based on sorted offer_ids
         trending_offers_data = []
 
         for offer_id in sorted_offer_ids:
-            offer_details = db_connector.query_data(
-                offers_collection_name, {"offer_id": offer_id}
-            )
+            
+            offer_details = DB[offerCollection].find({"offer_id": offer_id})
             if offer_details:
-                trending_offers_data.append(offer_details[0])
+                created_date_str = offer_details[0]["created_at"]
+                validity_duration = offer_details[0]["validity_duration"] 
+                if created_date_str and validity_duration is not None:
+                    try:
+                        # Parse the string representation of the created date to a datetime object
+                        created_date = parse(created_date_str)
+                        
+                        expiration_date = created_date + timedelta(days=validity_duration)
+                        
+                        if expiration_date.replace(tzinfo=utc) >= datetime.now().replace(tzinfo=utc):
+                            trending_offers_data.append(offer_details[0])
 
-        return json_util.dumps({"trending_offers": trending_offers_data}), 200
+                    except ValueError as e:
+                        print(f"Error parsing created_date: {e}")
+        return info(200,json_util.dumps(trending_offers_data))
 
     except Exception as e:
         print(f"Error retrieving trending offers from MongoDB: {e}")
-        return json_util.dumps({"error": "Internal Server Error"}), 500
+        return error(500, "Internal Server Error")
