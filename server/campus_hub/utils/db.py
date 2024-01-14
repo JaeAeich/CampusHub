@@ -5,7 +5,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import ConnectionFailure, PyMongoError
 from werkzeug.exceptions import InternalServerError
-from campus_hub.utils.response import error
+from campus_hub.utils.response import response
 
 
 class DBConnector:
@@ -43,10 +43,8 @@ class DBConnector:
         try:
             self.client.admin.command("ping")
             return True
-        except ConnectionFailure as e:
-            self.logger.error(
-                error(500, "ServerError", "Error connecting to Mongo client", e)
-            )
+        except ConnectionFailure:
+            self.logger.error(response(500, "Error connecting to Mongo client"))
             return False
 
     def close_connection(self) -> None:
@@ -56,10 +54,8 @@ class DBConnector:
         try:
             self.client.close()  # type: ignore[operator]
             self.logger.info("MongoDB connection closed.")
-        except PyMongoError as e:
-            self.logger.error(
-                error(500, "ServerError", "Error closing mongo connection.", e)
-            )
+        except PyMongoError:
+            self.logger.error(response(500, "Error closing mongo connection."))
 
     def get_collection(self, collection_name: str) -> Collection:
         """
@@ -94,9 +90,7 @@ class DBConnector:
             self.logger.info("Data inserted successfully.")
         except PyMongoError as e:
             self.logger.error(
-                error(
-                    500, "ServerError", "Error inserting data to Mongo collection.", e
-                )
+                response(500, "Error inserting data to Mongo collection."), e
             )
             raise InternalServerError("Failed to insert data into MongoDB")
 
@@ -123,12 +117,11 @@ class DBConnector:
             self.db.create_collection(collection_name)  # type: ignore[operator]
         except PyMongoError as e:
             self.logger.error(
-                error(
+                response(
                     500,
-                    "ServerError",
                     f"Error creating {collection_name} collection.",
-                    e,
-                )
+                ),
+                e,
             )
             raise InternalServerError(
                 f"Failed to create collection '{collection_name}'"
@@ -150,9 +143,7 @@ class DBConnector:
             result = list(collection.find(query))
             return result
         except PyMongoError as e:
-            self.logger.error(
-                error(500, "ServerError", "Error querying data from MongoDB.", e)
-            )
+            self.logger.error(response(500, "Error querying data from MongoDB."), e)
             raise InternalServerError("Failed to query data from MongoDB")
 
     def update_data(self, collection_name: str, query: dict, update_data: dict) -> None:
@@ -175,7 +166,7 @@ class DBConnector:
             collection.update_many(query, {"$set": update_data})
             self.logger.info("Data updated successfully.")
         except PyMongoError as e:
-            self.logger.error(error(500, "ServerError", "Error updating data.", e))
+            self.logger.error(response(500, "Error updating data."), e)
             raise InternalServerError("Failed to update data in MongoDB")
 
     def delete_data(self, collection_name: str, query: dict) -> None:
@@ -196,7 +187,7 @@ class DBConnector:
             collection.delete_many(query)
             self.logger.info("Data deleted successfully.")
         except PyMongoError as e:
-            self.logger.error(error(500, "ServerError", "Error deleting data.", e))
+            self.logger.error(response(500, "Error deleting data."), e)
             raise InternalServerError("Failed to delete data in MongoDB")
 
 

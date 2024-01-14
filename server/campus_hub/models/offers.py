@@ -5,7 +5,7 @@ from typing import List
 
 class Offers(BaseModel):
     """
-    Pydantic model representing a payment.
+    Pydantic model representing a offers.
 
     Attributes:
         product_ids: product ids having offer
@@ -54,3 +54,14 @@ class Offers(BaseModel):
             )
 
         return value
+
+
+class OffersList(BaseModel):
+    """
+    Pydantic model representing offer list.
+
+    Attributes:
+        offers: array of offers
+    """
+
+    offers: List[Offers]

@@ -18,6 +18,7 @@ pydantic = "^2.5.3"
 pydantic-extra-types = "^2.4.0"
 pymongo = {version = "3.11", extras = ["srv"]}
 mongo-types = "^0.15.1"
+types-pytz = "^2023.3.1.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.9"

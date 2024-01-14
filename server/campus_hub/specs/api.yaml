@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.0.0
+  version: 1.0.1
 servers:
   - url: /campus_hub/v1
 tags:
@@ -36,6 +36,10 @@ paths:
                 $ref: '#/components/schemas/ServiceList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new service
       operationId: services.add_service
@@ -84,6 +88,10 @@ paths:
                 $ref: '#/components/schemas/Service'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a service
       operationId: services.delete_service
@@ -101,6 +109,10 @@ paths:
           description: Success
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/services/{service_id}/stores':
     get:
       summary: Get a list of all stores of a service.
@@ -123,6 +135,10 @@ paths:
                 $ref: '#/components/schemas/StoreList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new store by service_id
       operationId: services.add_store_by_service_id
@@ -177,6 +193,10 @@ paths:
                 $ref: '#/components/schemas/Store'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a store by service_id
       operationId: services.delete_store_by_service_id
@@ -194,6 +214,10 @@ paths:
           description: Success
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/services/{service_id}/products':
     get:
       summary: Get a list of all products of a service.
@@ -216,6 +240,10 @@ paths:
                 $ref: '#/components/schemas/ProductList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}':
     get:
       summary: Get a specific store.
@@ -238,6 +266,10 @@ paths:
                 $ref: '#/components/schemas/Store'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a store
       operationId: stores.update_store
@@ -264,6 +296,10 @@ paths:
                 $ref: '#/components/schemas/Store'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a store
       operationId: stores.delete_store
@@ -281,6 +317,10 @@ paths:
           description: Success
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   /stores/trending:
     get:
       summary: Get trending stores.
@@ -296,6 +336,10 @@ paths:
                 $ref: '#/components/schemas/StoreList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}/offers':
     get:
       summary: Get a list of all offers from a store.
@@ -318,6 +362,10 @@ paths:
                 $ref: '#/components/schemas/OfferList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new offer
       operationId: stores.add_offer
@@ -368,6 +416,10 @@ paths:
                 $ref: '#/components/schemas/ReviewList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}/orders':
     get:
       summary: Get a list of all orders of a store.
@@ -390,6 +442,10 @@ paths:
                 $ref: '#/components/schemas/OrderList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}/products':
     get:
       summary: Get a list of all products of a store.
@@ -412,6 +468,10 @@ paths:
                 $ref: '#/components/schemas/ProductList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new product
       operationId: stores.add_product
@@ -466,6 +526,10 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a product
       operationId: stores.delete_product
@@ -483,6 +547,10 @@ paths:
           description: Success
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   /products:
     get:
       summary: Get a list of all products.
@@ -504,6 +572,10 @@ paths:
                 $ref: '#/components/schemas/ProductList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/products/{product_id}':
     get:
       summary: Get a specific product.
@@ -526,6 +598,10 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a product
       operationId: products.update_product
@@ -552,6 +628,10 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a product
       operationId: products.delete_product
@@ -569,6 +649,10 @@ paths:
           description: Success
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   /offers:
     get:
       summary: Get a list of all offers.
@@ -584,6 +668,10 @@ paths:
                 $ref: '#/components/schemas/OfferList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/offers/{offer_id}':
     put:
       summary: Update an offer
@@ -597,20 +685,19 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Offer'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Offer'
+                $ref: '#/components/schemas/Response'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a offer
       operationId: offers.delete_offer
@@ -628,6 +715,10 @@ paths:
           description: Success
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   /offers/trending:
     get:
       summary: Get trending offers.
@@ -643,6 +734,10 @@ paths:
                 $ref: '#/components/schemas/OfferList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   /sellers:
     get:
       summary: Get a list of all sellers.
@@ -658,6 +753,10 @@ paths:
                 $ref: '#/components/schemas/SellerList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new seller
       operationId: sellers.add_seller
@@ -833,9 +932,12 @@ components:
       items:
         $ref: '#/components/schemas/Product'
     OfferList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Offer'
+      type: object
+      properties:
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offer'
     Offer:
       type: object
       properties:
@@ -992,6 +1094,18 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Seller'
+    Response:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: The status code.
+        message:
+          type: string
+          description: A user-friendly message.
+      required:
+        - code
+        - message
   parameters:
     service_id:
       name: service_id
