@@ -51,3 +51,13 @@ class Service(BaseModel):
             )
 
         return value
+
+
+class ServiceList(BaseModel):
+    """Pydantic model representing a list service.
+
+    Attributes:
+        services: Array of services.
+    """
+
+    services: List[Service]

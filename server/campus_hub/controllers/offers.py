@@ -15,14 +15,13 @@ def get_offers() -> Union[OffersList, Response]:
         Flask response: JSON response containing the list of offers or error message.
     """
     try:
-        # Assuming there is a collection named "offers" in your MongoDB database.
         offers_collection = db_connector.db.offers
 
         # Fetch all offers from the collection
         offers = offers_collection.find()
 
         if not offers:
-            return response(404, "No offers found")
+            return response(404, "No offers found.")
 
         offer_list = OffersList(offers=[Offers(**offer) for offer in offers])
 
