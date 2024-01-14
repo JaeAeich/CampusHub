@@ -45,6 +45,7 @@ def update_offer(offer_id) -> Response:
     """
     try:
         offers_collection_name = "offers"
+
         offer_data = request.get_json()
 
         # Create a query dictionary to identify the offer by its offer_id
@@ -54,15 +55,15 @@ def update_offer(offer_id) -> Response:
         existing_offer = db_connector.query_data(offers_collection_name, query)
 
         if not existing_offer:
-            return response(404, f"Offer with offer_id {offer_id} not found")
+            return response(404, f"Offer with offer_id {offer_id} not found.")
 
         db_connector.update_data(offers_collection_name, query, offer_data)
 
-        return response(200, f"Offer with offer_id {offer_id} updated successfully")
+        return response(200, f"Offer with offer_id {offer_id} updated successfully.")
 
     except Exception as e:
         print(f"Error updating offer in MongoDB: {e}")
-        return response(500, "Internal Server Error")
+        return response(500, "Internal Server Error.")
 
 
 def delete_offer(offer_id) -> Response:
@@ -89,11 +90,11 @@ def delete_offer(offer_id) -> Response:
 
         db_connector.delete_data(offers_collection_name, query)
 
-        return response(200, "Offer deleted successfully")
+        return response(200, "Offer deleted successfully.")
 
     except Exception as e:
         print(f"Error updating offer in MongoDB: {e}")
-        return response(500, "Internal Server Error")
+        return response(500, "Internal Server Error.")
 
 
 def get_trending_offers() -> Response:
