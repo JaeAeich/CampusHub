@@ -64,3 +64,14 @@ class Seller(BaseModel):
             )
 
         return value
+
+
+class SellerList(BaseModel):
+    """
+    Pydantic model representing list of seller.
+
+    Attributes:
+        sellers: Name of the seller.
+    """
+
+    sellers: List[Seller]

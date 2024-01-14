@@ -1,8 +1,11 @@
-from flask import jsonify, request
+from flask import request
 from campus_hub.utils.db import db_connector
+from campus_hub.utils.response import Response, response
+from campus_hub.models.seller import Seller, SellerList
+from typing import Union
 
 
-def get_sellers():
+def get_sellers() -> Union[Response, SellerList]:
     """
     Get a list of all sellers from the MongoDB database.
 
@@ -10,7 +13,6 @@ def get_sellers():
         Flask response: JSON response containing the list of sellers.
     """
     try:
-        # Assuming there is a collection named "sellers" in your MongoDB database.
         sellers_collection_name = "sellers"
 
         # Fetch all sellers from the collection
@@ -18,21 +20,24 @@ def get_sellers():
 
         # If there are no sellers, return a 404 Not Found response
         if not sellers:
-            return jsonify({"error": "No sellers found"}), 404
+            response(404, "No sellers found.")
 
         # Convert ObjectId to string for each seller
         for seller in sellers:
             seller["_id"] = str(seller["_id"])
 
+        sellers = [Seller(**s) for s in sellers]
+        seller_list = SellerList(sellers=sellers)
+
         # If sellers are found, return a JSON response
-        return jsonify({"sellers": sellers}), 200
+        return seller_list.model_dump()
 
     except Exception as e:
         print(f"Error retrieving sellers from MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return response(500, "Internal Server Error.")
 
 
-def add_seller():
+def add_seller() -> Response:
     """
     Adds a new seller to the MongoDB database.
 
@@ -40,14 +45,13 @@ def add_seller():
         Flask response: JSON response containing the status of the operation.
     """
     try:
-        # Assuming there is a collection named "sellers" in your MongoDB database.
         sellers_collection_name = "sellers"
         seller_data = request.get_json()
 
         db_connector.insert_data(sellers_collection_name, seller_data)
 
-        return jsonify({"message": "seller added successfully"}), 201
+        return response(201, "Seller added successfully")
 
     except Exception as e:
         print(f"Error adding seller to MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return response(500, "Internal Server Error.")

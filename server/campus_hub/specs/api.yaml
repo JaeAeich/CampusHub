@@ -1091,9 +1091,12 @@ components:
         - order_ids
         - seller_address
     SellerList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Seller'
+      type: object
+      properties:
+        sellers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Seller'
     Response:
       type: object
       properties:

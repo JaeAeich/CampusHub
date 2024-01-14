@@ -26,12 +26,6 @@ def get_offers() -> Union[OffersList, Response]:
 
         offer_list = OffersList(offers=[Offers(**offer) for offer in offers])
 
-        print("###########")
-        print(type(offer_list))
-        print("###########")
-        print(offer_list)
-        print("###########")
-        
         return offer_list.model_dump()
 
     except Exception as e:
@@ -143,7 +137,7 @@ def get_trending_offers() -> Response:
 
         # Execute the aggregation pipeline on the "orders" collection
         trending_offers_result = db_connector.db[orders_collection_name].aggregate(
-            pipeline    # type: ignore[arg-type]
+            pipeline  # type: ignore[arg-type]
         )
 
         # Extract offer_ids and corresponding total_orders from the aggregation result

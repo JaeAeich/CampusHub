@@ -225,6 +225,21 @@ dnssec = ["ecdsa (>=0.13)", "pycryptodome"]
 idna = ["idna (>=2.1)"]
 
 [[package]]
+name = "email-validator"
+version = "1.3.1"
+description = "A robust email address syntax and deliverability validation library."
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "email_validator-1.3.1-py2.py3-none-any.whl", hash = "sha256:49a72f5fa6ed26be1c964f0567d931d10bf3fdeeacdf97bc26ef1cd2a44e0bda"},
+    {file = "email_validator-1.3.1.tar.gz", hash = "sha256:d178c5c6fa6c6824e9b04f199cf23e79ac15756786573c190d2ad13089411ad2"},
+]
+
+[package.dependencies]
+dnspython = ">=1.15.0"
+idna = ">=2.0.0"
+
+[[package]]
 name = "flask"
 version = "2.2.5"
 description = "A simple framework for building complex web applications."
@@ -496,6 +511,17 @@ python-versions = ">=3.7"
 files = [
     {file = "packaging-23.2-py3-none-any.whl", hash = "sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7"},
     {file = "packaging-23.2.tar.gz", hash = "sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5"},
+]
+
+[[package]]
+name = "phonenumbers"
+version = "8.13.27"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "phonenumbers-8.13.27-py2.py3-none-any.whl", hash = "sha256:97269235cfd99b907d96bf6223599d3347010ea93bba9d06f88629c021fc2166"},
+    {file = "phonenumbers-8.13.27.tar.gz", hash = "sha256:983bda7a3a8b2fad31806db109d4d36b2758ed16d0ab7ad5e737541a67d4637e"},
 ]
 
 [[package]]
@@ -1040,4 +1066,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "861a8c26d0c0fc800d74b4fa6eb80dc728321d1b67d31a666c9ad4ceb6f0318a"
+content-hash = "53175bd1f4d56a3e305b72b7875843a64f22defe5ce0beaa1dda6aff452fc6b4"
