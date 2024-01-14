@@ -40,6 +40,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new service
       operationId: services.add_service
@@ -51,16 +57,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Service"
+              $ref: "#/components/schemas/PostService"
       responses:
-        '201':
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Service'
-        '405':
-          description: Invalid Input.
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/services/{service_id}':
     put:
       summary: Update a service
@@ -85,9 +101,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Service'
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -105,10 +127,20 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -139,6 +171,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new store by service_id
       operationId: services.add_store_by_service_id
@@ -157,16 +195,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Store'
+              $ref: '#/components/schemas/PostStore'
       responses:
-        '201':
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Store'
+                $ref: '#/components/schemas/ResponseID'
         '405':
-          description: Invalid Input.
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a store by service_id
       operationId: services.update_store_by_service_id
@@ -183,16 +231,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Store'
+              $ref: '#/components/schemas/PostStore'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Store'
+                $ref: '#/components/schemas/ResponseID'
         '404':
-          description: Not Found
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -210,10 +264,20 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -244,6 +308,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}':
     get:
       summary: Get a specific store.
@@ -270,6 +340,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a store
       operationId: stores.update_store
@@ -286,16 +362,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Store'
+              $ref: '#/components/schemas/PostStore'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Store'
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -313,10 +395,20 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -336,6 +428,12 @@ paths:
                 $ref: '#/components/schemas/StoreList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -366,6 +464,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new offer
       operationId: stores.add_offer
@@ -384,16 +488,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Offer'
+              $ref: '#/components/schemas/PostOffer'
       responses:
-        '201':
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Store'
+                $ref: '#/components/schemas/ResponseID'
         '405':
           description: Invalid Input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}/reviews':
     get:
       summary: Get a list of all reviews of a store.
@@ -416,6 +530,12 @@ paths:
                 $ref: '#/components/schemas/ReviewList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -446,6 +566,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}/products':
     get:
       summary: Get a list of all products of a store.
@@ -472,6 +598,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '404':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new product
       operationId: stores.add_product
@@ -490,16 +622,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/PostProduct'
       responses:
-        '201':
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/ResponseID'
         '405':
-          description: Invalid Input.
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a product
       operationId: stores.update_product
@@ -516,16 +658,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/PostProduct'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -543,10 +691,20 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -602,6 +760,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a product
       operationId: products.update_product
@@ -618,16 +782,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/PostProduct'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -645,10 +815,20 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -672,6 +852,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/offers/{offer_id}':
     put:
       summary: Update an offer
@@ -689,16 +875,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Offer'
+              $ref: '#/components/schemas/PostOffer'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -718,8 +910,18 @@ paths:
       responses:
         '204':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -739,6 +941,12 @@ paths:
                 $ref: '#/components/schemas/OfferList'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
           content:
             application/json:
               schema:
@@ -773,27 +981,47 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Seller"
+              $ref: "#/components/schemas/PostSeller"
       responses:
-        '201':
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Seller'
+                $ref: '#/components/schemas/ResponseID'
         '405':
-          description: Invalid Input.
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Service'
-    Service:
       type: object
       properties:
-        service_id:
-          type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+    Service:
+      allOf:
+        - type: object
+          properties:
+            service_id:
+              type: string
+        - $ref: '#/components/schemas/PostService'
+      required:
+        - service_id
+    PostService:
+      type: object
+      properties:
         store_ids:
           type: array
           items:
@@ -811,20 +1039,29 @@ components:
           items:
             type: string
       required:
-        - service_id
         - store_ids
         - service_name
         - service_images
         - service_categories
     StoreList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Store'
-    Store:
       type: object
       properties:
-        store_id:
-          type: string
+        stores:
+          type: array
+          items:
+            $ref: '#/components/schemas/Store'
+    Store:
+      allOf:
+        - type: object
+          properties:
+            store_id:
+              type: string
+        - $ref: '#/components/schemas/PostStore'
+      required:
+        - store_id
+    PostStore:
+      type: object
+      properties:
         store_name:
           type: string
         store_images:
@@ -879,7 +1116,6 @@ components:
         offer_available:
           type: boolean
       required:
-        - store_id
         - seller_id
         - service_id
         - store_images
@@ -893,10 +1129,17 @@ components:
         - customer_order_ids
         - product_ids
     Product:
+      allOf:
+        - type: object
+          properties:
+            product_id:
+              type: string
+        - $ref: '#/components/schemas/PostProduct'
+      required:
+        - product_id
+    PostProduct:
       type: object
       properties:
-        product_id:
-          type: string
         product_categories:
           type: array
           items:
@@ -925,7 +1168,6 @@ components:
         offer_id: 
           type: string
       required:
-        - product_id
         - product_categories
         - product_name
         - store_id
@@ -933,9 +1175,12 @@ components:
         - product_cost
         - stocks
     ProductList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Product'
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
     OfferList:
       type: object
       properties:
@@ -944,6 +1189,13 @@ components:
           items:
             $ref: '#/components/schemas/Offer'
     Offer:
+      allOf:
+        - type: object
+          properties:
+            offer_id:
+              type: string
+        - $ref: '#/components/schemas/PostOffer'
+    PostOffer:
       type: object
       properties:
         product_ids:
@@ -958,8 +1210,6 @@ components:
         validity_duration:
           type: number
           format: integer
-        offer_id:
-          type: string
         service_id:
           type: string
         created_at:
@@ -1056,6 +1306,15 @@ components:
         - delivery_address
         - seller_id
     Seller:
+      allOf:
+        - type: object
+          properties:
+            seller_id: 
+              type: string
+        - $ref: '#/components/schemas/PostSeller'
+      required:
+        - seller_id
+    PostSeller:
       type: object
       properties:
         seller_name: 
@@ -1080,8 +1339,6 @@ components:
           type: string
         seller_address: 
           type: string
-        seller_id: 
-          type: string
         store_ids:
           type: array
           items:
@@ -1090,7 +1347,6 @@ components:
         - seller_name
         - seller_phone_number
         - seller_email
-        - seller_id
         - store_ids
         - seller_gender
         - order_ids
@@ -1102,6 +1358,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Seller'
+    ResponseID:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID created
     Response:
       type: object
       properties:
@@ -1183,4 +1445,3 @@ components:
       schema:
         type: number
         format: float
-    
