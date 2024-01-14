@@ -1,8 +1,9 @@
-from flask import jsonify, request
+from flask import request
 from campus_hub.utils.db import db_connector
 from datetime import datetime, timedelta
 from collections import Counter
 import bson.json_util as json_util
+
 
 def get_offers():
     """
@@ -49,7 +50,9 @@ def update_offer(offer_id):
         existing_offer = db_connector.query_data(offers_collection_name, query)
 
         if not existing_offer:
-            return json_util.dumps({"error": f"Offer with offer_id {offer_id} not found"}), 404
+            return json_util.dumps(
+                {"error": f"Offer with offer_id {offer_id} not found"}
+            ), 404
 
         db_connector.update_data(offers_collection_name, query, offer_data)
 
@@ -80,7 +83,9 @@ def delete_offer(offer_id):
         existing_offer = db_connector.query_data(offers_collection_name, query)
 
         if not existing_offer:
-            return json_util.dumps({"error": f"Offer with offer_id {offer_id} not found"}), 404
+            return json_util.dumps(
+                {"error": f"Offer with offer_id {offer_id} not found"}
+            ), 404
 
         db_connector.delete_data(offers_collection_name, query)
 
