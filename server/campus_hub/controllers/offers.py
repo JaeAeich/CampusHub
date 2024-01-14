@@ -1,12 +1,12 @@
-from flask import request, jsonify
+from flask import request
 from campus_hub.utils.db import db_connector
 from datetime import datetime, timedelta
 from collections import Counter
 import bson.json_util as json_util
 from campus_hub.utils.response import error, info
-from datetime import datetime, timedelta
 from dateutil.parser import parse
 import pytz
+
 utc = pytz.UTC
 
 DB = db_connector.db
@@ -14,6 +14,7 @@ storeCollection = "stores"
 productCollection = "products"
 orderCollection = "orders"
 offerCollection = "offers"
+
 
 def get_offers():
     """
@@ -25,17 +26,18 @@ def get_offers():
     try:
         if not db_connector.ping():
             return error(503, "Unable to connect to the MongoDB server")
-        try: 
+        try:
             collection = db_connector.get_collection(offerCollection)
         except LookupError:
             return error(404, f"{offerCollection} collection not found")
-        
-        offers=collection.find()
-        return info(200,json_util.dumps({offers}))
+
+        offers = collection.find()
+        return info(200, json_util.dumps({offers}))
 
     except Exception as e:
         print(f"Error retrieving offers from MongoDB: {e}")
         return error(500, "Internal Server Error")
+
 
 def update_offer(offer_id):
     """
@@ -50,12 +52,12 @@ def update_offer(offer_id):
     try:
         if not db_connector.ping():
             return error(503, "Unable to connect to the MongoDB server")
-        
-        try: 
+
+        try:
             db_connector.get_collection(offerCollection)
         except LookupError:
             return error(404, f"{offerCollection} collection not found")
-        
+
         offer_data = request.get_json()
 
         query = {"offer_id": offer_id}
@@ -63,7 +65,7 @@ def update_offer(offer_id):
         if not offer_data:
             return error(400, "Offer data cannot be empty")
 
-        try: 
+        try:
             db_connector.query_data(offerCollection, query)
 
         except LookupError:
@@ -91,15 +93,15 @@ def delete_offer(offer_id):
     try:
         if not db_connector.ping():
             return error(503, "Unable to connect to the MongoDB server")
-        
-        try: 
+
+        try:
             db_connector.get_collection(offerCollection)
         except LookupError:
             return error(404, f"{offerCollection} collection not found")
-        
+
         query = {"offer_id": offer_id}
 
-        try: 
+        try:
             db_connector.query_data(offerCollection, query)
 
         except LookupError:
@@ -124,13 +126,13 @@ def get_trending_offers():
     try:
         if not db_connector.ping():
             return error(503, "Unable to connect to the MongoDB server")
-        
-        try: 
+
+        try:
             db_connector.get_collection(offerCollection)
         except LookupError:
             return error(404, f"{offerCollection} collection not found")
-        
-        try: 
+
+        try:
             db_connector.get_collection(orderCollection)
         except LookupError:
             return error(404, f"{orderCollection} collection not found")
@@ -162,9 +164,7 @@ def get_trending_offers():
         ]
 
         # Execute the aggregation pipeline on the "orders" collection
-        trending_offers_result = DB[orderCollection].aggregate(
-            pipeline
-        )
+        trending_offers_result = DB[orderCollection].aggregate(pipeline)
         # Extract offer_ids and corresponding total_orders from the aggregation result
         offer_orders_counter = Counter(
             {result["_id"]: result["total_orders"] for result in trending_offers_result}
@@ -177,24 +177,27 @@ def get_trending_offers():
         trending_offers_data = []
 
         for offer_id in sorted_offer_ids:
-            
             offer_details = DB[offerCollection].find({"offer_id": offer_id})
             if offer_details:
                 created_date_str = offer_details[0]["created_at"]
-                validity_duration = offer_details[0]["validity_duration"] 
+                validity_duration = offer_details[0]["validity_duration"]
                 if created_date_str and validity_duration is not None:
                     try:
                         # Parse the string representation of the created date to a datetime object
                         created_date = parse(created_date_str)
-                        
-                        expiration_date = created_date + timedelta(days=validity_duration)
-                        
-                        if expiration_date.replace(tzinfo=utc) >= datetime.now().replace(tzinfo=utc):
+
+                        expiration_date = created_date + timedelta(
+                            days=validity_duration
+                        )
+
+                        if expiration_date.replace(
+                            tzinfo=utc
+                        ) >= datetime.now().replace(tzinfo=utc):
                             trending_offers_data.append(offer_details[0])
 
                     except ValueError as e:
                         print(f"Error parsing created_date: {e}")
-        return info(200,json_util.dumps(trending_offers_data))
+        return info(200, json_util.dumps(trending_offers_data))
 
     except Exception as e:
         print(f"Error retrieving trending offers from MongoDB: {e}")
