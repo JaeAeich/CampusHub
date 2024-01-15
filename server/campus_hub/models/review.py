@@ -23,7 +23,7 @@ class Review(BaseModel):
     @validator("user_id", "rating", "comment_headline", pre=True, always=True)
     def validate_required_fields(cls, value):
         """
-        Validator to ensure that required fields (user_id, rating) are always present.
+        Validator to ensure that required fields (user_id, rating, comment_headline) are always present.
         """
         required_fields = ["user_id", "rating", "comment_headline"]
         missing_fields = [field for field in required_fields if not value.get(field)]

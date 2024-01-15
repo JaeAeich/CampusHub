@@ -49,7 +49,7 @@ class Order(BaseModel):
     )
     def validate_required_fields(cls, value):
         """
-        Validator to ensure that required fields (order_id, user_id, product_list, store_id, delivery_status, amount_paid, transaction_id, delivery_address, seller_id) are always present.
+        Validator to ensure that required fields (order_id, user_id, email_id, product_list, store_id, store_name, delivery_status, amount_paid, transaction_id, delivery_address, seller_id) are always present.
         """
         required_fields = [
             "order_id",
