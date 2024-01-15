@@ -23,7 +23,6 @@ pytz = "^2023.3.post1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.9"
-mypy = "^1.8.0"
 
 [build-system]
 requires = ["poetry-core"]
