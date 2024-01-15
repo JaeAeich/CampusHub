@@ -59,7 +59,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PostService"
       responses:
-        '200':
+        '201':
           description: Success
           content:
             application/json:
@@ -598,7 +598,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-        '404':
+        '500':
           description: Server Error
           content:
             application/json:
