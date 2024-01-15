@@ -154,3 +154,9 @@ def delete_store(store_id: str):
         return {"message": "Store deleted successfully"}
     except Exception:
         return {"message": "Error deleting store"}, 500
+
+def add_offer(self, store_id: str):
+    return {"message": "Offer added successfully"}
+
+def add_product(self, store_id: str):
+    return {"message": "Product added successfully"}
