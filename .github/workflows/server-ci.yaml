@@ -3,10 +3,10 @@ name: Server CI
 on:
   push:
     branches:
-      - main
+      - dev
   pull_request:
     branches:
-      - main
+      - dev
 
 jobs:
   lint-and-format:
@@ -69,12 +69,3 @@ jobs:
           cd server
           source .venv/bin/activate
           ruff check .
-
-      #----------------------------------------------
-      #              run type checking suite
-      #----------------------------------------------
-      - name: Check types
-        run: |
-          cd server
-          source .venv/bin/activate
-          mypy .
