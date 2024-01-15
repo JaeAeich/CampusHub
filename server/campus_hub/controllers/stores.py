@@ -196,29 +196,72 @@ def get_reviews_by_store_id(store_id):
 
 def get_orders_by_store_id(store_id):
     """
-    Returns a list of all orders by store_id.
-    """
+    Get orders of a specific store from the MongoDB database.
 
+    Returns:
+        Flask response: JSON response containing the list of orders of a store.
+    """
     try:
-        orderCollection
-        cursor = orderCollection.find({"store_id": store_id})
-        orders = {"data": list(cursor)}
+        if not db_connector.ping():
+            return error(503, "Unable to connect to the MongoDB server")
+
+        try:
+            db_connector.get_collection(orderCollection)
+        except LookupError:
+            return error(404, f"{orderCollection} collection not found")
+
+        try:
+            db_connector.get_collection(storeCollection)
+        except LookupError:
+            return error(404, f"{storeCollection} collection not found")
+        
+        try:
+            query = {"store_id": store_id}
+            orders = db_connector.query_data(orderCollection, query)
+        except LookupError:
+            return error(400, f"Orders for store_id {store_id} not found")
+
+
+        return info(200, json_util.dumps(orders))
+
+        
     except Exception:
         return {"message": "Error connecting to database"}, 500
-    return {"data": orders}, 200
 
 
 def get_products_by_store_id(store_id):
     """
-    Returns a list of all products by store_id.
+    Get products of a specific store from the MongoDB database.
+
+    Returns:
+        Flask response: JSON response containing the list of products of a store.
     """
     try:
-        cursor = productCollection.find({"store_id": store_id}, limit=10)
-        products = {"data": list(cursor)}
+        if not db_connector.ping():
+            return error(503, "Unable to connect to the MongoDB server")
+
+        try:
+            db_connector.get_collection(productCollection)
+        except LookupError:
+            return error(404, f"{productCollection} collection not found")
+
+        try:
+            db_connector.get_collection(storeCollection)
+        except LookupError:
+            return error(404, f"{storeCollection} collection not found")
+        
+        try:
+            query = {"store_id": store_id}
+            products = db_connector.query_data(productCollection, query)
+        except LookupError:
+            return error(400, f"Products for store_id {store_id} not found")
+
+
+        return info(200, json_util.dumps(products))
+
+        
     except Exception:
         return {"message": "Error connecting to database"}, 500
-    
-    return {"data": products}, 200
 
 
 def update_product(product_id):
