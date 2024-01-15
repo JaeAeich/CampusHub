@@ -32,8 +32,9 @@ def get_offers():
             return error(404, f"{offerCollection} collection not found")
 
         offers = collection.find()
+        print(offers)
         return info(200, json_util.dumps({offers}))
-
+    
     except Exception as e:
         print(f"Error retrieving offers from MongoDB: {e}")
         return error(500, "Internal Server Error")
@@ -185,7 +186,6 @@ def get_trending_offers():
                 if offer_details:
                     created_date_str = offer_details[0]["created_at"]
                     validity_duration = offer_details[0]["validity_duration"]
-                    print(created_date_str, validity_duration)
                     if created_date_str and validity_duration is not None:
                         try:
                             # Parse the string representation of the created date to a datetime object
@@ -204,7 +204,7 @@ def get_trending_offers():
                             print(f"Error parsing created_date: {e}")
             except LookupError:
                 print(
-                    f"LookupError: No offer found for offer_id: {offer_id}. Skipping."
+                    f"LookupError: No offer found with offer_id: {offer_id}. Skipping."
                 )
                 continue
         return info(200, json_util.dumps(trending_offers_data))
