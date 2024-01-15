@@ -175,28 +175,34 @@ def get_trending_offers():
             offer_id for offer_id, _ in offer_orders_counter.most_common()
         ]
         trending_offers_data = []
-
+        print("hi")
         for offer_id in sorted_offer_ids:
-            offer_details = DB[offerCollection].find({"offer_id": offer_id})
-            if offer_details:
-                created_date_str = offer_details[0]["created_at"]
-                validity_duration = offer_details[0]["validity_duration"]
-                if created_date_str and validity_duration is not None:
-                    try:
-                        # Parse the string representation of the created date to a datetime object
-                        created_date = parse(created_date_str)
+            try:
+                offer_details = db_connector.query_data(offerCollection, {"offer_id": offer_id})
+                                                    
+                if offer_details:
+                    created_date_str = offer_details[0]["created_at"]
+                    validity_duration = offer_details[0]["validity_duration"]
+                    print(created_date_str, validity_duration)
+                    if created_date_str and validity_duration is not None:
+                        try:
+                            # Parse the string representation of the created date to a datetime object
+                            created_date = parse(created_date_str)
 
-                        expiration_date = created_date + timedelta(
-                            days=validity_duration
-                        )
+                            expiration_date = created_date + timedelta(
+                                days=validity_duration
+                            )
 
-                        if expiration_date.replace(
-                            tzinfo=utc
-                        ) >= datetime.now().replace(tzinfo=utc):
-                            trending_offers_data.append(offer_details[0])
+                            if expiration_date.replace(
+                                tzinfo=utc
+                            ) >= datetime.now().replace(tzinfo=utc):
+                                trending_offers_data.append(offer_details[0])
 
-                    except ValueError as e:
-                        print(f"Error parsing created_date: {e}")
+                        except ValueError as e:
+                            print(f"Error parsing created_date: {e}")
+            except LookupError:
+                print(f"LookupError: No offer found for offer_id: {offer_id}. Skipping.")
+                continue
         return info(200, json_util.dumps(trending_offers_data))
 
     except Exception as e:
