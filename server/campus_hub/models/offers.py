@@ -35,7 +35,7 @@ class Offers(BaseModel):
     )
     def validate_required_fields(cls, value):
         """
-        Validator to ensure that required fields (product_id, store_id, discount, validity_duration, offer_id) are always present.
+        Validator to ensure that required fields (product_ids, store_id, discount, validity_duration, offer_id, service_id) are always present.
         """
         required_fields = [
             "product_ids",
