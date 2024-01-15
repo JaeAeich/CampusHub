@@ -178,8 +178,10 @@ def get_trending_offers():
         print("hi")
         for offer_id in sorted_offer_ids:
             try:
-                offer_details = db_connector.query_data(offerCollection, {"offer_id": offer_id})
-                                                    
+                offer_details = db_connector.query_data(
+                    offerCollection, {"offer_id": offer_id}
+                )
+
                 if offer_details:
                     created_date_str = offer_details[0]["created_at"]
                     validity_duration = offer_details[0]["validity_duration"]
@@ -201,7 +203,9 @@ def get_trending_offers():
                         except ValueError as e:
                             print(f"Error parsing created_date: {e}")
             except LookupError:
-                print(f"LookupError: No offer found for offer_id: {offer_id}. Skipping.")
+                print(
+                    f"LookupError: No offer found for offer_id: {offer_id}. Skipping."
+                )
                 continue
         return info(200, json_util.dumps(trending_offers_data))
 

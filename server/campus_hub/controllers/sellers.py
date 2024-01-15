@@ -4,7 +4,7 @@ def get_sellers():
 
     Returns:
         Flask response: JSON response containing the list of sellers.
-    """ 
+    """
 
 
 def add_seller():
