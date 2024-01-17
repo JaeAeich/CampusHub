@@ -1,8 +1,8 @@
-import {Link} from "react-router-dom"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { SVGProps } from "react"
-import { JSX } from "react/jsx-runtime"
+import { Link } from 'react-router-dom';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { SVGProps } from 'react';
+import { JSX } from 'react/jsx-runtime';
 import { GoogleLogin } from '@react-oauth/google';
 
 export default function Component() {
@@ -10,7 +10,7 @@ export default function Component() {
     console.log(response);
   };
   const errorMessage = (error: any) => {
-      console.log(error);
+    console.log(error);
   };
   return (
     <div className="min-h-screen flex">
@@ -79,7 +79,6 @@ function ChromeIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
 
 function FlagIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (

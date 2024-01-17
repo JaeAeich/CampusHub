@@ -60,7 +60,6 @@ export const products: Array<{
   },
 ];
 
-
 export const miniProducts: Array<{
   imgSrc: string;
   category: string;
@@ -69,7 +68,28 @@ export const miniProducts: Array<{
   price: string;
   discount: string;
 }> = [
-    { imgSrc: "./images/products/clothes-1.jpg", alt: "relaxed short full sleeve t-shirt", title: "Relaxed Short full Sleeve T-Shirt", category: "Clothes", price: "$45.00", discount: "$12.00" },
-    { imgSrc: "./images/products/clothes-2.jpg", alt: "girls pink embro design top", title: "Girls pnk Embro design Top", category: "Clothes", price: "$61.00", discount: "$9.00" },
-    { imgSrc: "./images/products/clothes-3.jpg", alt: "black floral wrap midi skirt", title: "Black Floral Wrap Midi Skirt", category: "Clothes", price: "$76.00", discount: "$25.00" },
-  ];
+  {
+    imgSrc: './images/products/clothes-1.jpg',
+    alt: 'relaxed short full sleeve t-shirt',
+    title: 'Relaxed Short full Sleeve T-Shirt',
+    category: 'Clothes',
+    price: '$45.00',
+    discount: '$12.00',
+  },
+  {
+    imgSrc: './images/products/clothes-2.jpg',
+    alt: 'girls pink embro design top',
+    title: 'Girls pnk Embro design Top',
+    category: 'Clothes',
+    price: '$61.00',
+    discount: '$9.00',
+  },
+  {
+    imgSrc: './images/products/clothes-3.jpg',
+    alt: 'black floral wrap midi skirt',
+    title: 'Black Floral Wrap Midi Skirt',
+    category: 'Clothes',
+    price: '$76.00',
+    discount: '$25.00',
+  },
+];
