@@ -164,20 +164,27 @@ class DBConnector:
                 f"Failed to create collection '{collection_name}'"
             )
 
-    def query_data(self, collection_name: str, query: dict) -> list:
+    def query_data(self, collection_name: str, query: dict, projection: dict = None) -> list:
         """
         Queries data from the specified MongoDB collection.
 
         Args:
             collection_name (str): Name of the collection.
             query (dict): Query parameters.
+            projection (dict, optional): Projection parameters. Defaults to None.
 
         Returns:
             list: List of documents matching the query.
         """
         try:
             collection = self.db[collection_name]
-            result = list(collection.find(query))
+            
+            # Apply projection if provided
+            if projection:
+                result = list(collection.find(query, projection))
+            else:
+                result = list(collection.find(query))
+
             return result
         except PyMongoError as e:
             self.logger.error(
@@ -187,6 +194,7 @@ class DBConnector:
                 e,
             )
             raise InternalServerError("Failed to query data from MongoDB")
+
 
     def update_data(self, collection_name: str, query: dict, update_data: dict) -> None:
         """
