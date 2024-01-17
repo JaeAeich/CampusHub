@@ -1,5 +1,5 @@
 from typing import List, Optional, Literal
-from pydantic import BaseModel, validator, EmailStr
+from pydantic import BaseModel, EmailStr
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 
@@ -29,41 +29,6 @@ class Seller(BaseModel):
     seller_address: str
     seller_id: str
     store_ids: List[str]
-
-    # @validator(
-    #     "seller_name",
-    #     "seller_phone_number",
-    #     "seller_email",
-    #     "seller_gender",
-    #     "order_ids",
-    #     "seller_address",
-    #     "seller_id",
-    #     "store_ids",
-    #     pre=True,
-    #     always=True,
-    # )
-    # def validate_required_fields(cls, value):
-    #     """
-    #     Validator to ensure that required fields (seller_name, seller_phone_number, seller_email, seller_id, store_ids, seller_gender , order_ids, seller_address) are always present.
-    #     """
-    #     required_fields = [
-    #         "seller_name",
-    #         "seller_phone_number",
-    #         "seller_email",
-    #         "seller_gender",
-    #         "order_ids",
-    #         "seller_address",
-    #         "seller_id",
-    #         "store_ids",
-    #     ]
-    #     missing_fields = [field for field in required_fields if not value.get(field)]
-
-    #     if missing_fields:
-    #         raise ValueError(
-    #             f"The following fields are required and cannot be empty for seller: {', '.join(missing_fields)}"
-    #         )
-
-    #     return value
 
 
 class SellerList(BaseModel):
