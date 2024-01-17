@@ -1,10 +1,11 @@
 import os
-<<<<<<< Updated upstream
-=======
 import logging
 import shortuuid
->>>>>>> Stashed changes
 from pymongo import MongoClient
+from pymongo.collection import Collection
+from pymongo.errors import ConnectionFailure, PyMongoError
+from werkzeug.exceptions import InternalServerError
+from campus_hub.utils.response import response
 
 
 class DBConnector:
@@ -32,11 +33,6 @@ class DBConnector:
         try:
             self.client.admin.command("ping")
             return True
-<<<<<<< Updated upstream
-        except Exception as e:
-            print(f"Error pinging MongoDB: {e}")
-            return False
-=======
         except ConnectionFailure:
             self.logger.error(response(500, "Error(DBConnector.ping) connecting to Mongo client"))
             return False
@@ -210,4 +206,3 @@ class DBConnector:
 
 
 db_connector = DBConnector()
->>>>>>> Stashed changes
