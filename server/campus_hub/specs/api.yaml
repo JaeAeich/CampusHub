@@ -1075,8 +1075,7 @@ components:
           items:
             type: string
         store_phone_number:
-          type: number
-          format: integer
+          type: string
         store_email:
           type: string
           format: email
@@ -1320,8 +1319,7 @@ components:
         seller_name: 
           type: string
         seller_phone_number: 
-          type: number
-          format: integer
+          type: string
         seller_email: 
           type: string
           format: email
