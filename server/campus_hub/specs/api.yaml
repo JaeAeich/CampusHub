@@ -790,6 +790,15 @@ components:
           type: string
         service_id:
           type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - product_ids
+        - store_id
+        - discount
+        - validity_duration
+        - service_id
     Review:
       type: object
       properties:
@@ -849,6 +858,94 @@ components:
           type: string
         seller_id:
           type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - order_id
+        - user_id
+        - email_id
+        - product_list
+        - store_id
+        - store_name
+        - delivery_status
+        - amount_paid
+        - transaction_id
+        - delivery_address
+        - seller_id
+    Seller:
+      allOf:
+        - type: object
+          properties:
+            seller_id: 
+              type: string
+        - $ref: '#/components/schemas/PostSeller'
+      required:
+        - seller_id
+    PostSeller:
+      type: object
+      properties:
+        seller_name: 
+          type: string
+        seller_phone_number: 
+          type: number
+          format: integer
+        seller_email: 
+          type: string
+          format: email
+        seller_gender: 
+          type: string
+          enum: 
+            - Male
+            - Female
+            - Other
+        order_ids: 
+          type: array
+          items:
+            type: string
+        seller_image: 
+          type: array
+          items:
+            type: string
+        seller_address: 
+          type: string
+        store_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - seller_name
+        - seller_phone_number
+        - seller_email
+        - store_ids
+        - seller_gender
+        - order_ids
+        - seller_address
+    SellerList:
+      type: object
+      properties:
+        sellers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Seller'
+    ResponseID:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID created
+    Response:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: The status code.
+        message:
+          type: string
+          description: A user-friendly message.
+      required:
+        - code
+        - message
   parameters:
     service_id:
       name: service_id
