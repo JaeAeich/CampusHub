@@ -1,8 +1,8 @@
-import {Link} from "react-router-dom"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Link } from 'react-router-dom';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
-export default function Component() {
+export default function Login() {
   return (
     <div className="min-h-screen flex">
       <div className="w-1/2 bg-black text-white p-12 flex flex-col justify-between">
@@ -12,8 +12,8 @@ export default function Component() {
         </div>
         <div>
           <p className="text-lg italic">
-            "This library has saved me countless hours of work and helped me deliver stunning designs to my clients
-            faster than ever before."
+            "This library has saved me countless hours of work and helped me deliver stunning
+            designs to my clients faster than ever before."
           </p>
           <p className="text-lg font-semibold mt-4">Sofia Davis</p>
         </div>
@@ -44,7 +44,7 @@ export default function Component() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function ChromeIcon(props) {
@@ -67,9 +67,8 @@ function ChromeIcon(props) {
       <line x1="3.95" x2="8.54" y1="6.06" y2="14" />
       <line x1="10.88" x2="15.46" y1="21.94" y2="14" />
     </svg>
-  )
+  );
 }
-
 
 function FlagIcon(props) {
   return (
@@ -88,5 +87,5 @@ function FlagIcon(props) {
       <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
       <line x1="4" x2="4" y1="22" y2="15" />
     </svg>
-  )
+  );
 }
