@@ -1,9 +1,10 @@
 from campus_hub.utils.db import db_connector
 from campus_hub.models.seller import Seller, SellerList
 from campus_hub.utils.response import Response, response
-from pydantic import ValidationError 
-from typing import Union
+from pydantic import ValidationError
+from typing import Union, MutableMapping, Any
 from flask import request
+
 
 def get_sellers() -> Union[Response, SellerList]:
     """
@@ -15,8 +16,8 @@ def get_sellers() -> Union[Response, SellerList]:
         sellers_collection_name = "sellers"
 
         # Query without including _id field in the result
-        query = {}
-        projection = {'_id': False}
+        query: dict = {}
+        projection = {"_id": False}
 
         sellers = db_connector.query_data(sellers_collection_name, query, projection)
 
@@ -29,7 +30,7 @@ def get_sellers() -> Union[Response, SellerList]:
         except ValidationError as ve:
             print(f"Validation Error: {ve}")
             return response(500, "DB has inconsistent data.")
-        
+
         seller_list = SellerList(sellers=sellers)
 
         # If sellers are found, return a JSON response
@@ -49,10 +50,17 @@ def add_seller() -> Response:
     """
     try:
         sellers_collection_name = "sellers"
-        seller_data = request.json
+        request_json = request.json
+
+        # Check if request.json is not None before assignment
+        if request_json is not None:
+            seller_data: MutableMapping[Any, Any] = request_json
+        else:
+            # Handle the case when request.json is None
+            seller_data = {}
 
         # Add uui as seller id
-        seller_data["seller_id"] = db_connector.generate_unique_id('sellers')
+        seller_data["seller_id"] = db_connector.generate_unique_id("sellers")
 
         # Validate the incoming data using Pydantic model
         try:
