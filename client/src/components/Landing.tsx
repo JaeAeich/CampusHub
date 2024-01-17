@@ -1,8 +1,17 @@
-import { Link } from 'react-router-dom';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import {Link} from "react-router-dom"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { SVGProps } from "react"
+import { JSX } from "react/jsx-runtime"
+import { GoogleLogin } from '@react-oauth/google';
 
-export default function Login() {
+export default function Component() {
+  const responseMessage = (response: any) => {
+    console.log(response);
+  };
+  const errorMessage = (error: any) => {
+      console.log(error);
+  };
   return (
     <div className="min-h-screen flex">
       <div className="w-1/2 bg-black text-white p-12 flex flex-col justify-between">
@@ -34,10 +43,11 @@ export default function Login() {
             <span className="mx-4 text-sm text-gray-500">OR CONTINUE WITH</span>
             <div className="flex-grow h-px bg-gray-300" />
           </div>
-          <Button className="flex items-center justify-center w-full mb-4" variant="outline">
+          {/* <Button className="flex items-center justify-center w-full mb-4" variant="outline">
             <ChromeIcon className="text-gray-600 h-5 w-5 mr-2" />
             Google
-          </Button>
+          </Button> */}
+          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
           <p className="text-xs text-gray-500 mt-4">
             By clicking continue, you agree to our Terms of Service and Privacy Policy.
           </p>
@@ -47,7 +57,7 @@ export default function Login() {
   );
 }
 
-function ChromeIcon(props) {
+function ChromeIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -70,7 +80,8 @@ function ChromeIcon(props) {
   );
 }
 
-function FlagIcon(props) {
+
+function FlagIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
