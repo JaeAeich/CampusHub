@@ -17,7 +17,6 @@ function Landing() {
           <Banner />
           <DealOfTheDay />
           <ServiceCards />
-          <MiniProducts/>
         </div>
       </main>
       <Footer />
