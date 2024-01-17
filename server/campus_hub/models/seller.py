@@ -1,6 +1,5 @@
 from typing import List, Optional, Literal
-from pydantic import BaseModel, EmailStr
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel
 
 
 class Seller(BaseModel):
@@ -21,8 +20,8 @@ class Seller(BaseModel):
     """
 
     seller_name: str
-    seller_phone_number: PhoneNumber
-    seller_email: EmailStr
+    seller_phone_number: str
+    seller_email: str
     seller_gender: Literal["Male", "Female", "Other"]
     order_ids: List[str]
     seller_image: Optional[str]

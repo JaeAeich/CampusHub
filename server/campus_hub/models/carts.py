@@ -16,6 +16,7 @@ class CartItem(BaseModel):
     quantity: int
     wishlisted_price: Optional[float]
 
+
 class Cart(BaseModel):
     """
     Pydantic model representing a collection of carts.

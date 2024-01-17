@@ -1,6 +1,5 @@
 from typing import List, Optional, Tuple
-from pydantic import BaseModel, EmailStr
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel
 
 
 class Store(BaseModel):
@@ -29,8 +28,8 @@ class Store(BaseModel):
     store_images: List[str]
     store_description: Optional[str]
     store_categories: List[str]
-    store_phone_number: PhoneNumber
-    store_email: EmailStr
+    store_phone_number: str
+    store_email: str
     customer_order_ids: List[str]
     product_ids: List[str]
     seller_id: str

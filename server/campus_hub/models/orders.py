@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from campus_hub.models.carts import CartItem
 
 
@@ -23,7 +23,7 @@ class Order(BaseModel):
 
     order_id: str
     user_id: str
-    email_id: EmailStr
+    email_id: str
     product_list: List[CartItem]
     store_id: str
     store_name: str

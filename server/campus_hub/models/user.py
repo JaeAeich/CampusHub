@@ -1,6 +1,5 @@
 from typing import List, Optional, Literal
-from pydantic import BaseModel, EmailStr
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel
 
 
 class User(BaseModel):
@@ -22,8 +21,8 @@ class User(BaseModel):
 
     user_id: str
     user_name: str
-    user_phone_number: PhoneNumber
-    user_email: EmailStr
+    user_phone_number: str
+    user_email: str
     user_gender: Literal["Male", "Female", "Other"]
     order_ids: List[str]
     user_image: Optional[str]

@@ -635,23 +635,6 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
-name = "pydantic-extra-types"
-version = "2.4.0"
-description = "Extra Pydantic types."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pydantic_extra_types-2.4.0-py3-none-any.whl", hash = "sha256:f681b6f6c91f386de4193d0827d61ff0631c79bb4bc8819ebb1ba3753fd84586"},
-    {file = "pydantic_extra_types-2.4.0.tar.gz", hash = "sha256:e99136fc350803942e0e5a822eba8bf2087fe4982da6676b9382a71e7e9fc5b8"},
-]
-
-[package.dependencies]
-pydantic = ">=2.5.2"
-
-[package.extras]
-all = ["phonenumbers (>=8,<9)", "pycountry (>=23,<24)", "python-ulid (>=1,<2)"]
-
-[[package]]
 name = "pymongo"
 version = "3.11.0"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
@@ -982,6 +965,17 @@ files = [
 Jinja2 = ">=2.0"
 
 [[package]]
+name = "types-pytz"
+version = "2023.3.1.1"
+description = "Typing stubs for pytz"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-pytz-2023.3.1.1.tar.gz", hash = "sha256:cc23d0192cd49c8f6bba44ee0c81e4586a8f30204970fc0894d209a6b08dab9a"},
+    {file = "types_pytz-2023.3.1.1-py3-none-any.whl", hash = "sha256:1999a123a3dc0e39a2ef6d19f3f8584211de9e6a77fe7a0259f04a524e90a5cf"},
+]
+
+[[package]]
 name = "typing"
 version = "3.7.4.1"
 description = "Type Hints for Python"
@@ -1040,4 +1034,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f3a2a1bcd2a10fd98f712a6f73a65f5bcc28973c5c2211d3e6c6a2634138e97e"
+content-hash = "1e302b3d62dad3208282073a20ff1f2259535ba2c487c248e79e2c0a7de74818"
