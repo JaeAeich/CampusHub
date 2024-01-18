@@ -17,11 +17,11 @@ def response(status: Status, **Kwargs) -> tuple[Response, Status]:
     Create a response object.
 
     Args:
-        status_code (int): HTTP status code.
-        message (str): User-friendly message.
+        status (Status): Status of the response.
+        **Kwargs: Keyword arguments to be included in the response.
 
     Returns:
-        str: JSON-formatted response object.
+        Flask response: JSON response containing the status of the operation.
     """
     return jsonify({
         **Kwargs,
