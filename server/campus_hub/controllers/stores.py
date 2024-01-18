@@ -87,7 +87,7 @@ def add_offer(store_id) -> Response:
 
     except Exception as e:
         print(f"Error adding offer to MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return jsonify({"error": "Internal Server Error"})
 
 
 def add_product():
