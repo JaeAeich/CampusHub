@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 
 class CartItem(BaseModel):
@@ -16,21 +16,6 @@ class CartItem(BaseModel):
     quantity: int
     wishlisted_price: Optional[float]
 
-    @validator("product_id", "quantity", pre=True, always=True)
-    def validate_required_fields(cls, value):
-        """
-        Validator to ensure that required fields (product_id, quantity) are always present.
-        """
-        required_fields = ["product_id", "quantity"]
-        missing_fields = [field for field in required_fields if not value.get(field)]
-
-        if missing_fields:
-            raise ValueError(
-                f"The following fields are required and cannot be empty for cart item: {', '.join(missing_fields)}"
-            )
-
-        return value
-
 
 class Cart(BaseModel):
     """
@@ -43,19 +28,3 @@ class Cart(BaseModel):
 
     cart_id: str
     carts: List[str]
-
-    @validator(
-        "cart_id",
-        "carts",
-        pre=True,
-        always=True,
-    )
-    def validate_user_id(cls, value):
-        """
-        Validator to ensure that (cart_id, carts) is not empty.
-        """
-        if not value:
-            raise ValueError(
-                "cart_id, carts is required and cannot be empty for carts."
-            )
-        return value

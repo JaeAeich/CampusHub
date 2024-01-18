@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, validator, EmailStr
+from pydantic import BaseModel
 from campus_hub.models.carts import CartItem
 
 
@@ -23,7 +23,7 @@ class Order(BaseModel):
 
     order_id: str
     user_id: str
-    email_id: EmailStr
+    email_id: str
     product_list: List[CartItem]
     store_id: str
     store_name: str
@@ -32,42 +32,3 @@ class Order(BaseModel):
     transaction_id: str
     delivery_address: str
     seller_id: str
-
-    @validator(
-        "order_id",
-        "user_id",
-        "product_list",
-        "email_id" "store_id",
-        "store_name",
-        "delivery_status",
-        "amount_paid",
-        "transaction_id",
-        "delivery_address",
-        "seller_id",
-        pre=True,
-        always=True,
-    )
-    def validate_required_fields(cls, value):
-        """
-        Validator to ensure that required fields (order_id, user_id, product_list, store_id, delivery_status, amount_paid, transaction_id, delivery_address, seller_id) are always present.
-        """
-        required_fields = [
-            "order_id",
-            "user_id",
-            "product_list",
-            "email_id" "store_id",
-            "store_name",
-            "delivery_status",
-            "amount_paid",
-            "transaction_id",
-            "delivery_address",
-            "seller_id",
-        ]
-        missing_fields = [field for field in required_fields if not value.get(field)]
-
-        if missing_fields:
-            raise ValueError(
-                f"The following fields are required and cannot be empty for order: {', '.join(missing_fields)}"
-            )
-
-        return value

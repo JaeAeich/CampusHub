@@ -1,6 +1,5 @@
 from typing import List, Optional, Literal
-from pydantic import BaseModel, validator, EmailStr
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel
 
 
 class User(BaseModel):
@@ -22,46 +21,11 @@ class User(BaseModel):
 
     user_id: str
     user_name: str
-    user_phone_number: PhoneNumber
-    user_email: EmailStr
+    user_phone_number: str
+    user_email: str
     user_gender: Literal["Male", "Female", "Other"]
     order_ids: List[str]
     user_image: Optional[str]
     user_address: str
     cart_id: str
     wishlist_cart_id: str
-
-    @validator(
-        "user_id",
-        "user_name",
-        "user_phone_number",
-        "user_email",
-        "user_gender",
-        "user_address",
-        "cart_id",
-        "wishlist_cart_id",
-        pre=True,
-        always=True,
-    )
-    def validate_required_fields(cls, value):
-        """
-        Validator to ensure that required fields (user_id, user_name, user_phone_number, user_email, user_gender, user_address, order_ids, cart_id, wishlist_cart_id) are always present.
-        """
-        required_fields = [
-            "user_id",
-            "user_name",
-            "user_phone_number",
-            "user_email",
-            "user_gender",
-            "user_address",
-            "cart_id",
-            "wishlist_cart_id",
-        ]
-        missing_fields = [field for field in required_fields if not value.get(field)]
-
-        if missing_fields:
-            raise ValueError(
-                f"The following fields are required and cannot be empty for user: {', '.join(missing_fields)}"
-            )
-
-        return value

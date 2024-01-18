@@ -1,6 +1,5 @@
 from typing import List, Optional, Tuple
-from pydantic import BaseModel, validator, EmailStr
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel
 
 
 class Store(BaseModel):
@@ -29,8 +28,8 @@ class Store(BaseModel):
     store_images: List[str]
     store_description: Optional[str]
     store_categories: List[str]
-    store_phone_number: PhoneNumber
-    store_email: EmailStr
+    store_phone_number: str
+    store_email: str
     customer_order_ids: List[str]
     product_ids: List[str]
     seller_id: str
@@ -41,48 +40,3 @@ class Store(BaseModel):
     stripe_public_key: str
     timings: Optional[Tuple[float, float]]
     overall_rating: Optional[float]
-
-    @validator(
-        "store_id",
-        "seller_id",
-        "service_id",
-        "store_images",
-        "store_phone_number",
-        "store_email",
-        "store_categories",
-        "store_name",
-        "customer_order_ids",
-        "coordinates",
-        "store_address",
-        "stripe_public_key",
-        "product_ids",
-        pre=True,
-        always=True,
-    )
-    def validate_required_fields(cls, value):
-        """
-        Validator to ensure that all required fields (store_id, seller_id, service_id, store_images, store_name, store_phone_number, store_email, store_categories, coordinates, store_address, stripe_public_key, customer_order_ids, product_ids) are always present.
-        """
-        required_fields = [
-            "store_id",
-            "seller_id",
-            "service_id",
-            "store_images",
-            "store_phone_number",
-            "store_email",
-            "store_categories",
-            "store_name",
-            "customer_order_ids",
-            "coordinates",
-            "store_address",
-            "stripe_public_key",
-            "product_ids",
-        ]
-        missing_fields = [field for field in required_fields if not value.get(field)]
-
-        if missing_fields:
-            raise ValueError(
-                f"The following fields are required and cannot be empty for store: {', '.join(missing_fields)}"
-            )
-
-        return value

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from typing import Literal
 
 
@@ -160,38 +160,3 @@ class Payment(BaseModel):
     ]
     upi_id: str
     payment_status: Literal["COD", "UPI"]
-
-    @validator(
-        "transaction_id",
-        "payment_mode",
-        "amount",
-        "description",
-        "source",
-        "currency",
-        "upi_id",
-        "payment_status",
-        pre=True,
-        always=True,
-    )
-    def validate_required_fields(cls, value):
-        """
-        Validator to ensure that required fields (transaction_id, payment_mode, amount, description, source, currency, upi_id, payment_status) are always present.
-        """
-        required_fields = [
-            "transaction_id",
-            "payment_mode",
-            "amount",
-            "description",
-            "source",
-            "currency",
-            "upi_id",
-            "payment_status",
-        ]
-        missing_fields = [field for field in required_fields if not value.get(field)]
-
-        if missing_fields:
-            raise ValueError(
-                f"The following fields are required and cannot be empty for payment: {', '.join(missing_fields)}"
-            )
-
-        return value

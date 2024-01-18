@@ -44,3 +44,8 @@ def delete_store_by_service_id(service_id):
 def get_products_by_service_id(service_id):
     # Placeholder logic to get details of a specific service by ID
     return {"id": service_id, "name": "Service", "description": "Description"}
+
+
+def add_store_by_service_id(service_id):
+    # Placeholder logic to get details of a specific service by ID
+    return {"id": service_id, "name": "Service", "description": "Description"}
