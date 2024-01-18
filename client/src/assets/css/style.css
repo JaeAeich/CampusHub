@@ -963,8 +963,10 @@ body::-webkit-scrollbar-thumb:hover {
   font-size: var(--fs-7);
   padding: 2px 0;
 }
-.navLogo {
+h2.navLogo {
   font-family: 'Raleway', sans-serif;
+  font-weight: bolder;
+  font-size: xx-large;
   color: white;
 }
 .white-svg {

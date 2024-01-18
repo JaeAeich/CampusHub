@@ -2,7 +2,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SVGProps } from 'react';
 import { JSX } from 'react/jsx-runtime';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from 'git status
+';
 
 export default function Component() {
   const responseMessage = (response: any) => {
@@ -28,7 +29,7 @@ export default function Component() {
           <h2 className="text-login text-3xl font-bold mb-4">Create an account</h2>
           <p className="text-login text-gray-600 mb-8">Enter your email below to create your account</p>
           <Input className="mb-4 border border-gray-300 placeholder-black" placeholder="name@example.com" />
-          <Button className=" w-full mb-4">Sign In with Email</Button>
+          <Button className="loginEmail w-full mb-4">Sign In with Email</Button>
           <div className="flex items-center mb-4">
             <div className="flex-grow h-px bg-gray-300" />
             <span className="mx-4 text-sm tzext-gray-500">OR CONTINUE WITH</span>
@@ -38,7 +39,7 @@ export default function Component() {
             <ChromeIcon className="text-gray-600 h-5 w-5 mr-2" />
             Google
           </Button> */}
-          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} style={{width:"100%"}}/>
           <p className="text-xs text-gray-500 mt-4">
             By clicking continue, you agree to our Terms of Service and Privacy Policy.
           </p>
