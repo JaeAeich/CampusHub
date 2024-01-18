@@ -1,12 +1,19 @@
 from campus_hub.utils.db import db_connector
 from campus_hub.models.seller import Seller, SellerList
-from campus_hub.utils.response import Response, response
 from pydantic import ValidationError
-from typing import Union, MutableMapping, Any
-from flask import request
+from pymongo.errors import PyMongoError
+from typing import MutableMapping, Any
+from flask import request, jsonify, Response
+
+from campus_hub.utils.exceptions import (
+    DBQueryError,
+    DBInsertionError,
+    InvalidData,
+    InconsistentDBData,
+)
 
 
-def get_sellers() -> Union[Response, SellerList]:
+def get_sellers() -> Response:
     """
     Get a list of all sellers from the MongoDB database.
     Returns:
@@ -21,24 +28,24 @@ def get_sellers() -> Union[Response, SellerList]:
 
         sellers = db_connector.query_data(sellers_collection_name, query, projection)
 
-        # If there are no sellers, return a 404 Not Found response
-        if not sellers:
-            return response(404, "No sellers found.")
+        # If there are no sellers, raise a custom exception
+        if not sellers or len(sellers) == 0:
+            raise DBQueryError("No sellers found.")
 
         try:
             sellers = [Seller(**s) for s in sellers]
         except ValidationError as ve:
             print(f"Validation Error: {ve}")
-            return response(500, "DB has inconsistent data.")
+            raise InconsistentDBData("DB has inconsistent data.")
 
-        seller_list = SellerList(sellers=sellers)
+        seller_list: SellerList = SellerList(sellers=sellers)
 
         # If sellers are found, return a JSON response
-        return seller_list.model_dump()
+        return jsonify(seller_list.model_dump())
 
     except Exception as e:
         print(f"Error retrieving sellers from MongoDB: {e}")
-        return response(500, "Internal Server Error.")
+        return jsonify({"error": str(e)})
 
 
 def add_seller() -> Response:
@@ -60,21 +67,25 @@ def add_seller() -> Response:
             seller_data = {}
 
         # Add uui as seller id
-        seller_data["seller_id"] = db_connector.generate_unique_id("sellers")
+        seller_id: str = db_connector.generate_unique_id("sellers")
+        seller_data["seller_id"] = seller_id
 
         # Validate the incoming data using Pydantic model
         try:
             seller = Seller(**seller_data)
         except ValidationError as ve:
             print(f"Validation Error: {ve}")
-            return response(405, "Invalid seller data.")
+            raise InvalidData("Invalid seller data.")
 
         # Add the seller data to the database
-        db_connector.insert_data(sellers_collection_name, seller.dict())
+        try:
+            db_connector.insert_data(sellers_collection_name, seller.dict())
+        except PyMongoError as e:
+            print(f"Error adding seller to MongoDB: {e}")
+            raise DBInsertionError("Internal Server Error.")
 
         # Return a success response
-        return response(200, "Seller added successfully.")
-
+        return jsonify({"seller_id": seller_id})
     except Exception as e:
         print(f"Error adding seller to MongoDB: {e}")
-        return response(500, "Internal Server Error.")
+        raise DBInsertionError("Internal Server Error.")

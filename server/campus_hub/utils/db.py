@@ -4,8 +4,18 @@ import shortuuid
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.errors import ConnectionFailure, PyMongoError
-from werkzeug.exceptions import InternalServerError
 from campus_hub.utils.response import response
+
+# Import custom exceptions
+from campus_hub.utils.exceptions import (
+    DBConnectionError,
+    DBQueryError,
+    DBInsertionError,
+    DBUpdateError,
+    DBDeletionError,
+    UniqueIDGenerationError,
+    CollectionCreationError,
+)
 
 
 class DBConnector:
@@ -41,7 +51,7 @@ class DBConnector:
             self.logger.error(
                 response(500, "Error(DBConnector.ping) connecting to Mongo client")
             )
-            return False
+            raise DBConnectionError()
 
     def close_connection(self) -> None:
         """
@@ -96,7 +106,7 @@ class DBConnector:
                 ),
                 e,
             )
-            raise InternalServerError("Failed to insert data into MongoDB")
+            raise DBInsertionError(str(e))
 
     def generate_unique_id(self, collection_name: str) -> str:
         """
@@ -110,7 +120,7 @@ class DBConnector:
             str: Unique ID.
         """
         try:
-            id = collection_name + "-" + str(shortuuid.uuid())
+            id = collection_name + "_" + str(shortuuid.uuid())
             return id
         except Exception as e:
             self.logger.error(
@@ -119,7 +129,7 @@ class DBConnector:
                 ),
                 e,
             )
-            raise InternalServerError("Failed to generate unique id")
+            raise UniqueIDGenerationError()
 
     def collection_exists(self, collection: Collection) -> bool:
         """
@@ -141,7 +151,7 @@ class DBConnector:
                 ),
                 e,
             )
-            raise InternalServerError("Failed to check if collection exists")
+            raise DBQueryError(str(e))
 
     def create_collection(self, collection_name: str) -> None:
         """
@@ -160,9 +170,7 @@ class DBConnector:
                 ),
                 e,
             )
-            raise InternalServerError(
-                f"Failed to create collection '{collection_name}'"
-            )
+            raise CollectionCreationError(collection_name)
 
     def query_data(
         self, collection_name: str, query: dict, projection: dict = {}
@@ -195,7 +203,7 @@ class DBConnector:
                 ),
                 e,
             )
-            raise InternalServerError("Failed to query data from MongoDB")
+            raise DBQueryError(str(e))
 
     def update_data(self, collection_name: str, query: dict, update_data: dict) -> None:
         """
@@ -220,15 +228,17 @@ class DBConnector:
             self.logger.error(
                 response(500, "Error(DBConnector.update_data) updating data."), e
             )
-            raise InternalServerError("Failed to update data in MongoDB")
+            raise DBUpdateError(str(e))
 
     def delete_data(self, collection_name: str, query: dict) -> None:
         """
-        Deletes data from the specified MongoDB collection.
+                Deletes data from the specified MongoDB collection.
 
-        Args:
-            collection_name (str): Name of the collection.
-            query (dict): Query parameters to identify the document(s) to delete.
+                Args:
+                    collection_name (str): Name of the collection.
+                    query (dict): Query parameters to identify the document(s
+
+        ) to delete.
         """
         try:
             collection = self.db[collection_name]
@@ -243,7 +253,7 @@ class DBConnector:
             self.logger.error(
                 response(500, "Error(DBConnector.delete_data) deleting data."), e
             )
-            raise InternalServerError("Failed to delete data in MongoDB")
+            raise DBDeletionError(str(e))
 
 
 db_connector = DBConnector()

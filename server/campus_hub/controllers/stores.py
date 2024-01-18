@@ -1,8 +1,7 @@
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from campus_hub.utils.db import db_connector
 from campus_hub.models.offers import Offers
-from campus_hub.utils.response import response, response_id
-
+# from campus_hub.utils.exceptions import 
 
 def get_store_by_id(store_id):
     # Placeholder logic to get details of a specific service by ID
@@ -54,7 +53,7 @@ def delete_store(store_id):
     return {"message": "Service deleted successfully"}
 
 
-def add_offer(store_id):
+def add_offer(store_id) -> Response:
     """
     Adds a new offer to the MongoDB database.
 
@@ -73,7 +72,7 @@ def add_offer(store_id):
         existing_store = db_connector.query_data("stores", store_query)
 
         if not existing_store:
-            return response(404, f"Store with store_id {store_id} not found")
+            raise ValueError
 
         # Add the store_id to the offer_data before inserting into the database
         _offer["store_id"] = store_id
@@ -84,7 +83,7 @@ def add_offer(store_id):
 
         db_connector.insert_data(offers_collection_name, offer.model_dump())
 
-        return response_id(offer_id)
+        return jsonify({"offer_id": offer_id})
 
     except Exception as e:
         print(f"Error adding offer to MongoDB: {e}")
