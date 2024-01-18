@@ -3,18 +3,11 @@ from campus_hub.models.seller import Seller, SellerList
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from typing import MutableMapping, Any
-from flask import request, jsonify, Response
-from campus_hub.utils.response import response, Status
-
-from campus_hub.utils.exceptions import (
-    DBQueryError,
-    DBInsertionError,
-    InvalidData,
-    InconsistentDBData,
-)
+from flask import request
+from campus_hub.utils.response import response, message, Status, APIResponse
 
 
-def get_sellers() -> tuple[Response, Status]:
+def get_sellers() -> APIResponse:
     """
     Get a list of all sellers from the MongoDB database.
     Returns:
@@ -31,13 +24,15 @@ def get_sellers() -> tuple[Response, Status]:
 
         # If there are no sellers, raise a custom exception
         if not sellers or len(sellers) == 0:
-            return response(Status.NOT_FOUND, "No sellers found.")
+            return response(Status.NOT_FOUND, **message("No sellers found."))
 
         try:
             sellers = [Seller(**s) for s in sellers]
         except Exception as e:
             print(f"Validation Error: {e}")
-            return response(Status.INTERNAL_SERVER_ERROR, "Invalid seller data in DB.")
+            return response(
+                Status.INTERNAL_SERVER_ERROR, **message("Invalid seller data in DB.")
+            )
 
         seller_list: SellerList = SellerList(sellers=sellers)
 
@@ -46,10 +41,13 @@ def get_sellers() -> tuple[Response, Status]:
 
     except Exception as e:
         print(f"Error retrieving sellers from MongoDB: {e}")
-        return jsonify({"error": str(e)})
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving sellers from MongoDB: {e}"),
+        )
 
 
-def add_seller() -> Response:
+def add_seller() -> APIResponse:
     """
     Adds a new seller to the MongoDB database.
 
@@ -76,17 +74,21 @@ def add_seller() -> Response:
             seller = Seller(**seller_data)
         except ValidationError as ve:
             print(f"Validation Error: {ve}")
-            raise InvalidData("Invalid seller data.")
+            return response(Status.BAD_REQUEST, **message("Invalid seller data."))
 
         # Add the seller data to the database
         try:
             db_connector.insert_data(sellers_collection_name, seller.dict())
         except PyMongoError as e:
             print(f"Error adding seller to MongoDB: {e}")
-            raise DBInsertionError("Internal Server Error.")
+            return response(
+                Status.INTERNAL_SERVER_ERROR, **message("Internal Server Error.")
+            )
 
         # Return a success response
-        return jsonify({"seller_id": seller_id})
+        return response(Status.SUCCESS, **{"seller_id": seller_id})
     except Exception as e:
         print(f"Error adding seller to MongoDB: {e}")
-        raise DBInsertionError("Internal Server Error.")
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message("Internal Server Error.")
+        )

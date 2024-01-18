@@ -1,7 +1,8 @@
 from flask import jsonify, request, Response
 from campus_hub.utils.db import db_connector
 from campus_hub.models.offers import Offers
-# from campus_hub.utils.exceptions import 
+# from campus_hub.utils.exceptions import
+
 
 def get_store_by_id(store_id):
     # Placeholder logic to get details of a specific service by ID

@@ -4,7 +4,7 @@ import shortuuid
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.errors import ConnectionFailure, PyMongoError
-from campus_hub.utils.response import response
+from campus_hub.utils.response import response, Status, message
 
 # Import custom exceptions
 from campus_hub.utils.exceptions import (
@@ -49,7 +49,10 @@ class DBConnector:
             return True
         except ConnectionFailure:
             self.logger.error(
-                response(500, "Error(DBConnector.ping) connecting to Mongo client")
+                response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message("Error(DBConnector.ping) connecting to Mongo client"),
+                )
             )
             raise DBConnectionError()
 
@@ -63,7 +66,10 @@ class DBConnector:
         except PyMongoError:
             self.logger.error(
                 response(
-                    500, "Error(DBConnector.close_connection) closing mongo connection."
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        "Error(DBConnector.close_connection) closing connection."
+                    ),
                 )
             )
 
@@ -101,8 +107,10 @@ class DBConnector:
         except PyMongoError as e:
             self.logger.error(
                 response(
-                    500,
-                    "Error(DBConnector.insert_data) inserting data to Mongo collection.",
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        "Error(DBConnector.insert_data) inserting data to Mongo collection."
+                    ),
                 ),
                 e,
             )
@@ -125,7 +133,10 @@ class DBConnector:
         except Exception as e:
             self.logger.error(
                 response(
-                    500, "Error(DBConnector.generate_unique_id) generating unique id."
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        "Error(DBConnector.generate_unique_id) generating unique id."
+                    ),
                 ),
                 e,
             )
@@ -146,8 +157,10 @@ class DBConnector:
         except PyMongoError as e:
             self.logger.error(
                 response(
-                    500,
-                    "Error(DBConnector.collection_exists) checking if collection exists.",
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        "Error(DBConnector.collection_exists) checking if collection exists."
+                    ),
                 ),
                 e,
             )
@@ -165,8 +178,10 @@ class DBConnector:
         except PyMongoError as e:
             self.logger.error(
                 response(
-                    500,
-                    f"Error(DBConnector.create_collection) creating {collection_name} collection.",
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        f"Error(DBConnector.create_collection) creating {collection_name} collection.)"
+                    ),
                 ),
                 e,
             )
@@ -199,7 +214,10 @@ class DBConnector:
         except PyMongoError as e:
             self.logger.error(
                 response(
-                    500, "Error(DBConnector.query_data) querying data from MongoDB."
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        "Error(DBConnector.query_data) querying data from MongoDB."
+                    ),
                 ),
                 e,
             )
@@ -226,7 +244,11 @@ class DBConnector:
             self.logger.info("Data updated successfully.")
         except PyMongoError as e:
             self.logger.error(
-                response(500, "Error(DBConnector.update_data) updating data."), e
+                response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message("Error(DBConnector.update_data) updating data."),
+                ),
+                e,
             )
             raise DBUpdateError(str(e))
 
@@ -251,7 +273,11 @@ class DBConnector:
             self.logger.info("Data deleted successfully.")
         except PyMongoError as e:
             self.logger.error(
-                response(500, "Error(DBConnector.delete_data) deleting data."), e
+                response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message("Error(DBConnector.delete_data) deleting data."),
+                ),
+                e,
             )
             raise DBDeletionError(str(e))
 

@@ -1,10 +1,7 @@
-from typing import Dict, Union, Any
 from enum import Enum
 from flask import jsonify, Response
+from typing import Any, Dict
 
-Response = Dict[str, Union[int, str]]
-
-ResponseID = Dict[str, str]
 
 class Status(Enum):
     SUCCESS = 200
@@ -12,7 +9,12 @@ class Status(Enum):
     NOT_FOUND = 404
     INTERNAL_SERVER_ERROR = 500
 
-def response(status: Status, **Kwargs) -> tuple[Response, Status]:
+
+APIResponse = tuple[Response, int]
+APIMessage = Dict[str, Any]
+
+
+def response(status: Status, **Kwargs) -> APIResponse:
     """
     Create a response object.
 
@@ -23,6 +25,17 @@ def response(status: Status, **Kwargs) -> tuple[Response, Status]:
     Returns:
         Flask response: JSON response containing the status of the operation.
     """
-    return jsonify({
-        **Kwargs,
-    }), status.value
+    return jsonify(
+        {
+            **Kwargs,
+        }
+    ), status.value
+
+
+def message(message: str) -> APIMessage:
+    """
+    Generate a JSON response with a given message.
+    """
+    return {
+        "message": message,
+    }
