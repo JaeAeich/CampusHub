@@ -85,7 +85,7 @@ def add_offer(store_id) -> APIResponse:
 
         db_connector.insert_data(offers_collection_name, offer.model_dump())
 
-        return response(Status.SUCCESS, **{"offer_id": offer_id})
+        return response(Status.SUCCESS, **{"id": offer_id})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

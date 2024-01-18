@@ -84,11 +84,12 @@ def add_seller() -> APIResponse:
             db_connector.insert_data(sellers_collection_name, seller.dict())
         except PyMongoError as e:
             return response(
-                Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
             )
 
         # Return a success response
-        return response(Status.SUCCESS, **{"seller_id": seller_id})
+        return response(Status.SUCCESS, **{"id": seller_id})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

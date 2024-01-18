@@ -1365,14 +1365,10 @@ components:
     Response:
       type: object
       properties:
-        code:
-          type: integer
-          description: The status code.
         message:
           type: string
           description: A user-friendly message.
       required:
-        - code
         - message
   parameters:
     service_id:
