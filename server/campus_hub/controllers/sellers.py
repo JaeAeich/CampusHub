@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from typing import MutableMapping, Any
 from flask import request, jsonify, Response
+from campus_hub.utils.response import response, Status
 
 from campus_hub.utils.exceptions import (
     DBQueryError,
@@ -13,7 +14,7 @@ from campus_hub.utils.exceptions import (
 )
 
 
-def get_sellers() -> Response:
+def get_sellers() -> tuple[Response, Status]:
     """
     Get a list of all sellers from the MongoDB database.
     Returns:
@@ -30,18 +31,18 @@ def get_sellers() -> Response:
 
         # If there are no sellers, raise a custom exception
         if not sellers or len(sellers) == 0:
-            raise DBQueryError("No sellers found.")
+            return response(Status.NOT_FOUND, "No sellers found.")
 
         try:
             sellers = [Seller(**s) for s in sellers]
-        except ValidationError as ve:
-            print(f"Validation Error: {ve}")
-            raise InconsistentDBData("DB has inconsistent data.")
+        except Exception as e:
+            print(f"Validation Error: {e}")
+            return response(Status.INTERNAL_SERVER_ERROR, "Invalid seller data in DB.")
 
         seller_list: SellerList = SellerList(sellers=sellers)
 
         # If sellers are found, return a JSON response
-        return jsonify(seller_list.model_dump())
+        return response(Status.SUCCESS, **seller_list.model_dump())
 
     except Exception as e:
         print(f"Error retrieving sellers from MongoDB: {e}")

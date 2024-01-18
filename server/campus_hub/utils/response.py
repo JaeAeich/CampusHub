@@ -1,11 +1,18 @@
-from typing import Dict, Union
+from typing import Dict, Union, Any
+from enum import Enum
+from flask import jsonify, Response
 
 Response = Dict[str, Union[int, str]]
 
 ResponseID = Dict[str, str]
 
+class Status(Enum):
+    SUCCESS = 200
+    BAD_REQUEST = 400
+    NOT_FOUND = 404
+    INTERNAL_SERVER_ERROR = 500
 
-def response(status_code: int, message: str) -> Response:
+def response(status: Status, **Kwargs) -> tuple[Response, Status]:
     """
     Create a response object.
 
@@ -16,21 +23,6 @@ def response(status_code: int, message: str) -> Response:
     Returns:
         str: JSON-formatted response object.
     """
-    return {
-        "status_code": status_code,
-        "message": message,
-    }
-
-
-def response_id(id: str) -> ResponseID:
-    """
-    Create a response for unique ID.
-
-    Args:
-        id (str): Unique ID (UUID)
-
-    Returns:
-
-    """
-
-    return {"id": id}
+    return jsonify({
+        **Kwargs,
+    }), status.value
