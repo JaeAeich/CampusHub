@@ -5,6 +5,7 @@ from pymongo.errors import PyMongoError
 from typing import MutableMapping, Any
 from flask import request
 from campus_hub.utils.response import response, message, Status, APIResponse
+from typing import List
 
 
 def get_sellers() -> APIResponse:
@@ -13,25 +14,26 @@ def get_sellers() -> APIResponse:
     Returns:
         Flask response: JSON response containing the list of sellers.
     """
+
+    sellers_collection_name = "sellers"
+
+    # Query without including _id field in the result
+    query: dict = {}
+    projection = {"_id": False}
+
     try:
-        sellers_collection_name = "sellers"
-
-        # Query without including _id field in the result
-        query: dict = {}
-        projection = {"_id": False}
-
-        sellers = db_connector.query_data(sellers_collection_name, query, projection)
+        _sellers = db_connector.query_data(sellers_collection_name, query, projection)
 
         # If there are no sellers, raise a custom exception
-        if not sellers or len(sellers) == 0:
+        if not _sellers or len(_sellers) == 0:
             return response(Status.NOT_FOUND, **message("No sellers found."))
 
         try:
-            sellers = [Seller(**s) for s in sellers]
+            sellers: List[Seller] = [Seller(**s) for s in _sellers]
         except Exception as e:
-            print(f"Validation Error: {e}")
             return response(
-                Status.INTERNAL_SERVER_ERROR, **message("Invalid seller data in DB.")
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid seller data in DB: {str(e)}"),
             )
 
         seller_list: SellerList = SellerList(sellers=sellers)
@@ -40,7 +42,6 @@ def get_sellers() -> APIResponse:
         return response(Status.SUCCESS, **seller_list.model_dump())
 
     except Exception as e:
-        print(f"Error retrieving sellers from MongoDB: {e}")
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving sellers from MongoDB: {e}"),
@@ -54,10 +55,11 @@ def add_seller() -> APIResponse:
     Returns:
         Flask response: JSON response containing the status of the operation.
     """
-    try:
-        sellers_collection_name = "sellers"
-        request_json = request.json
 
+    sellers_collection_name = "sellers"
+    request_json = request.json
+
+    try:
         # Check if request.json is not None before assignment
         if request_json is not None:
             seller_data: MutableMapping[Any, Any] = request_json
@@ -71,24 +73,23 @@ def add_seller() -> APIResponse:
 
         # Validate the incoming data using Pydantic model
         try:
-            seller = Seller(**seller_data)
+            seller: Seller = Seller(**seller_data)
         except ValidationError as ve:
-            print(f"Validation Error: {ve}")
-            return response(Status.BAD_REQUEST, **message("Invalid seller data."))
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid seller data: {str(ve)}")
+            )
 
         # Add the seller data to the database
         try:
             db_connector.insert_data(sellers_collection_name, seller.dict())
         except PyMongoError as e:
-            print(f"Error adding seller to MongoDB: {e}")
             return response(
-                Status.INTERNAL_SERVER_ERROR, **message("Internal Server Error.")
+                Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
             )
 
         # Return a success response
         return response(Status.SUCCESS, **{"seller_id": seller_id})
     except Exception as e:
-        print(f"Error adding seller to MongoDB: {e}")
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message("Internal Server Error.")
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )

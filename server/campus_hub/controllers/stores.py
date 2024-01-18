@@ -1,7 +1,7 @@
-from flask import jsonify, request, Response
+from flask import request
 from campus_hub.utils.db import db_connector
 from campus_hub.models.offers import Offers
-# from campus_hub.utils.exceptions import
+from campus_hub.utils.response import Status, APIResponse, response, message
 
 
 def get_store_by_id(store_id):
@@ -54,7 +54,7 @@ def delete_store(store_id):
     return {"message": "Service deleted successfully"}
 
 
-def add_offer(store_id) -> Response:
+def add_offer(store_id) -> APIResponse:
     """
     Adds a new offer to the MongoDB database.
 
@@ -64,31 +64,32 @@ def add_offer(store_id) -> Response:
     Returns:
         Flask response: JSON response containing the status of the operation.
     """
-    try:
-        offers_collection_name = "offers"
-        _offer = request.get_json()
 
+    offers_collection_name = "offers"
+    _offer = request.get_json()
+
+    try:
         # Check if the store with the specified store_id exists
         store_query = {"store_id": store_id}
         existing_store = db_connector.query_data("stores", store_query)
 
         if not existing_store:
-            raise ValueError
+            return response(Status.NOT_FOUND, **message("Store doesn't exist."))
 
         # Add the store_id to the offer_data before inserting into the database
         _offer["store_id"] = store_id
 
-        offer_id = db_connector.generate_unique_id(offers_collection_name)
+        offer_id: str = db_connector.generate_unique_id(offers_collection_name)
 
-        offer = Offers(offer_id=offer_id, **_offer)
+        offer: Offers = Offers(offer_id=offer_id, **_offer)
 
         db_connector.insert_data(offers_collection_name, offer.model_dump())
 
-        return jsonify({"offer_id": offer_id})
-
+        return response(Status.SUCCESS, **{"offer_id": offer_id})
     except Exception as e:
-        print(f"Error adding offer to MongoDB: {e}")
-        return jsonify({"error": "Internal Server Error"})
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
 
 
 def add_product():
