@@ -12,20 +12,12 @@ export default function Component() {
     console.log(error);
   };
   return (
-    <div className="min-h-screen flex">
-      <div className="w-1/2 bg-black text-white p-12 flex flex-col justify-between">
-        <div>
-          <FlagIcon className="text-white h-6 w-6" />
-          <h1 className="text-4xl font-bold mt-2">Acme Inc</h1>
-        </div>
-        <div>
-          <p className="text-lg italic">
-            "This library has saved me countless hours of work and helped me deliver stunning
-            designs to my clients faster than ever before."
-          </p>
-          <p className="text-lg font-semibold mt-4">Sofia Davis</p>
-        </div>
-      </div>
+    <div className="login min-h-screen flex">
+      <div className="w-1/2 bg-black text-white px-12 flex flex-col justify-center relative">
+  <div className='px-12'>
+    <img src="./logo-with-name.png" width="70%" className='loginLogo' alt="CampusHub Logo"></img>
+  </div>
+</div>
       <div className="w-1/2 bg-white p-12 flex flex-col justify-center">
         <div className="text-right">
           {/* <Link className="text-sm font-medium text-gray-600" href="#">
@@ -33,13 +25,13 @@ export default function Component() {
           </Link> */}
         </div>
         <div className="mt-12">
-          <h2 className="text-3xl font-bold mb-4">Create an account</h2>
-          <p className="text-gray-600 mb-8">Enter your email below to create your account</p>
-          <Input className="mb-4" placeholder="name@example.com" />
-          <Button className="bg-[#bd1e59] text-white w-full  mb-4">Sign In with Email</Button>
+          <h2 className="text-login text-3xl font-bold mb-4">Create an account</h2>
+          <p className="text-login text-gray-600 mb-8">Enter your email below to create your account</p>
+          <Input className="mb-4 border border-gray-300 placeholder-black" placeholder="name@example.com" />
+          <Button className=" w-full mb-4">Sign In with Email</Button>
           <div className="flex items-center mb-4">
             <div className="flex-grow h-px bg-gray-300" />
-            <span className="mx-4 text-sm text-gray-500">OR CONTINUE WITH</span>
+            <span className="mx-4 text-sm tzext-gray-500">OR CONTINUE WITH</span>
             <div className="flex-grow h-px bg-gray-300" />
           </div>
           {/* <Button className="flex items-center justify-center w-full mb-4" variant="outline">
