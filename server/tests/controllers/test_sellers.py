@@ -32,25 +32,20 @@ def test_add_seller(app):
     )
 
     print("Response Status Code:", response.status_code)
-    print("Response Data:", response.data.decode("utf-8"))
+    print("Response Data:", response.data)
 
     assert response.status_code == 200
 
-    data = json.loads(response.data.decode("utf-8"))
+    data = json.loads(response.data)
     assert "id" in data
 
 
 def test_get_sellers(app):
     client = app.test_client()
 
-    # Perform a GET request to the /sellers endpoint
     response = client.get("campus_hub/v1/sellers")
-
-    # Assert that the response status code is 200 OK
     assert response.status_code == 200
 
-    # Parse the JSON response
-    data = json.loads(response.data.decode("utf-8"))
+    data = json.loads(response.data)
 
-    # API response should contain a "sellers" (list) field and it should be a list
     assert "sellers" in data
