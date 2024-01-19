@@ -14,14 +14,14 @@ class Review(BaseModel):
         review_images: Image references in the review.
     """
 
-    comment_headline = str
+    comment_headline: str
     comment: Optional[str]
     user_id: str
     rating: float
     review_images: List[str]
 
 
-class Reviews(BaseModel):
+class ReviewList(BaseModel):
     """
     Pydantic model representing a collection of reviews.
 

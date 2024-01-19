@@ -32,3 +32,13 @@ class Order(BaseModel):
     transaction_id: str
     delivery_address: str
     seller_id: str
+
+class OrderList(BaseModel):
+    """
+    Pydantic model representing a list of orders.
+
+    Attributes:
+        orders: list of orders
+    """
+
+    orders: List[Order]

@@ -3,3 +3,6 @@ data/
 
 # ignore env file
 *.env
+
+# ignore local vscode settings 
+.vscode/

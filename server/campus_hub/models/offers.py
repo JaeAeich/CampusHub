@@ -22,3 +22,13 @@ class Offers(BaseModel):
     discount: float
     validity_duration: timedelta
     offer_id: str
+
+class OfferList(BaseModel):
+    """
+    Pydantic model representing a list of offers.
+
+    Attributes:
+        offers: list of offers
+    """
+
+    offers: List[Offers]
