@@ -22,3 +22,14 @@ class Service(BaseModel):
     service_description: Optional[str]
     service_images: List[str]
     service_categories: List[str]
+
+
+class ServiceList(BaseModel):
+    """
+    Pydantic model representing list of service.
+
+    Attributes:
+        services: Name of the service.
+    """
+
+    services: List[Service]

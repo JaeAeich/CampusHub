@@ -29,6 +29,8 @@ class Product(BaseModel):
     product_description: Optional[str]
     stocks: int
     product_specifications: Optional[Dict]
+    offer_id: str
+
 
 class ProductList(BaseModel):
     """

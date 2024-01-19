@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.0.1
+  version: 1.0.2
 servers:
   - url: /campus_hub/v1
 tags:
@@ -231,7 +231,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostStore'
+              $ref: '#/components/schemas/Store'
       responses:
         '200':
           description: Success
@@ -314,6 +314,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/services/{service_id}/offers':
+    get:
+        summary: Get a list of all offers of a service.
+        operationId: services.get_offers_by_service_id
+        tags:
+          - Services
+        parameters:
+          - name: service_id
+            in: path
+            description: ID of service to get
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/OfferList'
+          '404':
+            description: Not Found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Response'
+          '500':
+            description: Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Response'
   '/stores/{store_id}':
     get:
       summary: Get a specific store.
@@ -362,7 +394,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostStore'
+              $ref: '#/components/schemas/Store'
       responses:
         '200':
           description: Success
@@ -598,7 +630,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-        '404':
+        '500':
           description: Server Error
           content:
             application/json:
@@ -632,73 +664,6 @@ paths:
                 $ref: '#/components/schemas/ResponseID'
         '405':
           description: Invalid Input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Response'
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Response'
-    put:
-      summary: Update a product
-      operationId: stores.update_product
-      tags:
-        - Stores
-      parameters:
-        - name: store_id
-          in: path
-          description: ID of store to put
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostProduct'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseID'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Response'
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Response'
-    delete:
-      summary: Delete a product
-      operationId: stores.delete_product
-      tags:
-        - Stores
-      parameters:
-        - name: store_id
-          in: path
-          description: ID of product to delete
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseID'
-        '404':
-          description: Not Found
           content:
             application/json:
               schema:
@@ -782,7 +747,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostProduct'
+              $ref: '#/components/schemas/Product'
       responses:
         '200':
           description: Success
@@ -875,7 +840,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostOffer'
+              $ref: '#/components/schemas/Offer'
       responses:
         '200':
           description: Success
@@ -1209,11 +1174,12 @@ components:
         validity_duration:
           type: number
           format: integer
+        offer_id:
+          type: string
         service_id:
           type: string
         created_at:
           type: string
-          format: date-time
       required:
         - product_ids
         - store_id
@@ -1291,7 +1257,6 @@ components:
           type: string
         created_at:
           type: string
-          format: date-time
       required:
         - order_id
         - user_id
