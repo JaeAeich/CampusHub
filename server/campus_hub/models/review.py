@@ -21,7 +21,7 @@ class Review(BaseModel):
     review_images: List[str]
 
 
-class ReviewList(BaseModel):
+class Reviews(BaseModel):
     """
     Pydantic model representing a collection of reviews.
 
@@ -34,3 +34,12 @@ class ReviewList(BaseModel):
     store_id: str
     product_id: str
     reviews: List[Review]
+
+class ReviewList(BaseModel):
+    """
+    Pydantic model representing a collection of reviews.
+
+    Attributes:
+        review_list: List of reviews.
+    """
+    review_list: List[Reviews]
