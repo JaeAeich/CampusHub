@@ -73,6 +73,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      # Install Poetry
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
       # Load cached venv if cache exists
       - name: Load cached venv
         id: cached-poetry-dependencies
@@ -109,6 +117,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      # Install Poetry
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
       # Load cached venv if cache exists
       - name: Load cached venv
         id: cached-poetry-dependencies
@@ -124,9 +140,11 @@ jobs:
           cd server
           poetry install --no-interaction --no-root
 
+      # Deploy mongo
       - name: Deploy mongo
         run: docker-compose up mongo -d
 
+      # Wait for it to start
       - name: Wait for app startup
         run: sleep 20
 
