@@ -15,11 +15,6 @@ def add_offer(request_data):
     return {"message": "Offer added successfully"}
 
 
-def get_trending_offers():
-    # Placeholder logic to get details of a specific service by ID
-    return {"id": 1, "name": "Store", "description": "Description"}
-
-
 def get_offers() -> APIResponse:
     """
     Get a list of all offers from the MongoDB database.
@@ -140,6 +135,7 @@ def delete_offer(offer_id: str) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
+
 def get_trending_offers() -> APIResponse:
     """
     Get trending offers with the maximum orders in the past 7 days from the MongoDB database.
@@ -158,11 +154,7 @@ def get_trending_offers() -> APIResponse:
         pipeline = [
             {
                 "$addFields": {
-                    "created_at": {
-                        "$dateFromString": {
-                            "dateString": "$created_at"
-                        }
-                    }
+                    "created_at": {"$dateFromString": {"dateString": "$created_at"}}
                 }
             },
             {
@@ -189,9 +181,9 @@ def get_trending_offers() -> APIResponse:
 
         # Execute the aggregation pipeline on the "orders" collection
         trending_offers_result = db_connector.db[orders_collection_name].aggregate(
-            pipeline  
+            pipeline
         )
-        
+
         # Extract offer_ids and corresponding total_orders from the aggregation result
         offer_orders_counter = Counter(
             {result["_id"]: result["total_orders"] for result in trending_offers_result}
@@ -199,7 +191,6 @@ def get_trending_offers() -> APIResponse:
 
         if not offer_orders_counter or len(offer_orders_counter) == 0:
             return response(Status.NOT_FOUND, **message("No offers found."))
-                
 
         # Sort offer_ids based on total_orders in descending order
         sorted_offer_ids = [
@@ -216,10 +207,14 @@ def get_trending_offers() -> APIResponse:
             if offer_details:
                 try:
                     offer_details[0]: Offers = Offers(**offer_details[0])
-                    created_at_datetime = datetime.strptime(offer_details[0].created_at, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    created_at_datetime = datetime.strptime(
+                        offer_details[0].created_at, "%Y-%m-%dT%H:%M:%S.%fZ"
+                    )
 
                     # Check if (validity_duration + created_at) is greater than or equal to today's date
-                    expiration_date = created_at_datetime + timedelta(days=offer_details[0].validity_duration)
+                    expiration_date = created_at_datetime + timedelta(
+                        days=offer_details[0].validity_duration
+                    )
                     today_date = datetime.utcnow()
 
                     if expiration_date >= today_date:

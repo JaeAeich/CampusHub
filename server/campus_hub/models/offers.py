@@ -24,6 +24,7 @@ class Offers(BaseModel):
     offer_id: str
     created_at: str
 
+
 class OffersList(BaseModel):
     """
     Pydantic model representing list of store.
