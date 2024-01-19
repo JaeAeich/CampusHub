@@ -14,7 +14,7 @@ class Review(BaseModel):
         review_images: Image references in the review.
     """
 
-    comment_headline = str
+    comment_headline: str
     comment: Optional[str]
     user_id: str
     rating: float
@@ -34,3 +34,14 @@ class Reviews(BaseModel):
     store_id: str
     product_id: str
     reviews: List[Review]
+
+
+class ReviewList(BaseModel):
+    """
+    Pydantic model representing a collection of reviews.
+
+    Attributes:
+        review_list: List of reviews.
+    """
+
+    review_list: List[Reviews]

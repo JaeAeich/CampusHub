@@ -30,3 +30,14 @@ class Product(BaseModel):
     stocks: int
     product_specifications: Optional[Dict]
     offer_id: str
+
+
+class ProductList(BaseModel):
+    """
+    Pydantic model representing a list of products.
+
+    Attributes:
+        products: list of products
+    """
+
+    products: List[Product]
