@@ -32,3 +32,4 @@ class Order(BaseModel):
     transaction_id: str
     delivery_address: str
     seller_id: str
+    created_at: str
