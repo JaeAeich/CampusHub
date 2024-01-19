@@ -1245,7 +1245,6 @@ components:
           type: string
         created_at:
           type: string
-          format: string
       required:
         - product_ids
         - store_id
@@ -1323,7 +1322,6 @@ components:
           type: string
         created_at:
           type: string
-          format: date-time
       required:
         - order_id
         - user_id

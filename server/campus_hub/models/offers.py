@@ -13,6 +13,7 @@ class Offers(BaseModel):
         discount: discount amount for the product
         validity_duration: expiration date of the discount
         offer_id: offer id for the product
+        created_at: created_date of the offer
     """
 
     product_ids: List[str]
@@ -22,7 +23,6 @@ class Offers(BaseModel):
     validity_duration: str
     offer_id: str
     created_at: str
-
 
 class OffersList(BaseModel):
     """
