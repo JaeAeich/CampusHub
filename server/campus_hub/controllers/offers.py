@@ -7,6 +7,7 @@ from typing import MutableMapping, Any
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 
+
 def add_offer(request_data):
     # Placeholder logic to add a new service
     return {"message": "Offer added successfully"}
@@ -15,7 +16,6 @@ def add_offer(request_data):
 def get_trending_offers():
     # Placeholder logic to get details of a specific service by ID
     return {"id": 1, "name": "Store", "description": "Description"}
-
 
 
 def get_offers() -> APIResponse:
@@ -56,6 +56,7 @@ def get_offers() -> APIResponse:
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving offers from MongoDB: {e}"),
         )
+
 
 def update_offer(offer_id: str) -> APIResponse:
     """
