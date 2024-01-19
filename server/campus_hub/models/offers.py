@@ -20,7 +20,7 @@ class Offers(BaseModel):
     service_id: str
     store_id: str
     discount: float
-    validity_duration: str
+    validity_duration: int
     offer_id: str
     created_at: str
 
