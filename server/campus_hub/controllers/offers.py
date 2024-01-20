@@ -3,7 +3,7 @@ from campus_hub.models.offers import Offers, OffersList
 from flask import request
 from campus_hub.utils.response import response, message, Status, APIResponse
 from typing import List
-from typing import MutableMapping, Any
+from typing import MutableMapping, Any, Sequence, Mapping
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from datetime import datetime, timedelta
@@ -164,7 +164,7 @@ def get_trending_offers() -> APIResponse:
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
 
         # Aggregate pipeline to get offers with maximum orders in the past 7 days
-        pipeline = [
+        pipeline : Sequence[Mapping[str, Any]] = [
             {
                 "$addFields": {
                     "created_at": {"$dateFromString": {"dateString": "$created_at"}}
@@ -219,7 +219,7 @@ def get_trending_offers() -> APIResponse:
             )
             if offer_details:
                 try:
-                    offer_details[0]: Offers = Offers(**offer_details[0])
+                    offer_details[0]= Offers(**offer_details[0])
                     created_at_datetime = datetime.strptime(
                         offer_details[0].created_at, "%Y-%m-%dT%H:%M:%S.%fZ"
                     )
