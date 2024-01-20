@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from './ui/button';
 
 export default function Landing() {
   return (
@@ -22,6 +23,7 @@ export default function Landing() {
         fugit?
       </CardContent>
       <CardFooter className="flex justify-between">Date: 29 Dec 2023</CardFooter>
+      <Button variant="destructive">Click me</Button>
     </Card>
   );
 }

@@ -8,7 +8,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'airbnb',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/components/ui/**', '**/*.css'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', '/src/components/ui/**', '**/*.css'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'prettier'],
   rules: {
@@ -39,21 +39,13 @@ module.exports = {
         alwaysTryTypes: true,
       },
       node: {
+        path: ['src'],
         extensions: ['.ts', '.tsx'],
       },
       alias: {
-        map: [['@', './src']],
-        extensions: ['.ts', '.tsx'],
+        map: [['@', `${__dirname}/src`]],
+        extensions: ['.js', '.jsx', '.ts', '.d.ts', '.tsx', '.css'],
       },
     },
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
-    },
   },
-  overrides: [
-    {
-      files: ['*.ts', '*.tsx'],
-      parser: '@typescript-eslint/parser',
-    },
-  ],
 };
