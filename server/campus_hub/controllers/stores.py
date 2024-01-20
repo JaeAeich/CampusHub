@@ -15,6 +15,8 @@ from pymongo.errors import PyMongoError
 def get_store_by_id(store_id) -> APIResponse:
     """
     Get details of a store by its store_id from the MongoDB database.
+    Args:
+    store_id (str): The store_id of the store to be fetched
     Returns:
         Flask response: JSON response containing the list of stores.
     """
@@ -64,7 +66,7 @@ def get_trending_stores() -> APIResponse:
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     try:
         # aggregate pipeline
-        _pipeline : Sequence[Mapping[str, Any]] = [
+        _pipeline: Sequence[Mapping[str, Any]] = [
             {
                 "$addFields": {
                     "created_at": {"$dateFromString": {"dateString": "$created_at"}}
@@ -132,6 +134,8 @@ def get_trending_stores() -> APIResponse:
 def get_offers_by_store_id(store_id) -> APIResponse:
     """
     Get a list of offers of a store the MongoDB database.
+    Args:
+    store_id (str): The store_id of the store whose offers are to be fetched
     Returns:
         Flask response: JSON response containing the list of stores.
     """
@@ -160,6 +164,13 @@ def get_offers_by_store_id(store_id) -> APIResponse:
 
         try:
             offers: List[Offers] = [Offers(**o) for o in _offers]
+            try:
+                [datetime.fromisoformat(offer["created_at"]) for offer in _offers]
+            except ValueError as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Invalid offer data in DB: {str(e)}"),
+                )
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -180,6 +191,8 @@ def get_offers_by_store_id(store_id) -> APIResponse:
 def get_reviews_by_store_id(store_id) -> APIResponse:
     """
     Get a list of reviews of a store from the MongoDB database.
+    Args:
+    store_id (str): The store_id of the store whose reviews are to be fetched
     Returns:
         Flask response: JSON response containing the list of reviews.
     """
@@ -227,6 +240,8 @@ def get_reviews_by_store_id(store_id) -> APIResponse:
 def get_orders_by_store_id(store_id) -> APIResponse:
     """
     Get a list of orders of a store from the MongoDB database.
+    Args:
+    store_id (str): The store_id of the store whose orders are to be fetched
     Returns:
         Flask response: JSON response containing the list of orders.
     """
@@ -255,6 +270,14 @@ def get_orders_by_store_id(store_id) -> APIResponse:
 
         try:
             orders: List[Order] = [Order(**r) for r in _orders]
+            try:
+                [datetime.fromisoformat(order["created_at"]) for order in _orders]
+            except ValueError as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Invalid order data in DB: {str(e)}"),
+                )
+
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -275,6 +298,8 @@ def get_orders_by_store_id(store_id) -> APIResponse:
 def get_products_by_store_id(store_id) -> APIResponse:
     """
     Get a list of products of a store from the MongoDB database.
+    Args:
+    store_id (str): The store_id of the store whose products are to be fetched
     Returns:
         Flask response: JSON response containing the list of products.
     """
@@ -323,7 +348,8 @@ def get_products_by_store_id(store_id) -> APIResponse:
 def update_store(store_id: str) -> APIResponse:
     """
     Updates a store in the MongoDB database.
-
+    Args:
+    store_id (str): The store_id of the store that is to be updated.
     Returns:
         Flask response: JSON response containing the id of the updated store.
     """
@@ -335,7 +361,12 @@ def update_store(store_id: str) -> APIResponse:
     try:
         # Check if request.json is not None before assignment
         if request_json is not None:
-            store_data: MutableMapping[Any, Any] = request_json
+            if "store_id" in request_json and request_json["store_id"] == store_id:
+                store_data: MutableMapping[Any, Any] = request_json
+            else:
+                return response(
+                    Status.BAD_REQUEST, **message("Query and request store_id mismatch")
+                )
         else:
             # Handle the case when request.json is None
             store_data = {}
@@ -372,7 +403,8 @@ def update_store(store_id: str) -> APIResponse:
 def delete_store(store_id: str) -> APIResponse:
     """
     Delete a store from the MongoDB database.
-
+    Args:
+    store_id (str): The store_id of the store that is to be deleted.
     Returns:
         Flask response: JSON response containing the id of the deleted store.
     """
@@ -404,7 +436,8 @@ def delete_store(store_id: str) -> APIResponse:
 def add_offer(store_id) -> APIResponse:
     """
     Adds a new offer to the MongoDB database.
-
+    Args:
+    store_id (str): The store_id of the store in which offer is to be added.
     Returns:
         Flask response: JSON response containing the id of the new offer.
     """
@@ -432,6 +465,7 @@ def add_offer(store_id) -> APIResponse:
         offer_id: str = db_connector.generate_unique_id("offers")
         offer_data["offer_id"] = offer_id
         offer_data["store_id"] = store_id
+        offer_data["created_at"] = str(datetime.utcnow())
 
         # Validate the incoming data using Pydantic model
         try:
@@ -461,7 +495,8 @@ def add_offer(store_id) -> APIResponse:
 def add_product(store_id: str) -> APIResponse:
     """
     Adds a new product to the MongoDB database.
-
+    Args:
+    store_id (str): The store_id of the store in which product is to be added.
     Returns:
         Flask response: JSON response containing the status of the operation.
     """
