@@ -10,7 +10,7 @@ export default function DealOfTheDay() {
   return (
     <div>
       <Container>
-        <h2 className="font-Oswald text-2xl font-semibold my-4">Deals of the Day</h2>
+        <h2 className="font-heading text-2xl font-bold my-4">Deals of the Day</h2>
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
           <CarouselContent>
             {deals.map((deal) => (
@@ -26,8 +26,8 @@ export default function DealOfTheDay() {
                     </AspectRatio>
                   </div>
                   <div className="flex flex-col justify-center px-16">
-                    <h3 className="font-Oswald text-xl font-bold my-4 uppercase">{deal.name}</h3>
-                    <p className="font-helvetica text-primary">{deal.desc}</p>
+                    <h3 className="font-subheading text- text-xl font-bold my-3">{deal.name}</h3>
+                    <p className="font-body text-darkgray font-bold">{deal.desc}</p>
                     <div className="flex flex-row items-center py-2">
                       <p className="font-helvetica flex text-2xl font-bold text-destructive pr-2">
                         &#8377;
@@ -39,35 +39,33 @@ export default function DealOfTheDay() {
                       </p>
                     </div>
                     <div className="flex-col justify-left">
-                      <Button variant="outline" className="flex bg-destructive text-secondary my-3">
+                      <Button
+                        variant="outline"
+                        className="flex bg-destructive text-background font-bold mb-4"
+                      >
                         ADD TO CART
                       </Button>
                       <div className="flex items-center">
-                        <p className="font-helvetica text-primary text-lg font-bold mr-3">
-                          Gone in
-                        </p>
+                        <p className="font-subheading text-primary text-lg mr-3">Gone in</p>
                         <Badge
                           variant="secondary"
-                          className="mr-2 px-3 py-2 gap-2 flex flex-row justify-center items-center"
+                          className="font-bold text-body mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
                         >
-                          12
-                          <code>hour</code>
+                          12 hour
                         </Badge>
 
                         <Badge
                           variant="secondary"
-                          className="mx-2 px-3 py-2 gap-2 flex flex-row justify-center items-center"
+                          className="font-bold mx-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
                         >
-                          16
-                          <code>min</code>
+                          16 min
                         </Badge>
 
                         <Badge
                           variant="secondary"
-                          className="mx-2 px-3 py-2 gap-2 flex flex-row justify-center items-center"
+                          className="font-bold mx-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
                         >
-                          48
-                          <code>sec</code>
+                          48 sec
                         </Badge>
                       </div>
                     </div>
