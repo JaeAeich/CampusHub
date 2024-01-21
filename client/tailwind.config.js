@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -18,6 +16,14 @@ module.exports = {
       screens: {
         '2xl': '1400px',
       },
+    },
+    fontFamily: {
+      helvetica: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+      proximaNova: ['"Proxima Nova"', 'sans-serif'],
+      sourceSerifPro: ['"Source Serif Pro"', 'serif'],
+      georgia: ['Georgia', 'serif'],
+      cambria: ['Cambria', 'serif'],
+      oswald: ['Oswald', 'sans-serif'],
     },
     extend: {
       colors: {
@@ -76,5 +82,6 @@ module.exports = {
       },
     },
   },
+  // eslint-disable-next-line global-require
   plugins: [require('tailwindcss-animate')],
 };
