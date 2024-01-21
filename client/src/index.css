@@ -9,9 +9,8 @@
     --text: 247, 75%, 5%;
     --background: 240, 60%, 99%;
     --primary: 240, 4%, 5%;
-    --secondary:0, 0%, 79%;
-    --accent: 357, 100%, 50%
-    --background: 0 0% 100%;
+    --secondary: 0, 0%, 79%;
+    --accent: 357, 100%, 50% --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -20,7 +19,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --dark-gray:240, 0%, 59%;
+    --dark-gray: 240, 0%, 59%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;

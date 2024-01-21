@@ -39,13 +39,14 @@ export default function DealOfTheDay() {
                       </p>
                     </div>
                     <div className="flex-col justify-left">
-                      <Button variant="outline" className="flex bg-destructive text-background font-bold mb-4">
+                      <Button
+                        variant="outline"
+                        className="flex bg-destructive text-background font-bold mb-4"
+                      >
                         ADD TO CART
                       </Button>
                       <div className="flex items-center">
-                        <p className="font-subheading text-primary text-lg mr-3">
-                          Gone in
-                        </p>
+                        <p className="font-subheading text-primary text-lg mr-3">Gone in</p>
                         <Badge
                           variant="secondary"
                           className="font-bold text-body mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"

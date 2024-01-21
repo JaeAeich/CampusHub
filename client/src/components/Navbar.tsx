@@ -81,7 +81,7 @@ function Navbar() {
             </div>
           </nav>
           <div className="mx-4 flex items-center">
-            <Button size="icon" className='mr-2'>
+            <Button size="icon" className="mr-2">
               <ShoppingCart color="#fff" className="h-6 w-6" />
               <span className="sr-only">Shopping Cart</span>
             </Button>
