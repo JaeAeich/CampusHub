@@ -14,9 +14,9 @@ import ServiceCards from './ServiceCards';
 export default function Landing() {
   return (
     <div>
-      <TrendingStores/>
-      <DealOfTheDay/>
-      <ServiceCards/>
+      <TrendingStores />
+      <DealOfTheDay />
+      <ServiceCards />
     </div>
   );
 }

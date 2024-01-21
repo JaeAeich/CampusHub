@@ -77,7 +77,7 @@ function Navbar() {
                 onChange={(e) => setSearchValue(e.target.value)}
               />
               <Button type="button" variant="ghost" size="icon" onClick={handleSearch}>
-                <Search/>
+                <Search />
               </Button>
             </div>
           </nav>
