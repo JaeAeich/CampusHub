@@ -18,7 +18,12 @@ module.exports = {
       },
     },
     fontFamily: {
-      sans: ['Poppins'],
+      helvetica: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+      proximaNova: ['"Proxima Nova"', 'sans-serif'],
+      sourceSerifPro: ['"Source Serif Pro"', 'serif'],
+      georgia: ['Georgia', 'serif'],
+      cambria: ['Cambria', 'serif'],
+      oswald: ['Oswald', 'sans-serif'],
     },
     extend: {
       colors: {

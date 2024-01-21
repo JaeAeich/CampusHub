@@ -65,11 +65,11 @@ function Navbar() {
               <Avatar>
                 <AvatarImage src="../../public/logo.png" alt="campushub" />
               </Avatar>
-              <h1 className="text-xl font-bold sm:block hidden">CampusHub</h1>
+              <h1 className="text-2xl font-bold sm:block hidden">CampusHub</h1>
             </Link>
           </div>
-          <nav className="mx-6 flex w-full justify-center items-center space-x-4 lg:space-x-6 sm:block hidden">
-            <div className="flex w-full items-center space-x-2">
+          <nav className="ml-4 flex w-full justify-center items-center space-x-4 lg:space-x-6 sm:block hidden">
+            <div className="mx-2 flex w-full items-center space-x-2">
               <Input
                 type="text"
                 placeholder="Search stores"
@@ -77,11 +77,11 @@ function Navbar() {
                 onChange={(e) => setSearchValue(e.target.value)}
               />
               <Button type="button" variant="ghost" size="icon" onClick={handleSearch}>
-                <Search />
+                <Search/>
               </Button>
             </div>
           </nav>
-          <div className="flex items-center">
+          <div className="mx-4 flex items-center">
             <Button variant="ghost" size="icon" className="mr-2" aria-label="Shopping Cart">
               <ShoppingCart className="h-6 w-6" />
               <span className="sr-only">Shopping Cart</span>
