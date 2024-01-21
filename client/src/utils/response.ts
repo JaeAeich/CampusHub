@@ -1,7 +1,7 @@
 /**
  * Represents the structure of an API response.
  */
-interface ApiResponse {
+export interface ErrorResponse {
   /**
    * A string indicating the error type or code.
    */
@@ -28,7 +28,7 @@ interface ApiResponse {
  *
  * @returns {ApiResponse} An object representing the API response with error information.
  */
-const errorResponse = (error: string, breakPoint: string, message?: string): ApiResponse => ({
+const errorResponse = (error: string, breakPoint: string, message?: string): ErrorResponse => ({
   error,
   breakPoint,
   message,

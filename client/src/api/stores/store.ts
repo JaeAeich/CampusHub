@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import baseURL from './config';
-import errorResponse from '../utils/reponse';
+import baseURL from '../config';
+import errorResponse from '../../utils/response';
 
 const storeURL = `${baseURL}/store`;
 
