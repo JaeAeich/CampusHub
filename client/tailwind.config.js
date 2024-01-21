@@ -17,13 +17,23 @@ module.exports = {
         '2xl': '1400px',
       },
     },
+    fontSize: {
+      sm: '0.750rem',
+      base: '1rem',
+      xl: '1.333rem',
+      '2xl': '1.777rem',
+      '3xl': '2.369rem',
+      '4xl': '3.158rem',
+      '5xl': '4.210rem',
+    },
     fontFamily: {
-      helvetica: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
-      proximaNova: ['"Proxima Nova"', 'sans-serif'],
-      sourceSerifPro: ['"Source Serif Pro"', 'serif'],
-      georgia: ['Georgia', 'serif'],
-      cambria: ['Cambria', 'serif'],
-      oswald: ['Oswald', 'sans-serif'],
+      heading: 'Montserrat',
+      subheading: 'Gantari',
+      body: 'Cambria',
+    },
+    fontWeight: {
+      normal: '400',
+      bold: '700',
     },
     extend: {
       colors: {
@@ -32,6 +42,7 @@ module.exports = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        darkgray: 'hsl(var(--dark-gray))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

@@ -9,7 +9,7 @@ export default function ServiceCards() {
 
   return (
     <Container>
-      <h2 className="font-Oswald text-2xl font-semibold my-4">Services</h2>
+      <h2 className="font-heading text-2xl font-bold my-4">Services</h2>
       <div className="mb-10">
         <Carousel
           opts={{
@@ -27,7 +27,7 @@ export default function ServiceCards() {
                 {/* TODO: Route to the store path onClick */}
                 <div className="m-1 relative group">
                   <Card>
-                    <Badge variant="default">{service.name}</Badge>
+                    <h1 className='p-4 text-xl font-subheading font-semibold'>{service.name}</h1>
                     <CardContent className="flex aspect-[3/2] items-center justify-center p-6">
                       <img
                         src={service.image}

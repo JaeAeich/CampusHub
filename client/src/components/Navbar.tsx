@@ -30,7 +30,7 @@ function Navbar() {
     // TODO: add search functionality
   };
   return (
-    <header className="sm:flex sm:justify-between py-3 px-4 border-b">
+    <header className="sm:flex bg-black  sm:justify-between py-3 px-4 border-b">
       <Container>
         <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between w-full">
           <div className="flex items-center">
@@ -46,7 +46,7 @@ function Navbar() {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                   />
-                  <Button type="button" variant="ghost" size="icon" onClick={handleSearch}>
+                  <Button type="button" size="icon" onClick={handleSearch}>
                     <Search />
                   </Button>
                 </div>
@@ -64,7 +64,7 @@ function Navbar() {
               <Avatar>
                 <AvatarImage src="../../public/logo.png" alt="campushub" />
               </Avatar>
-              <h1 className="text-2xl font-bold sm:block hidden">CampusHub</h1>
+              <h1 className="text-2xl font-bold sm:block hidden text-background">CampusHub</h1>
             </Link>
           </div>
           <nav className="ml-4 flex w-full justify-center items-center space-x-4 lg:space-x-6 sm:block hidden">
@@ -75,14 +75,14 @@ function Navbar() {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
-              <Button type="button" variant="ghost" size="icon" onClick={handleSearch}>
-                <Search />
+              <Button type="button" size="icon" onClick={handleSearch}>
+                <Search color="#fff" />
               </Button>
             </div>
           </nav>
           <div className="mx-4 flex items-center">
-            <Button variant="ghost" size="icon" className="mr-2" aria-label="Shopping Cart">
-              <ShoppingCart className="h-6 w-6" />
+            <Button size="icon" className='mr-2'>
+              <ShoppingCart color="#fff" className="h-6 w-6" />
               <span className="sr-only">Shopping Cart</span>
             </Button>
             <ProfileButton />

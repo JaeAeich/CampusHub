@@ -8,7 +8,7 @@ export default function TrendingStores() {
   return (
     <div className="my-2 md:my-4">
       <Container>
-        <h2 className="font-Oswald text-2xl font-semibold my-4">Trending</h2>
+        <h2 className="font-heading text-2xl font-bold my-4">Trending</h2>
         <Carousel plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent>
             <CarouselItem className="w-full">
