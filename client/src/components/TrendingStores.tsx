@@ -1,4 +1,3 @@
-import Container from './ui/container';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 import {
@@ -9,6 +8,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
+import Container from './ui/container';
 
 export default function TrendingStores() {
   return (
@@ -19,14 +19,14 @@ export default function TrendingStores() {
           <CarouselContent>
             <CarouselItem className="w-full">
               <AspectRatio ratio={16 / 6}>
-                <img src="./../../public/ccd.png" alt="Image" className="rounded-md object-cover" />
+                <img src="./../../public/ccd.png" alt="" className="rounded-md object-cover" />
               </AspectRatio>
             </CarouselItem>
             <CarouselItem className="w-full flex items-center justify-center">
               <AspectRatio ratio={16 / 6} className="w-full">
                 <img
                   src="./../../public/amul.jpg"
-                  alt="Image"
+                  alt=""
                   className="rounded-md object-cover w-full h-full"
                 />
               </AspectRatio>

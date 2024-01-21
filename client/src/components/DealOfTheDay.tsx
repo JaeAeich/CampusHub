@@ -1,8 +1,4 @@
-import Container from './ui/container';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { deals } from '../../app/constants';
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +7,10 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
+import Container from './ui/container';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { deals } from '../../app/constants';
 
 export default function DealOfTheDay() {
   return (
@@ -25,21 +25,23 @@ export default function DealOfTheDay() {
                   <div className="flex-shrink-0 w-1/3 items-center">
                     <AspectRatio ratio={4 / 3}>
                       <img
-                        src={deal['image']}
-                        alt={deal['name']}
+                        src={deal.image}
+                        alt={deal.name}
                         className="rounded-md object-fit mx-4 my-6"
                       />
                     </AspectRatio>
                   </div>
                   <div className="flex flex-col justify-center px-16">
-                    <h3 className="font-Oswald text-xl font-bold my-4 uppercase">{deal['name']}</h3>
-                    <p className="font-helvetica text-neutral-600">{deal['desc']}</p>
+                    <h3 className="font-Oswald text-xl font-bold my-4 uppercase">{deal.name}</h3>
+                    <p className="font-helvetica text-neutral-600">{deal.desc}</p>
                     <div className="flex flex-row items-center py-2">
                       <p className="font-helvetica flex text-2xl font-bold text-rose-500 pr-2">
-                        &#8377;{deal['discountedCost']}
+                        &#8377;
+                        {deal.discountedCost}
                       </p>
                       <p className="font-helvetica flex text-neutral-600 text-xl line-through">
-                        &#8377;{deal['originalCost']}
+                        &#8377;
+                        {deal.originalCost}
                       </p>
                     </div>
                     <div className="flex-col justify-left">
