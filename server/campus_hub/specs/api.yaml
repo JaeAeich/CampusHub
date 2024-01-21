@@ -12,6 +12,10 @@ tags:
       Password)
   - name: Services
     description: 'Operations related to services (Get, Add, Update, Delete)'
+  - name: Stores
+    description: 'Operations related to stores (Get, Add, Update, Delete)'
+  - name: Products
+    description: 'Operations related to products (Get, Add, Update, Delete)'
   - name: Orders
     description: 'Operations related to orders (Get History, Place Order, Cancel Order)'
   - name: Payments
@@ -21,7 +25,7 @@ tags:
   - name: Offers
     description: 'Operations related to offers (Get, Get by Id, Get trending)'
 paths:
-  /services:
+  '/services':
     get:
       summary: Get a list of all services.
       operationId: services.get_services
@@ -340,7 +344,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  /stores/trending:
+  '/stores/trending':
     get:
       summary: Get trending stores.
       operationId: stores.get_trending_stores
@@ -569,37 +573,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  /products:
-    get:
-      summary: Get a list of all products.
-      operationId: products.get_products
-      tags:
-        - Products
-      parameters:
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/store_id'
-        - $ref: '#/components/parameters/max_rating'
-        - $ref: '#/components/parameters/max_price'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductList'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Response'
-  '/products/{product_id}':
+  '/stores/{store_id}/products/{product_id}':
     get:
       summary: Get a specific product.
       operationId: products.get_product_by_id
       tags:
-        - Products
+        - Stores
       parameters:
+        - name: store_id
+          in: path
+          description: ID of store to get
+          required: true
+          schema:
+            type: string
         - name: product_id
           in: path
           description: ID of product to get
@@ -629,7 +615,7 @@ paths:
       summary: Update a product
       operationId: products.update_product
       tags:
-        - Products
+        - Stores
       parameters:
         - name: product_id
           in: path
@@ -665,7 +651,7 @@ paths:
       summary: Delete a product
       operationId: products.delete_product
       tags:
-        - Products
+        - Stores
       parameters:
         - name: product_id
           in: path
@@ -692,7 +678,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  /offers:
+  '/products':
+    get:
+      summary: Get a list of all products.
+      operationId: products.get_products
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/store_id'
+        - $ref: '#/components/parameters/max_rating'
+        - $ref: '#/components/parameters/max_price'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/offers':
     get:
       summary: Get a list of all offers.
       operationId: offers.get_offers
@@ -785,7 +795,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  /offers/trending:
+  '/offers/trending':
     get:
       summary: Get trending offers.
       operationId: offers.get_trending_offers
@@ -810,7 +820,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  /sellers:
+  '/sellers':
     get:
       summary: Get a list of all sellers.
       operationId: sellers.get_sellers
@@ -848,6 +858,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseID'
+        '405':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/seller/{seller_id}/store':
+    post:
+      summary: Add a new store
+      operationId: sellers.add_store
+      tags:
+        - Sellers
+      parameters:
+        - name: seller_id
+          in: path
+          description: ID of seller to add store
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Store object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostStore"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
         '405':
           description: Invalid Input
           content:
@@ -965,7 +1014,7 @@ components:
           type: array
           items:
             type: number
-            format: integer
+            format: float
           minItems: 2
           maxItems: 2
         overall_rating:
