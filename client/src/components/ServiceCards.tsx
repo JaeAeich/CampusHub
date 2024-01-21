@@ -1,18 +1,15 @@
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  // CarouselNext,
-  // CarouselPrevious,
-} from '@/components/ui/carousel';
+import { Badge } from '@/components/ui/badge';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Container from './ui/container';
 import { services } from '../../app/constants';
 
 export default function ServiceCards() {
+  const handleRouteToStore = () => {};
+
   return (
     <Container>
-      <h1 className="font-Oswald text-2xl font-bold my-4">Service in your campus</h1>
+      <h2 className="font-Oswald text-2xl font-semibold my-4">Services</h2>
       <div className="mb-10">
         <Carousel
           opts={{
@@ -22,28 +19,27 @@ export default function ServiceCards() {
         >
           <CarouselContent>
             {services.map((service) => (
-              <CarouselItem key={service.name} className="md:basis-1/2 lg:basis-1/3">
+              <CarouselItem
+                key={service.name}
+                onClick={() => handleRouteToStore()}
+                className="md:basis-1/2 lg:basis-1/3"
+              >
+                {/* TODO: Route to the store path onClick */}
                 <div className="m-1 relative group">
                   <Card>
+                    <Badge variant="default">{service.name}</Badge>
                     <CardContent className="flex aspect-[3/2] items-center justify-center p-6">
                       <img
                         src={service.image}
                         alt={service.name}
                         className="blog-banner h-full transition-transform transform group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gray-600 bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <p className="text-white font-helvetica text-2xl font-bold text-center">
-                          {service.name}
-                        </p>
-                      </div>
                     </CardContent>
                   </Card>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          {/* <CarouselPrevious />
-          <CarouselNext /> */}
         </Carousel>
       </div>
     </Container>
