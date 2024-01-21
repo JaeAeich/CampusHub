@@ -17,15 +17,14 @@ const servicesURL = `${baseURL}/services`;
  * @returns {Promise<{ services: Service[] } | ErrorResponse | MessageResponse>} A promise
  * that resolves to an array of services or an error response.
  */
-async function getServices(): Promise<{ services: Service[] } | ErrorResponse | MessageResponse> {
+export async function getServices(): Promise<
+  { services: Service[] } | ErrorResponse | MessageResponse
+> {
   try {
     const response: AxiosResponse = await axios.get(`${servicesURL}`);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return errorResponse(error.name, 'api.services.getServices', error.message);
-    }
-    return errorResponse(JSON.stringify(error), 'api.services.getServices');
+    return errorResponse(error, 'api.services.getServices');
   }
 }
 
@@ -37,17 +36,14 @@ async function getServices(): Promise<{ services: Service[] } | ErrorResponse | 
  * @returns {Promise<Service | ErrorResponse | IdResponse | MessageResponse>} A promise that
  * resolves to the added service or an error response.
  */
-async function addService(
+export async function addService(
   service: Omit<Service, 'service_id'>,
 ): Promise<Service | ErrorResponse | IdResponse | MessageResponse> {
   try {
     const response: AxiosResponse = await axios.post(servicesURL, service);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return errorResponse(error.name, 'api.services.addService', error.message);
-    }
-    return errorResponse(JSON.stringify(error), 'api.services.addService');
+    return errorResponse(error, 'api.services.addService');
   }
 }
 
@@ -58,7 +54,7 @@ async function addService(
  * @returns {Promise<Service | ErrorResponse | IdResponse | MessageResponse>} A promise
  * that resolves to the updated service or an error response.
  */
-async function updateService(
+export async function updateService(
   service: Service,
 ): Promise<Service | ErrorResponse | IdResponse | MessageResponse> {
   try {
@@ -68,10 +64,7 @@ async function updateService(
     );
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return errorResponse(error.name, 'api.services.updateService', error.message);
-    }
-    return errorResponse(JSON.stringify(error), 'api.services.updateService');
+    return errorResponse(error, 'api.services.updateService');
   }
 }
 
@@ -82,17 +75,14 @@ async function updateService(
  * @returns {Promise<Service | ErrorResponse | IdResponse | MessageResponse>} A promise
  * that resolves to the deleted service or an error response.
  */
-async function deleteService(
+export async function deleteService(
   service_id: string,
 ): Promise<Service | ErrorResponse | IdResponse | MessageResponse> {
   try {
     const response: AxiosResponse = await axios.delete(`${servicesURL}/${service_id}`);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return errorResponse(error.name, 'api.services.deleteService', error.message);
-    }
-    return errorResponse(JSON.stringify(error), 'api.services.deleteService');
+    return errorResponse(error, 'api.services.deleteService');
   }
 }
 
@@ -103,17 +93,14 @@ async function deleteService(
  * @returns {Promise<{ stores: Store[] } | MessageResponse | ErrorResponse>} A promise that
  * resolves to the data associated with the stores for the given service or an error response.
  */
-async function getStoresByServiceId(
+export async function getStoresByServiceId(
   service_id: string,
 ): Promise<{ stores: Store[] } | MessageResponse | ErrorResponse> {
   try {
     const response: AxiosResponse = await axios.get(`${servicesURL}/${service_id}/stores`);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return errorResponse(error.name, 'api.services.getStoresByServiceId', error.message);
-    }
-    return errorResponse(JSON.stringify(error), 'api.services.getStoresByServiceId');
+    return errorResponse(error, 'api.services.getStoresByServiceId');
   }
 }
 
@@ -124,17 +111,14 @@ async function getStoresByServiceId(
  * @returns {Promise<{ offers: Offers[] } | MessageResponse | ErrorResponse>} A promise that
  * resolves to the data associated with the offers for the given service or an error response.
  */
-async function getOffersByServiceId(
+export async function getOffersByServiceId(
   service_id: string,
 ): Promise<{ offers: Offers[] } | MessageResponse | ErrorResponse> {
   try {
     const response: AxiosResponse = await axios.get(`${servicesURL}/${service_id}/offers`);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return errorResponse(error.name, 'api.services.getOffersByServiceId', error.message);
-    }
-    return errorResponse(JSON.stringify(error), 'api.services.getOffersByServiceId');
+    return errorResponse(error, 'api.services.getOffersByServiceId');
   }
 }
 
