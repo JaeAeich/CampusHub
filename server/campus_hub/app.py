@@ -1,6 +1,7 @@
 from pathlib import Path
 from connexion import FlaskApp
 from connexion.resolver import RelativeResolver
+from flask_cors import CORS
 
 app = FlaskApp(
     __name__,
@@ -9,6 +10,7 @@ app = FlaskApp(
 )
 openapi_path = Path(__file__).parent / "specs" / "api.yaml"
 app.add_api(openapi_path)
+CORS(app.app, origin=["https://localhost:5173"])
 
 if __name__ == "__main__":
     # for development only
