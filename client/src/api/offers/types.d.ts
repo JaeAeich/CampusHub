@@ -6,5 +6,4 @@ export default interface Offers {
   service_id: string;
   store_id: string;
   validity_duration: number;
-  // eslint-disable-next-line
 }

@@ -5,5 +5,4 @@ export default interface Service {
   service_images: string[];
   service_name: string;
   store_ids: string[];
-  // eslint-disable-next-line
 }

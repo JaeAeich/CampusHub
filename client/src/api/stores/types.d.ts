@@ -16,5 +16,4 @@ export default interface Store {
   store_phone_number: string;
   stripe_public_key: string;
   timings: [number, number];
-  // eslint-disable-next-line
 }

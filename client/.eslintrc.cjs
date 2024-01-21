@@ -2,11 +2,11 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
-    'prettier',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'airbnb',
+    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', '/src/components/ui/**', '**/*.css'],
   parser: '@typescript-eslint/parser',
