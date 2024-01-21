@@ -64,7 +64,7 @@ function Navbar() {
               <Avatar>
                 <AvatarImage src="../../public/logo.png" alt="campushub" />
               </Avatar>
-              <h1 className="text-2xl font-bold sm:block hidden text-background">CampusHub</h1>
+              <h1 className="xl:text-2xl md:text-xl font-bold sm:block hidden text-background">CampusHub</h1>
             </Link>
           </div>
           <nav className="ml-4 flex w-full justify-center items-center space-x-4 lg:space-x-6 sm:block hidden">

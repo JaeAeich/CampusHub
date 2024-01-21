@@ -10,13 +10,13 @@ export default function DealOfTheDay() {
   return (
     <div>
       <Container>
-        <h2 className="font-heading text-2xl font-bold my-4">Deals of the Day</h2>
+        <h2 className="font-heading xl:text-2xl md:text-xl font-bold my-4">Deals of the Day</h2>
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
           <CarouselContent>
             {deals.map((deal) => (
               <CarouselItem key={deal.name} className="w-full">
-                <div className="flex items-center w-full flex-col sm:flex-row">
-                  <div className="flex-shrink-0 w-1/3 items-center">
+                <div className="flex items-center w-full flex-col lg:flex-row">
+                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center">
                     <AspectRatio ratio={4 / 3}>
                       <img
                         src={deal.image}
@@ -25,15 +25,15 @@ export default function DealOfTheDay() {
                       />
                     </AspectRatio>
                   </div>
-                  <div className="flex flex-col justify-center px-16">
-                    <h3 className="font-subheading text- text-xl font-bold my-3">{deal.name}</h3>
+                  <div className="flex flex-col justify-center xl:px-16 lg:px-0">
+                    <h3 className="font-subheading xl:text-xl md:text-lg font-bold my-3">{deal.name}</h3>
                     <p className="font-body text-darkgray font-bold">{deal.desc}</p>
                     <div className="flex flex-row items-center py-2">
-                      <p className="font-helvetica flex text-2xl font-bold text-destructive pr-2">
+                      <p className="font-helvetica flex xl:text-2xl md:text-xl sm:text-lg font-bold text-destructive pr-2">
                         &#8377;
                         {deal.discountedCost}
                       </p>
-                      <p className="font-helvetica flex text-primary text-xl line-through">
+                      <p className="font-helvetica flex text-primary xl:text-xl md:text-lg sm:text-md line-through">
                         &#8377;
                         {deal.originalCost}
                       </p>

@@ -8,7 +8,7 @@ export default function ServiceCards() {
 
   return (
     <Container>
-      <h2 className="font-heading text-2xl font-bold my-4">Services</h2>
+      <h2 className="font-heading xl:text-2xl md:text-xl font-bold my-4">Services</h2>
       <div className="mb-10">
         <Carousel
           opts={{
