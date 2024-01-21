@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  Facebook, Github, Instagram, Linkedin, Twitter,
-} from 'lucide-react';
+import { Facebook, Github, Instagram, Linkedin, Twitter } from 'lucide-react';
 import Container from '@/components/ui/container';
 
 const routes = [

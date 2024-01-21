@@ -28,7 +28,6 @@ function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const handleSearch = () => {
     // TODO: add search functionality
-    console.log(searchValue);
   };
   return (
     <header className="sm:flex sm:justify-between py-3 px-4 border-b">

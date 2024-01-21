@@ -4,15 +4,15 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  // CarouselNext,
+  // CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Container from './ui/container';
 
 export default function TrendingStores() {
   return (
-    <div className="my-7">
+    <div className="my-2 md:my-4">
       <Container>
         <h1 className="font-Oswald text-2xl font-bold my-4">Trending stores in your campus</h1>
         <Carousel plugins={[Autoplay({ delay: 3000 })]}>
@@ -32,8 +32,8 @@ export default function TrendingStores() {
               </AspectRatio>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          {/* <CarouselPrevious />
+          <CarouselNext /> */}
         </Carousel>
       </Container>
     </div>

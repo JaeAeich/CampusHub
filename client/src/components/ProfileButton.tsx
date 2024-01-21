@@ -28,9 +28,7 @@ const routes = [
 function ProfileButton() {
   // TODO: add different dropdown based on if user is logged in or not
   // TODO: get user and add its
-  const handleLogOut = () => {
-    console.log("You've been logged out!");
-  };
+  const handleLogOut = () => {};
 
   return (
     <DropdownMenu>

@@ -3,8 +3,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  // CarouselNext,
+  // CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Container from './ui/container';
@@ -14,14 +14,14 @@ import { deals } from '../../app/constants';
 
 export default function DealOfTheDay() {
   return (
-    <div className="my-7">
+    <div>
       <Container>
         <h1 className="font-Oswald text-2xl font-bold my-4">Deals of the Day</h1>
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
           <CarouselContent>
             {deals.map((deal) => (
-              <CarouselItem className="w-full">
-                <div className="flex items-center w-full">
+              <CarouselItem key={deal.name} className="w-full">
+                <div className="flex items-center w-full flex-col sm:flex-row">
                   <div className="flex-shrink-0 w-1/3 items-center">
                     <AspectRatio ratio={4 / 3}>
                       <img
@@ -68,9 +68,8 @@ export default function DealOfTheDay() {
               </CarouselItem>
             ))}
           </CarouselContent>
-
-          <CarouselPrevious />
-          <CarouselNext />
+          {/* <CarouselPrevious />
+          <CarouselNext /> */}
         </Carousel>
       </Container>
     </div>

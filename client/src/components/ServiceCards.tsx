@@ -3,8 +3,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  // CarouselNext,
+  // CarouselPrevious,
 } from '@/components/ui/carousel';
 import Container from './ui/container';
 import { services } from '../../app/constants';
@@ -22,7 +22,7 @@ export default function ServiceCards() {
         >
           <CarouselContent>
             {services.map((service) => (
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={service.name} className="md:basis-1/2 lg:basis-1/3">
                 <div className="m-1 relative group">
                   <Card>
                     <CardContent className="flex aspect-[3/2] items-center justify-center p-6">
@@ -42,8 +42,8 @@ export default function ServiceCards() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          {/* <CarouselPrevious />
+          <CarouselNext /> */}
         </Carousel>
       </div>
     </Container>
