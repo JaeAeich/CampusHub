@@ -8,6 +8,7 @@ from typing import List
 from typing import MutableMapping, Any
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
+from datetime import datetime
 
 
 def get_services() -> APIResponse:
@@ -26,7 +27,7 @@ def get_services() -> APIResponse:
     try:
         _services = db_connector.query_data(services_collection_name, query, projection)
 
-        # If there are no services, raise a custom exception
+        # If there are no services, return an error response
         if not _services or len(_services) == 0:
             return response(Status.NOT_FOUND, **message("No services found."))
 
@@ -107,6 +108,9 @@ def update_service(service_id: str) -> APIResponse:
     """
     Updates a service to the MongoDB database.
 
+    Args:
+    service_id (str): The service id of the service to update.
+
     Returns:
         Flask response: JSON response containing the id of the updated service.
     """
@@ -118,7 +122,17 @@ def update_service(service_id: str) -> APIResponse:
     try:
         # Check if request.json is not None before assignment
         if request_json is not None:
-            service_data: MutableMapping[Any, Any] = request_json
+            if (
+                "service_id" in request_json
+                and request_json["service_id"] == service_id
+            ):
+                service_data: MutableMapping[Any, Any] = request_json
+            else:
+                return response(
+                    Status.BAD_REQUEST,
+                    **message("Query and request service_id mismatch"),
+                )
+
         else:
             # Handle the case when request.json is None
             service_data = {}
@@ -156,6 +170,9 @@ def delete_service(service_id: str) -> APIResponse:
     """
     Delete a service from the MongoDB database.
 
+    Args:
+        service_id (str): The service id of the service to delete.
+
     Returns:
         Flask response: JSON response containing the id of the deleted service.
     """
@@ -188,6 +205,9 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
     """
     Get stores by service id from the MongoDB database.
 
+    Args:
+        service_id (str): The service id of the stores to be fetched.
+
     Returns:
         Flask response: JSON response containing the list of stores.
     """
@@ -200,14 +220,13 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
     try:
         _services = db_connector.query_data(services_collection_name, query, projection)
 
-        # If there are no services, raise a custom exception
+        # If there are no services, return an error response
         if not _services or len(_services) == 0:
             return response(Status.NOT_FOUND, **message("Service does not exist."))
 
-        query = {"service_id": service_id}
         _stores = db_connector.query_data(stores_collection_name, query, projection)
 
-        # If there are no stores, raise a custom exception
+        # If there are no stores, return an error response
         if not _stores or len(_stores) == 0:
             return response(
                 Status.NOT_FOUND,
@@ -258,6 +277,9 @@ def get_offers_by_service_id(service_id: str) -> APIResponse:
     """
     Get offers by service id from the MongoDB database.
 
+    Args:
+        service_id (str): The service id of the stores to be fetched.
+
     Returns:
         Flask response: JSON response containing the list of offers.
     """
@@ -270,14 +292,13 @@ def get_offers_by_service_id(service_id: str) -> APIResponse:
     try:
         _services = db_connector.query_data(services_collection_name, query, projection)
 
-        # If there are no services, raise a custom exception
+        # If there are no services, return an error response
         if not _services or len(_services) == 0:
             return response(Status.NOT_FOUND, **message("Service does not exist."))
 
-        query = {"service_id": service_id}
         _offers = db_connector.query_data(offers_collection_name, query, projection)
 
-        # If there are no offers, raise a custom exception
+        # If there are no offers, return an error response
         if not _offers or len(_offers) == 0:
             return response(
                 Status.NOT_FOUND,
@@ -286,6 +307,13 @@ def get_offers_by_service_id(service_id: str) -> APIResponse:
 
         try:
             offers: List[Offers] = [Offers(**s) for s in _offers]
+            try:
+                [datetime.fromisoformat(offer["created_at"]) for offer in _offers]
+            except ValueError as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Invalid offer data in DB: {str(e)}"),
+                )
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,

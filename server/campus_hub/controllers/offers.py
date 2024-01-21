@@ -3,12 +3,11 @@ from campus_hub.models.offers import Offers, OffersList
 from flask import request
 from campus_hub.utils.response import response, message, Status, APIResponse
 from typing import List
-from typing import MutableMapping, Any
+from typing import MutableMapping, Any, Sequence, Mapping
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from datetime import datetime, timedelta
 from collections import Counter
-from typing import Sequence, Mapping
 
 
 def add_offer(request_data):
@@ -38,6 +37,14 @@ def get_offers() -> APIResponse:
 
         try:
             offers: List[Offers] = [Offers(**s) for s in _offers]
+            try:
+                [datetime.fromisoformat(offer["created_at"]) for offer in _offers]
+            except ValueError as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Invalid offer data in DB: {str(e)}"),
+                )
+
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -71,11 +78,16 @@ def update_offer(offer_id: str) -> APIResponse:
     try:
         # Check if request.json is not None before assignment
         if request_json is not None:
-            offer_data: MutableMapping[Any, Any] = request_json
+            if "offer_id" in request_json and request_json["offer_id"] == offer_id:
+                offer_data: MutableMapping[Any, Any] = request_json
+            else:
+                return response(
+                    Status.BAD_REQUEST, **message("Query and request offer_id mismatch")
+                )
+
         else:
             # Handle the case when request.json is None
             offer_data = {}
-
         # Validate the incoming data using Pydantic model
         try:
             offer: Offers = Offers(**offer_data)
@@ -152,7 +164,7 @@ def get_trending_offers() -> APIResponse:
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
 
         # Aggregate pipeline to get offers with maximum orders in the past 7 days
-        pipeline: Sequence[Mapping[str, Any]] = [
+        pipeline : Sequence[Mapping[str, Any]] = [
             {
                 "$addFields": {
                     "created_at": {"$dateFromString": {"dateString": "$created_at"}}
@@ -207,7 +219,7 @@ def get_trending_offers() -> APIResponse:
             )
             if offer_details:
                 try:
-                    offer_details[0] = Offers(**offer_details[0])
+                    offer_details[0]= Offers(**offer_details[0])
                     created_at_datetime = datetime.strptime(
                         offer_details[0].created_at, "%Y-%m-%dT%H:%M:%S.%fZ"
                     )
