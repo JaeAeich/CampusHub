@@ -164,7 +164,7 @@ def get_trending_offers() -> APIResponse:
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
 
         # Aggregate pipeline to get offers with maximum orders in the past 7 days
-        pipeline : Sequence[Mapping[str, Any]] = [
+        pipeline: Sequence[Mapping[str, Any]] = [
             {
                 "$addFields": {
                     "created_at": {"$dateFromString": {"dateString": "$created_at"}}
@@ -219,7 +219,7 @@ def get_trending_offers() -> APIResponse:
             )
             if offer_details:
                 try:
-                    offer_details[0]= Offers(**offer_details[0])
+                    offer_details[0] = Offers(**offer_details[0])
                     created_at_datetime = datetime.strptime(
                         offer_details[0].created_at, "%Y-%m-%dT%H:%M:%S.%fZ"
                     )

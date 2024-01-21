@@ -246,6 +246,20 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-cors"
+version = "4.0.0"
+description = "A Flask extension adding a decorator for CORS support"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Flask-Cors-4.0.0.tar.gz", hash = "sha256:f268522fcb2f73e2ecdde1ef45e2fd5c71cc48fe03cffb4b441c6d1b40684eb0"},
+    {file = "Flask_Cors-4.0.0-py2.py3-none-any.whl", hash = "sha256:bc3492bfd6368d27cfe79c7821df5a8a319e1a6d5eab277a3794be19bdc51783"},
+]
+
+[package.dependencies]
+Flask = ">=0.9"
+
+[[package]]
 name = "gunicorn"
 version = "21.2.0"
 description = "WSGI HTTP Server for UNIX"
@@ -965,6 +979,20 @@ files = [
 Jinja2 = ">=2.0"
 
 [[package]]
+name = "types-flask-cors"
+version = "4.0.0.20240106"
+description = "Typing stubs for Flask-Cors"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-Flask-Cors-4.0.0.20240106.tar.gz", hash = "sha256:e49b29c4ba1de9496f7f43aab90f32393dd2599f87fab448cdebc481facca1a3"},
+    {file = "types_Flask_Cors-4.0.0.20240106-py3-none-any.whl", hash = "sha256:bc07707c8eae86b04d177bc19f4cbb128af6fc490de9c4ba4a4348e45c77406f"},
+]
+
+[package.dependencies]
+Flask = ">=2.0.0"
+
+[[package]]
 name = "types-pytz"
 version = "2023.3.1.1"
 description = "Typing stubs for pytz"
@@ -1034,4 +1062,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1e302b3d62dad3208282073a20ff1f2259535ba2c487c248e79e2c0a7de74818"
+content-hash = "ed44511380b8773d0614a19b8d3801c527b4356c27e177521c47e6a7d95cb697"
