@@ -9,7 +9,7 @@ export default function DealOfTheDay() {
   return (
     <div>
       <Container>
-        <h2 className="font-heading xl:text-2xl sm:text-xl text-lg font-semibold my-4">
+        <h2 className="font-heading xl:text-xll sm:text-xl text-lg font-semibold my-4">
           Deals of the Day
         </h2>
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
@@ -17,23 +17,23 @@ export default function DealOfTheDay() {
             {deals.map((deal) => (
               <CarouselItem key={deal.name} className="w-full">
                 <div className="flex flex-col lg:flex-row w-full">
-                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-24 my-3">
+                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-28 my-3">
                     <img src={deal.image} alt={deal.name} className="rounded-md h-full mx-auto" />
                   </div>
                   <div className="flex flex-col lg:w-2/3 justify-center xl:px-16 lg:px-3">
-                    <h3 className="font-subheading xl:text-xl md:text-xl text-lg font-bold my-3">
+                    <h3 className="font-subheading xl:text-xl md:text-xl text-xl font-bold my-3">
                       {deal.name}
                     </h3>
-                    <p className="font-body text-darkgray font-bold overflow-hidden line-clamp-3">
+                    <p className="font-body  text-md text-darkgray overflow-hidden line-clamp-3">
                       {deal.desc}
                     </p>
                     <div className="lg:flex-col flex-row lg:justify-left">
                       <div className="flex flex-row items-center py-2">
-                        <p className="font-helvetica flex xl:text-2xl md:text-xl sm:text-lg font-bold text-destructive pr-2">
+                        <p className="font-helvetica flex xl:text-2xl text-xl font-bold text-accent pr-2">
                           &#8377;
                           {deal.discountedCost}
                         </p>
-                        <p className="font-helvetica flex text-primary xl:text-xl md:text-lg sm:text-md line-through">
+                        <p className="font-helvetica flex text-primary xl:text-lg text-md line-through">
                           &#8377;
                           {deal.originalCost}
                         </p>
@@ -41,7 +41,7 @@ export default function DealOfTheDay() {
 
                       <Button
                         variant="outline"
-                        className="flex bg-destructive text-background font-bold mb-4"
+                        className="flex bg-accent hover:bg-accentDark  text-background font-bold mb-4"
                       >
                         ADD TO CART
                       </Button>
