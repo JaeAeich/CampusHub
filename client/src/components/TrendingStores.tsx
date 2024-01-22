@@ -12,11 +12,11 @@ export default function TrendingStores() {
         <Carousel className="w-full" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent>
             <CarouselItem className="w-full">
-              <img src="./../../public/ccd.png" alt="" className="rounded-md object-cover" />
+              <img src="./ccd.png" alt="" className="rounded-md object-cover" />
             </CarouselItem>
             <CarouselItem className="w-full flex items-center justify-center">
               <img
-                src="./../../public/amul.jpg"
+                src="./amul.jpg"
                 alt=""
                 className="rounded-md object-cover w-full h-full"
               />
