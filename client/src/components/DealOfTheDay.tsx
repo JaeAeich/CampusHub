@@ -1,4 +1,3 @@
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Container from './ui/container';
@@ -10,24 +9,23 @@ export default function DealOfTheDay() {
   return (
     <div>
       <Container>
-        <h2 className="font-heading xl:text-2xl md:text-xl font-bold my-4">Deals of the Day</h2>
+        <h2 className="font-heading xl:text-2xl sm:text-xl text-lg font-semibold my-4">Deals of the Day</h2>
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
           <CarouselContent>
             {deals.map((deal) => (
               <CarouselItem key={deal.name} className="w-full">
-                <div className="flex items-center w-full flex-col lg:flex-row">
-                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center">
-                    <AspectRatio ratio={4 / 3}>
+                <div className="flex flex-col lg:flex-row w-full">
+                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-24 my-3">
                       <img
                         src={deal.image}
                         alt={deal.name}
-                        className="rounded-md object-fit mx-4 my-6"
+                        className="rounded-md h-full mx-auto"
                       />
-                    </AspectRatio>
                   </div>
-                  <div className="flex flex-col justify-center xl:px-16 lg:px-0">
-                    <h3 className="font-subheading xl:text-xl md:text-lg font-bold my-3">{deal.name}</h3>
-                    <p className="font-body text-darkgray font-bold">{deal.desc}</p>
+                  <div className="flex flex-col lg:w-2/3 justify-center xl:px-16 lg:px-3">
+                    <h3 className="font-subheading xl:text-xl md:text-xl text-lg font-bold my-3">{deal.name}</h3>
+                    <p className="font-body text-darkgray font-bold overflow-hidden line-clamp-3">{deal.desc}</p>
+                    <div className="lg:flex-col flex-row lg:justify-left"> 
                     <div className="flex flex-row items-center py-2">
                       <p className="font-helvetica flex xl:text-2xl md:text-xl sm:text-lg font-bold text-destructive pr-2">
                         &#8377;
@@ -38,37 +36,37 @@ export default function DealOfTheDay() {
                         {deal.originalCost}
                       </p>
                     </div>
-                    <div className="flex-col justify-left">
+                    
                       <Button
                         variant="outline"
                         className="flex bg-destructive text-background font-bold mb-4"
                       >
                         ADD TO CART
                       </Button>
+                      </div>
                       <div className="flex items-center">
-                        <p className="font-subheading text-primary text-lg mr-3">Gone in</p>
+                        <p className="font-subheading text-primary mr-3">Gone in</p>
                         <Badge
                           variant="secondary"
-                          className="font-bold text-body mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
+                          className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
                         >
-                          12 hour
+                          12h
                         </Badge>
 
                         <Badge
                           variant="secondary"
-                          className="font-bold mx-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
+                          className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
                         >
-                          16 min
+                          16m
                         </Badge>
 
                         <Badge
                           variant="secondary"
-                          className="font-bold mx-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
+                          className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
                         >
-                          48 sec
+                          48s
                         </Badge>
                       </div>
-                    </div>
                   </div>
                 </div>
               </CarouselItem>

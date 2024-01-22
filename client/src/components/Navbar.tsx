@@ -30,13 +30,13 @@ function Navbar() {
     // TODO: add search functionality
   };
   return (
-    <header className="sm:flex bg-black  sm:justify-between py-3 px-4 border-b">
+    <header className="sm:flex bg-black  sm:justify-between py-3 sm:px-4 px-1 border-b">
       <Container>
-        <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between w-full">
+        <div className="relative px-1 sm:px-6 lg:px-8 flex h-16 items-center justify-between w-full">
           <div className="flex items-center">
             <Sheet>
               <SheetTrigger>
-                <Menu className="h-6 sm:hidden w-6" />
+                <Menu color="#fff" className="h-6 sm:hidden w-6" />
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[400px] gap-2">
                 <div className="flex w-full items-center space-x-2 mb-2">
@@ -46,9 +46,7 @@ function Navbar() {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                   />
-                  <Button type="button" size="icon" onClick={handleSearch}>
-                    <Search />
-                  </Button>
+                  <Search onClick={handleSearch} color="#000" />
                 </div>
                 <Separator />
                 <nav className="flex flex-col gap-4 mt-2">
@@ -62,9 +60,9 @@ function Navbar() {
             </Sheet>
             <Link to="/" className="flex ml-4 lg:ml-0 justify-center items-center gap-2">
               <Avatar>
-                <AvatarImage src="../../public/logo.png" alt="campushub" />
+                <AvatarImage src="./logo.png" alt="campushub" />
               </Avatar>
-              <h1 className="xl:text-2xl md:text-xl font-bold sm:block hidden text-background">CampusHub</h1>
+              <h1 className="sm:block hidden font-heading font-extrabold sm:block xl:text-2xl md:text-xl sm:text-xl text-background">CampusHub</h1>
             </Link>
           </div>
           <nav className="ml-4 flex w-full justify-center items-center space-x-4 lg:space-x-6 sm:block hidden">

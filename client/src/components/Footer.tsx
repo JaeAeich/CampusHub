@@ -26,7 +26,7 @@ export default function Footer() {
     <footer className="bg-foreground text-background pt-8 pb-2 px-2">
       <Container>
         <div className="flex flex-col items-center text-xs md:text-base">
-          <div className="flex flex-wrap justify-center mb-4">
+          <div className="flex flex-wrap justify-center mb-4 sm:block hidden">
             <ul className="flex items-center space-x-4">
               {routes.map((route) => (
                 <li key={route.to}>
