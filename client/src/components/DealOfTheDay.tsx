@@ -9,7 +9,7 @@ export default function DealOfTheDay() {
   return (
     <div>
       <Container>
-        <h2 className="font-heading xl:text-xll sm:text-xl text-lg font-semibold my-4">
+        <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Deals of the Day
         </h2>
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
@@ -17,11 +17,11 @@ export default function DealOfTheDay() {
             {deals.map((deal) => (
               <CarouselItem key={deal.name} className="w-full">
                 <div className="flex flex-col lg:flex-row w-full">
-                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-28 my-3">
+                  <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-36 my-3">
                     <img src={deal.image} alt={deal.name} className="rounded-md h-full mx-auto" />
                   </div>
                   <div className="flex flex-col lg:w-2/3 justify-center xl:px-16 lg:px-3">
-                    <h3 className="font-subheading xl:text-xl md:text-xl text-xl font-bold my-3">
+                    <h3 className="font-subheading xl:text-xl md:text-xl text-lgg font-bold my-3">
                       {deal.name}
                     </h3>
                     <p className="font-body  text-md text-darkgray overflow-hidden line-clamp-3">

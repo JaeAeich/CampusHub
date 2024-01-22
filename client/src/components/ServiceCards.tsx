@@ -8,7 +8,7 @@ export default function ServiceCards() {
 
   return (
     <Container>
-      <h2 className="font-heading xl:text-xll sm:text-xl text-lg font-semibold sm:my-4 mt-10 sm: mb-2">
+      <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-10 sm: mb-2">
         Services{' '}
       </h2>
       <div className="mb-10">
