@@ -8,7 +8,11 @@
     --background: 240, 60%, 99%;
     --primary: 240, 4%, 5%;
     --secondary: 0, 0%, 79%;
-    --accent: 357, 100%, 50% --background: 0 0% 100%;
+    --accent: 355, 63%, 76%;
+    --accent-lighter: 355, 41%, 95%;
+    --accent-light: 352, 44%, 84%;
+    --accent-dark: 355, 67%, 70%;
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;

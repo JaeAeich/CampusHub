@@ -20,7 +20,9 @@ module.exports = {
     fontSize: {
       sm: '0.750rem',
       base: '1rem',
+      lgg: '1.15rem',
       xl: '1.333rem',
+      xll: '1.53rem',
       '2xl': '1.777rem',
       '3xl': '2.369rem',
       '4xl': '3.158rem',
@@ -32,8 +34,14 @@ module.exports = {
       body: 'Cambria',
     },
     fontWeight: {
+      thin: '100',
+      extralight: '200',
       normal: '400',
+      medium: '500',
+      semibold: '600',
       bold: '700',
+      extrabold: '800',
+      black: '900',
     },
     extend: {
       colors: {
@@ -62,6 +70,18 @@ module.exports = {
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
+        },
+        accentDark: {
+          DEFAULT: 'hsl(var(--accent-dark))',
+          foreground: 'hsl(var(--accent-dark-foreground))',
+        },
+        accentLighter: {
+          DEFAULT: 'hsl(var(--accent-lighter))',
+          foreground: 'hsl(var(--accent-lighter-foreground))',
+        },
+        accentLight: {
+          DEFAULT: 'hsl(var(--accent-light))',
+          foreground: 'hsl(var(--accent-light-foreground))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',

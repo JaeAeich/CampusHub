@@ -4,7 +4,7 @@ import ServiceCards from './ServiceCards';
 
 export default function Landing() {
   return (
-    <div>
+    <div className="mx-auto max-w-full sm:max-w-lg md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl">
       <TrendingStores />
       <DealOfTheDay />
       <ServiceCards />
