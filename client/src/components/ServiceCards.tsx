@@ -21,7 +21,7 @@ export default function ServiceCards() {
           <CarouselContent>
             {services.map((service) => (
               <CarouselItem
-                key={service.name}
+                key={service.service_name}
                 onClick={() => handleRouteToStore()}
                 className="md:basis-1/2 lg:basis-1/3 sm:basis-1/2"
               >
@@ -30,13 +30,13 @@ export default function ServiceCards() {
                   <Card className="bg-gradient-to-r from-accentLighter to-accentLight">
                     <div className="flex-row flex justify-between">
                       <h1 className="px-4 pt-4 xl:text-xl md:text-lg sm:text-md font-subheading font-semibold">
-                        {service.name}
+                        {service.service_name}
                       </h1>
                     </div>
                     <CardContent className="flex sm:aspect-[3/2] aspect-[2] items-center justify-center sm:p-6">
                       <img
-                        src={service.image}
-                        alt={service.name}
+                        src={service.service_images[0]}
+                        alt={service.service_name}
                         className="blog-banner h-full transition-transform transform group-hover:scale-110"
                       />
                     </CardContent>
