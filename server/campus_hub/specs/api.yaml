@@ -576,7 +576,7 @@ paths:
   '/stores/{store_id}/products/{product_id}':
     get:
       summary: Get a specific product.
-      operationId: products.get_product_by_id
+      operationId: stores.get_product_by_id
       tags:
         - Stores
       parameters:
@@ -613,7 +613,7 @@ paths:
                 $ref: '#/components/schemas/Response'
     put:
       summary: Update a product
-      operationId: products.update_product
+      operationId: stores.update_product
       tags:
         - Stores
       parameters:
@@ -649,7 +649,7 @@ paths:
                 $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a product
-      operationId: products.delete_product
+      operationId: stores.delete_product
       tags:
         - Stores
       parameters:

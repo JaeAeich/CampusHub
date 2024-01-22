@@ -1,3 +1,4 @@
+from campus_hub.models.store import Store
 from campus_hub.utils.db import db_connector
 from campus_hub.models.seller import Seller, SellerList
 from pydantic import ValidationError
@@ -90,6 +91,76 @@ def add_seller() -> APIResponse:
 
         # Return a success response
         return response(Status.SUCCESS, **{"id": seller_id})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
+
+
+def add_store(seller_id) -> APIResponse:
+    """
+    Adds a new store to the MongoDB database.
+
+    Returns:
+        Flask response: JSON response containing the status of the operation.
+    """
+
+    sellers_collection_name = "sellers"
+    seller_query: dict = {"seller_id": seller_id}
+    request_json = request.json
+
+    projection = {"_id": False}
+
+
+    try:
+        # NOTE: Check if seller exists
+        _sellers = db_connector.query_data(sellers_collection_name, seller_query, projection)
+
+        # If there are no sellers, return 404 error
+        if not _sellers or len(_sellers) == 0:
+
+            return response(Status.NOT_FOUND, **message("seller does not exist."))
+        
+        # Check if request.json is not None before assignment
+        if request_json is not None:
+            store_data: MutableMapping[Any, Any] = request_json
+        else:
+            # Handle the case when request.json is None
+            store_data = {}
+
+        # Add uui as seller id
+        store_id: str = db_connector.generate_unique_id("stores")
+        store_data["store_id"] = store_id
+
+        # Validate the incoming data using Pydantic model
+        try:
+            store: Store = Store(**store_data)
+        except ValidationError as ve:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid store data: {str(ve)}")
+            )
+
+        # NOTE: Check if service exists
+        # NOTE: This is done after validation to ensure that the service_id is present in the request
+        services_collection_name = "services"
+        service_query: dict = {"service_id": request_json["service_id"]}
+        _services = db_connector.query_data(services_collection_name, service_query, projection)
+
+        # If there are no services, return 404 error
+        if not _services or len(_services) == 0:
+            return response(Status.NOT_FOUND, **message("service does not exist."))
+        
+        # Add the store data to the database
+        try:
+            db_connector.insert_data(sellers_collection_name, store.model_dump())
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
+            )
+
+        # Return a success response
+        return response(Status.SUCCESS, **{"id": store_id})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
