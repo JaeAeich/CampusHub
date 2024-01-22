@@ -1,26 +1,53 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Menu, ShoppingCart, Search } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Menu, ShoppingCart, Search, Cat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Container from '@/components/ui/container';
 import { Separator } from '@/components/ui/separator';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import ProfileButton from './ProfileButton';
+import { services } from '../../app/constants';
 
 const routes = [
   {
     to: '/',
-    label: 'Products',
+    label: 'Services',
+    content: services.map((service) => ({
+      name: service.name,
+    })),
   },
   {
     to: '/',
-    label: 'Categories',
+    label: 'My Account',
+    content: null,
   },
   {
     to: '/',
-    label: 'On Sale',
+    label: 'Wishlist',
+    content: null,
+  },
+  {
+    to: '/',
+    label: 'Past Orders',
+    content: null,
+  },
+  {
+    to: '/',
+    label: 'Notifications',
+    content: null,
+  },
+  {
+    to: '/',
+    label: 'Log Out',
+    content: null,
   },
 ];
 
@@ -30,45 +57,74 @@ function Navbar() {
     // TODO: add search functionality
   };
   return (
-    <header className="sm:flex bg-black  sm:justify-between py-3 px-4 border-b">
+    <header className="sm:flex bg-black  sm:justify-between py-3 border-b">
       <Container>
-        <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between w-full">
+        <div className="relative flex h-16 items-center justify-between w-full">
           <div className="flex items-center">
             <Sheet>
               <SheetTrigger>
-                <Menu className="h-6 sm:hidden w-6" />
+                <Menu color="#fff" className="h-6 md:hidden w-6" />
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[400px] gap-2">
-                <div className="flex w-full items-center space-x-2 mb-2">
-                  <Input
-                    type="text"
-                    placeholder="Search stores"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                  />
-                  <Button type="button" size="icon" onClick={handleSearch}>
-                    <Search />
-                  </Button>
+                <div className="flex flex-row items-center">
+                  <Avatar>
+                    <AvatarImage src="" />
+                    <AvatarFallback>
+                      <Cat />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col justify-left m-1 ml-2">
+                    {/* // TODO: Add name and address of user. */}
+                    <p className="flex font-subheading font-bold">Hi, User</p>
+                    <p className="flex font-subheading">Delivering to your address.</p>
+                  </div>
                 </div>
                 <Separator />
                 <nav className="flex flex-col gap-4 mt-2">
-                  {routes.map((route) => (
-                    <Link key={route.label} to={route.to} className="block px-2 py-1 text-lg">
-                      {route.label}
-                    </Link>
-                  ))}
+                  <Accordion type="single" collapsible>
+                    {routes.map((route, index) =>
+                      route.content ? (
+                        <AccordionItem value={`item-${index}`} key={route.label}>
+                          <AccordionTrigger className="text-lg font-subheading">
+                            {route.label}
+                          </AccordionTrigger>
+                          {route.content ? (
+                            <AccordionContent>
+                              {route.content.map((service) => (
+                                <div key={service.name}>{service.name}</div>
+                              ))}
+                            </AccordionContent>
+                          ) : (
+                            <AccordionContent />
+                          )}
+                        </AccordionItem>
+                      ) : (
+                        <>
+                          <Link
+                            className="flex text-lg font-subheading py-5 hover:underline"
+                            to={route.to}
+                          >
+                            {route.label}
+                          </Link>
+                          <Separator />
+                        </>
+                      ),
+                    )}
+                  </Accordion>
                 </nav>
               </SheetContent>
             </Sheet>
-            <Link to="/" className="flex ml-4 lg:ml-0 justify-center items-center gap-2">
+            <Link to="/" className="flex md:flex hidden ml-4 lg:ml-0 justify-center items-center">
               <Avatar>
-                <AvatarImage src="../../public/logo.png" alt="campushub" />
+                <AvatarImage className="md:block hidden" src="./logo.png" alt="campushub" />
               </Avatar>
-              <h1 className="xl:text-2xl md:text-xl font-bold sm:block hidden text-background">CampusHub</h1>
+              <h1 className="md:block hidden font-heading font-extrabold xl:text-2xl md:text-xl sm:text-xl text-background">
+                CampusHub
+              </h1>
             </Link>
           </div>
-          <nav className="ml-4 flex w-full justify-center items-center space-x-4 lg:space-x-6 sm:block hidden">
-            <div className="mx-2 flex w-full items-center space-x-2">
+          <nav className="ml-4 flex w-full justify-center items-center space-x-4 lg:space-x-6">
+            <div className="md:mx-2 flex w-full items-center space-x-2">
               <Input
                 type="text"
                 placeholder="Search stores"
@@ -80,12 +136,14 @@ function Navbar() {
               </Button>
             </div>
           </nav>
-          <div className="mx-4 flex items-center">
-            <Button size="icon" className="mr-2">
-              <ShoppingCart color="#fff" className="h-6 w-6" />
+          <div className=" flex items-center justify-left">
+            <Button size="icon" className="md:ml-1 md:mr-3">
+              <ShoppingCart color="#fff" />
               <span className="sr-only">Shopping Cart</span>
             </Button>
-            <ProfileButton />
+            <div className="sm:block hidden">
+              <ProfileButton />
+            </div>
           </div>
         </div>
       </Container>
