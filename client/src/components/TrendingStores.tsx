@@ -15,11 +15,7 @@ export default function TrendingStores() {
               <img src="./ccd.png" alt="" className="rounded-md object-cover" />
             </CarouselItem>
             <CarouselItem className="w-full flex items-center justify-center">
-              <img
-                src="./amul.jpg"
-                alt=""
-                className="rounded-md object-cover w-full h-full"
-              />
+              <img src="./amul.jpg" alt="" className="rounded-md object-cover w-full h-full" />
             </CarouselItem>
           </CarouselContent>
         </Carousel>

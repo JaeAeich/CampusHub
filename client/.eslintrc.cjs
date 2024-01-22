@@ -12,13 +12,13 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'prettier'],
   rules: {
-    "jsx-a11y/label-has-associated-control": [
+    'jsx-a11y/label-has-associated-control': [
       2,
       {
-        "labelComponents": ["label"], 
-        "labelAttributes": ["htmlFor"], 
-        "controlComponents": ["Checkbox"],
-        "depth": 3,
+        labelComponents: ['label'],
+        labelAttributes: ['htmlFor'],
+        controlComponents: ['Checkbox'],
+        depth: 3,
       },
     ],
     camelcase: 'off',
