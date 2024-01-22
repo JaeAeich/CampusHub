@@ -1,7 +1,7 @@
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Container from './ui/container';
-import {stores} from '../../app/constants'
+import { stores } from '../../app/constants';
 
 export default function TrendingStores() {
   return (
@@ -13,7 +13,10 @@ export default function TrendingStores() {
         <Carousel className="w-full" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent>
             {stores.map((store) => (
-              <CarouselItem key={store.store_id} className="w-full flex items-center justify-center">
+              <CarouselItem
+                key={store.store_id}
+                className="w-full flex items-center justify-center"
+              >
                 <img
                   src={store.store_images[0]}
                   alt={store.store_name}

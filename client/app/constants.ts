@@ -75,11 +75,10 @@ export const deals: Array<{
   },
 ];
 
-
 export const stores: Store[] = [
   {
     store_id: '1',
-    coordinates: [12.971598, 77.594562], 
+    coordinates: [12.971598, 77.594562],
     customer_order_ids: ['order1', 'order2'],
     offer_available: true,
     overall_rating: 4.5,
@@ -94,11 +93,11 @@ export const stores: Store[] = [
     store_name: 'Cafe Coffee Day',
     store_phone_number: '9876543210',
     stripe_public_key: 'your_stripe_public_key',
-    timings: [9, 21], 
+    timings: [9, 21],
   },
   {
     store_id: '2',
-    coordinates: [12.971598, 77.594562], 
+    coordinates: [12.971598, 77.594562],
     customer_order_ids: ['order3', 'order4'],
     offer_available: false,
     overall_rating: 4.0,
@@ -113,6 +112,6 @@ export const stores: Store[] = [
     store_name: 'Amul Store',
     store_phone_number: '9876543211',
     stripe_public_key: 'your_stripe_public_key',
-    timings: [10, 20], 
+    timings: [10, 20],
   },
 ];
