@@ -19,7 +19,8 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
-import Slider from 'react-input-slider';
+import { Slider } from '@/components/ui/slider';
+// import Slider from 'react-input-slider';
 import ProductCard from './ProductCard';
 
 function ProductsPage() {
@@ -33,9 +34,7 @@ function ProductsPage() {
     setSelectedRating(0);
     // setOfferAvailable('option-4');
   };
-  const handleSliderChange = (value) => {
-    setSliderValue(value);
-  };
+  const handleSliderChange = () => {};
 
   // const handleCategoryChange = (event) => {
   //   setSelectedCategories((prevCategories) => {
@@ -115,25 +114,13 @@ function ProductsPage() {
                 <AccordionContent className="m-1">
                   {/* //TODO: Get price range from APIs */}
                   <div className="flex flex-col font-subheading font-semibold text-base items-center">
-                    <div className="flex flex-row items-center mb-5">
+                    <div className="flex gap-2 w-full">
                       <p>0</p>
                       <Slider
-                        className="mx-2"
-                        axis="x"
-                        x={sliderValue.x}
-                        onChange={handleSliderChange}
-                        styles={{
-                          track: {
-                            backgroundColor: '/ccc',
-                          },
-                          active: {
-                            backgroundColor: '/e99ba2',
-                          },
-                          thumb: {
-                            width: 25,
-                            height: 20,
-                          },
-                        }}
+                        defaultValue={[33]}
+                        max={1000}
+                        step={1}
+                        onValueChange={handleSliderChange}
                       />
                       <p>1000</p>
                     </div>
@@ -263,22 +250,10 @@ function ProductsPage() {
                               <div className="flex flex-row items-center mb-5">
                                 <p>0</p>
                                 <Slider
-                                  className="mx-5"
-                                  axis="x"
-                                  x={sliderValue.x}
-                                  onChange={handleSliderChange}
-                                  styles={{
-                                    track: {
-                                      backgroundColor: '/ccc',
-                                    },
-                                    active: {
-                                      backgroundColor: '/e99ba2',
-                                    },
-                                    thumb: {
-                                      width: 25,
-                                      height: 20,
-                                    },
-                                  }}
+                                  defaultValue={[33]}
+                                  max={1000}
+                                  step={1}
+                                  onValueChange={handleSliderChange}
                                 />
                                 <p>1000</p>
                               </div>

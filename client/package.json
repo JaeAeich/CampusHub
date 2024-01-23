@@ -36,7 +36,6 @@
     "embla-carousel-autoplay": "^8.0.0-rc19",
     "embla-carousel-react": "^8.0.0-rc19",
     "lucide-react": "^0.303.0",
-    "react-input-slider": "^6.0.1",
     "react-router-dom": "^6.21.3",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",

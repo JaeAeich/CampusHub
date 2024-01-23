@@ -13,13 +13,13 @@ function App() {
         <div className="flex grow">
           <Routes>
             <Route path="/" element={<Landing />} />
-            {/* <Route path="/services/service_id" element={<StoresList/>} /> */}
+            <Route path="/services" element={<ProductsPage />} />
+            {/* <Route path="/services/service_id" element={<StoresList />} /> */}
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>
         <Footer />
       </div>
-      <Footer />
     </BrowserRouter>
   );
 }
