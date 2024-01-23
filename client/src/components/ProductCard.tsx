@@ -5,20 +5,20 @@ function getStarElement(index, rating) {
   if (rating - index >= 0) {
     return (
       <Star
-        fill="yellow"
+        fill="#e89ba1"
         strokeWidth={0}
         type="button"
-        className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
+        className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
       />
     );
   }
   if (rating - index > -1) {
     return (
       <StarHalf
-        fill="yellow"
+        fill="#e89ba1"
         strokeWidth={0}
         type="button"
-        className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
+        className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
       />
     );
   }
@@ -27,14 +27,14 @@ function getStarElement(index, rating) {
       fill="gray"
       strokeWidth={0}
       type="button"
-      className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
+      className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
     />
   );
 }
 
 function ProductCard() {
   return (
-    <div className="relative inline-block m-7 w-full  max-w-xs overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+    <div className="relative inline-block m-7 w-full max-w-xs overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <Link className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" to="/">
         <img
           className="object-cover"
@@ -61,7 +61,7 @@ function ProductCard() {
               // TODO: Rating is hardcoded here.
               <span key={index}>{getStarElement(index, 4.8)}</span>
             ))}
-            <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
+            <span className="mr-2 ml-3 rounded bg-secondaryLight px-2.5 py-0.5 text-xs font-semibold">
               5.0
             </span>
           </div>

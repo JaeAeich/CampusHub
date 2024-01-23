@@ -64,8 +64,8 @@ function ProductsPage() {
   // };
 
   return (
-    <div className="flex lg:flex-row flex-col">
-      <div className="lg:block hidden flex lg:flex-col w-96 min-h-screen bg-secondaryLight p-4">
+    <div className="flex lg:flex-row flex-col w-full">
+      <div className="lg:block hidden flex w-full lg:flex-col lg:w-96 min-h-screen bg-secondaryLight p-4">
         <form
         // onSubmit={handleSubmit}
         >
@@ -152,12 +152,12 @@ function ProductsPage() {
                     {[1, 2, 3, 4, 5].map((index) => (
                       <Star
                         fill={`
-                                  ${index <= selectedRating ? 'yellow' : 'gray'}
+                                  ${index <= selectedRating ? '#e89ba1' : 'gray'} 
                                 `}
                         strokeWidth={0}
                         key={index}
                         type="button"
-                        className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
+                        className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
                         onMouseEnter={() => handleRatingChange(index)}
                       />
                     ))}
@@ -297,12 +297,12 @@ function ProductsPage() {
                               {[1, 2, 3, 4, 5].map((index) => (
                                 <Star
                                   fill={`
-                                    ${index <= selectedRating ? 'yellow' : 'gray'}
+                                    ${index <= selectedRating ? '#e89ba1' : 'gray'}
                                   `}
                                   strokeWidth={0}
                                   key={index}
                                   type="button"
-                                  className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
+                                  className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
                                   onMouseEnter={() => handleRatingChange(index)}
                                 />
                               ))}
@@ -359,7 +359,8 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      <div className="w-full">
+      <div className="justify-center">
+        <ProductCard />
         <ProductCard />
       </div>
     </div>

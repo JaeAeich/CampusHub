@@ -47,6 +47,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        accentPink: '#e89ba1',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
