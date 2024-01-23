@@ -1,4 +1,5 @@
 import re
+from campus_hub.models.review import Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
@@ -65,7 +66,37 @@ def get_reviews_by_product_id(product_id) -> APIResponse:
         Flask response: JSON response containing the list of products.
     """
 
-    return
+    reviews_collection_name = "reviews"
+
+    # Query without including _id field in the result
+    query: dict = {}
+    query["product_id"] = product_id
+    projection = {"_id": False}
+
+    try:
+        _reviews = db_connector.query_data(reviews_collection_name, query, projection)
+
+        # If there are no products, return 404 error
+        if not _reviews or len(_reviews) == 0:
+            return response(
+                Status.NOT_FOUND, **message("No reviews found for the product in the database.")
+            )
+
+        try:
+            reviews = [Reviews(**review) for review in _reviews]
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid review data in DB: {str(e)}"),
+            )
+
+        # If products are found, return a JSON response
+        return response(Status.SUCCESS, reviews=[review.model_dump() for review in reviews])
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving product from MongoDB: {e}"),
+        )
 
 def get_product_cost(product_id) -> APIResponse:
     """
@@ -99,7 +130,7 @@ def get_product_cost(product_id) -> APIResponse:
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
 
-        cost : int = products["product_cost"]
+        cost : float = products.product_cost
 
         # If products are found, return a JSON response
         return response(Status.SUCCESS, cost = cost)
@@ -146,10 +177,10 @@ def get_range_of_cost_in_store(store_id) -> APIResponse:
         max_cost : float = 0
         min_cost : float = 1000000
         for product in products:
-            if product["product_cost"] > max_cost:
-                max_cost = product["product_cost"]
-            if product["product_cost"] < min_cost:
-                min_cost = product["product_cost"]
+            if product.product_cost > max_cost:
+                max_cost = product.product_cost
+            if product.product_cost < min_cost:
+                min_cost = product.product_cost
 
         # If products are found, return a JSON response
         return response(Status.SUCCESS, max_cost = max_cost, min_cost = min_cost)
