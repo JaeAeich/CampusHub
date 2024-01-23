@@ -20,13 +20,8 @@ def get_sellers() -> APIResponse:
 
     # Get the query parameters
     try:
-        query_arg_1 = request.args.get('no_of_docs_each_page')
-        query_arg_2 = request.args.get('current_page_number')
-        if query_arg_1:
-            _no_of_docs_each_page = int(query_arg_1)
-        if query_arg_2:
-            _current_page_number = int(query_arg_2)
-
+        _no_of_docs_each_page = request.args.get('no_of_docs_each_page')
+        _current_page_number = request.args.get('current_page_number')
     except Exception as e:
         return response(
             Status.BAD_REQUEST,
@@ -39,7 +34,7 @@ def get_sellers() -> APIResponse:
 
     try:
         if _no_of_docs_each_page and _current_page_number:
-            _sellers = db_connector.query_data(sellers_collection_name, query, projection, no_of_docs_each_page= _no_of_docs_each_page, current_page_number= _current_page_number)
+            _sellers = db_connector.query_data(sellers_collection_name, query, projection, no_of_docs_each_page= int(_no_of_docs_each_page), current_page_number= int(_current_page_number))
         else:
             _sellers = db_connector.query_data(sellers_collection_name, query, projection)
         # If there are no sellers, raise a custom exception
