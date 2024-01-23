@@ -1,10 +1,7 @@
 import re
-from typing import Any, MutableMapping
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
-from pydantic import ValidationError
-from pymongo.errors import PyMongoError
 
 
 def get_products(service_id, store_id, max_rating, min_rating) -> APIResponse:
