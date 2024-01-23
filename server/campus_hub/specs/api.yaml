@@ -863,6 +863,9 @@ paths:
       operationId: sellers.get_sellers
       tags:
         - Sellers
+      parameters:
+        - $ref: '#/components/parameters/no_of_docs_each_page'
+        - $ref: '#/components/parameters/current_page_number'
       responses:
         "200":
           description: Success
@@ -1837,3 +1840,17 @@ components:
       schema:
         type: number
         format: float
+    no_of_docs_each_page:
+      name: no_of_docs_each_page
+      in: query
+      description: no of docs each page
+      required: false
+      schema:
+        type: integer
+    current_page_number:
+      name: current_page_number
+      in: query
+      description: current page no
+      required: false
+      schema:
+        type: integer

@@ -197,7 +197,7 @@ class DBConnector:
             raise CollectionCreationError(collection_name)
 
     def query_data(
-        self, collection_name: str, query: dict, projection: dict = {}
+        self, collection_name: str, query: dict, projection: dict = {}, no_of_docs_each_page: int = 10, current_page_number: int = 1
     ) -> list:
         """
         Queries data from the specified MongoDB collection.
@@ -206,6 +206,8 @@ class DBConnector:
             collection_name (str): Name of the collection.
             query (dict): Query parameters.
             projection (dict, optional): Projection parameters. Defaults to None.
+            no_of_docs_each_page (int, optional): Number of documents to be returned in each page. Defaults to 10.
+            current_page_number (int, optional): Current page number. Defaults to 1.
 
         Returns:
             list: List of documents matching the query.
@@ -215,9 +217,10 @@ class DBConnector:
 
             # Apply projection if provided
             if projection:
-                result = list(collection.find(query, projection))
+                result = list(collection.find(query, projection).skip(no_of_docs_each_page * (current_page_number - 1)).limit(no_of_docs_each_page))
             else:
-                result = list(collection.find(query))
+                result = list(collection.find(query).skip(no_of_docs_each_page * (current_page_number - 1)).limit(no_of_docs_each_page))
+
             return result
         except PyMongoError as e:
             self.logger.error(
