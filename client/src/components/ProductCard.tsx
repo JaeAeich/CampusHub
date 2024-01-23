@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCartIcon, Star, StarHalf } from 'lucide-react';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from '@/components/ui/toaster';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
 
@@ -36,7 +36,7 @@ function getStarElement(index, rating) {
 }
 
 function ProductCard() {
-  const {toast}= useToast();
+  const { toast } = useToast();
   return (
     <div className="relative inline-block m-7 w-full max-w-xs overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <Link className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" to="/">
@@ -72,19 +72,24 @@ function ProductCard() {
         </div>
         <Toaster />
         {/* //TODO: Add to cart */}
-        <div onMouseDown ={() => {
-    toast({
-      title: "Product Added Successfully",
-      action: (
-        <ToastAction altText="Goto schedule to undo">View Cart</ToastAction>
-      ),
-    });
-  }}
-       className="w-full flex items-center justify-center rounded-md bg-accentLight px-5 py-2.5 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300" >
+        <div
+          onMouseOver={() => {
+            toast({
+              title: 'Product Added Successfully',
+              action: <ToastAction altText="Goto schedule to undo">View Cart</ToastAction>,
+            });
+          }}
+          onFocus={() => {
+            toast({
+              title: 'Product Added Successfully',
+              action: <ToastAction altText="Goto schedule to undo">View Cart</ToastAction>,
+            });
+          }}
+          className="w-full flex items-center justify-center rounded-md bg-accentLight px-5 py-2.5 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300"
+        >
           <ShoppingCartIcon className="mb-1 mr-2 h-7" />
           Add to cart
         </div>
-        
       </div>
     </div>
   );

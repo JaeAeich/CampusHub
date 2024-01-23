@@ -2,34 +2,28 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Menu, ShoppingCart, Search, Cat, Plus, Minus  } from 'lucide-react';
+import { Menu, ShoppingCart, Search, Cat, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Container from '@/components/ui/container';
 import { Separator } from '@/components/ui/separator';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import ProfileButton from './ProfileButton';
-import { services } from '../../app/constants';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
+import ProfileButton from './ProfileButton';
+import { services } from '../../app/constants';
 
 const routes = [
   {
@@ -152,40 +146,49 @@ function Navbar() {
             </div>
           </nav>
           <div className=" flex items-center justify-left">
-          <Drawer >
-  <DrawerTrigger asChild>
-  <Button size="icon" className="md:ml-1 md:mr-3">
-              <ShoppingCart color="#fff" />
-              <span className="sr-only">Shopping Cart</span>
-            </Button></DrawerTrigger>
-      <DrawerContent >
-        <div className='mx-auto justify-center lg:w-4/6 sm:w-4/5 w-full sm:p-3 px-10'>
-        <Table >
-  <TableHeader>
-    <TableRow className='font-subheading sm:text-lgg text-smm font-semibold items-center'>
-      <TableHead>Image</TableHead>
-      <TableHead>Name</TableHead>
-      <TableHead>Quantity</TableHead>
-      <TableHead>Amount</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow className='font-body sm:text-base text-smm'>
-      <TableCell><img
-          className="object-cover"
-          src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-          alt="product" width={100} height={100}
-        /></TableCell>
-      <TableCell>Nike Air MX Super 2500 - Red</TableCell>
-      <TableCell className='flex flex-row items-center mt-4'><Plus className='m-1'/>1<Minus className='m-1'/></TableCell>
-      <TableCell className='font-bold font-heading sm:text-lgg text-base'>&#8377;449</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>
-        </div>
-      </DrawerContent>
-</Drawer>
-            
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button size="icon" className="md:ml-1 md:mr-3">
+                  <ShoppingCart color="#fff" />
+                  <span className="sr-only">Shopping Cart</span>
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <div className="mx-auto justify-center lg:w-4/6 sm:w-4/5 w-full sm:p-3 px-10">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="font-subheading sm:text-lgg text-smm font-semibold items-center">
+                        <TableHead>Image</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Quantity</TableHead>
+                        <TableHead>Amount</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="font-body sm:text-base text-smm">
+                        <TableCell>
+                          <img
+                            className="object-cover"
+                            src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                            alt="product"
+                            width={100}
+                            height={100}
+                          />
+                        </TableCell>
+                        <TableCell>Nike Air MX Super 2500 - Red</TableCell>
+                        <TableCell className="flex flex-row items-center mt-4">
+                          <Plus className="m-1" />1<Minus className="m-1" />
+                        </TableCell>
+                        <TableCell className="font-bold font-heading sm:text-lgg text-base">
+                          &#8377;449
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </DrawerContent>
+            </Drawer>
+
             <div className="sm:block hidden">
               <ProfileButton />
             </div>

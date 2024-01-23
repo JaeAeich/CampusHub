@@ -4,11 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -28,7 +24,7 @@ import { Slider } from '@/components/ui/slider';
 import ProductCard from './ProductCard';
 
 function ProductsPage() {
-  const [sliderValue, setSliderValue] = useState({ x: 50 });
+  const [sliderValue, setSliderValue] = useState([500]);
   // const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
   // const [offerAvailable, setOfferAvailable] = useState('option-4');
@@ -38,7 +34,9 @@ function ProductsPage() {
     setSelectedRating(0);
     // setOfferAvailable('option-4');
   };
-  const handleSliderChange = () => {};
+  const handleSliderChange = (value) => {
+    setSliderValue([value[0]]);
+  };
 
   // const handleCategoryChange = (event) => {
   //   setSelectedCategories((prevCategories) => {
@@ -121,34 +119,15 @@ function ProductsPage() {
                     <div className="flex gap-2 w-full">
                       <p>0</p>
                       <Slider
-<<<<<<< HEAD
-                        className="mx-2"
-                        axis="x"
-                        x={sliderValue.x}
-                        onChange={handleSliderChange}
-                        styles={{
-                          track: {
-                            backgroundColor: '#ccc',
-                          },
-                          active: {
-                            backgroundColor: '#e99ba2',
-                          },
-                          thumb: {
-                            width: 25,
-                            height: 20,
-                          },
-                        }}
-=======
-                        defaultValue={[33]}
+                        defaultValue={[500]}
                         max={1000}
                         step={1}
                         onValueChange={handleSliderChange}
->>>>>>> 007202e17d7e76fdbdb36691c230197ca6cfabfc
                       />
                       <p>1000</p>
                     </div>
                     <div className="flex justify-center">
-                      <p>Price: {sliderValue.x * 10}</p>
+                      <p>Price: {sliderValue[0]}</p>
                     </div>
                   </div>
                 </AccordionContent>
