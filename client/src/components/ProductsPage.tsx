@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Star } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -23,49 +24,51 @@ import ProductCard from './ProductCard';
 
 function ProductsPage() {
   const [sliderValue, setSliderValue] = useState({ x: 50 });
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  // const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
-  const [offerAvailable, setOfferAvailable] = useState('option-4');
+  // const [offerAvailable, setOfferAvailable] = useState('option-4');
   const clearFilter = () => {
     setSliderValue({ x: 50 });
-    setSelectedCategories([]);
+    // setSelectedCategories([]);
     setSelectedRating(0);
-    setOfferAvailable('option-4');
+    // setOfferAvailable('option-4');
   };
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategories((prevCategories) => {
-      if (prevCategories.includes(event.target.id)) {
-        return prevCategories.filter((c) => c !== event.target.id);
-      }
-      return [...prevCategories, event.target.id];
-    });
-  };
+  // const handleCategoryChange = (event) => {
+  //   setSelectedCategories((prevCategories) => {
+  //     if (prevCategories.includes(event.target.id)) {
+  //       return prevCategories.filter((c) => c !== event.target.id);
+  //     }
+  //     return [...prevCategories, event.target.id];
+  //   });
+  // };
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
   };
 
-  const handleOfferAvailableChange = (event) => {
-    setOfferAvailable(event.target.id);
-  };
+  // const handleOfferAvailableChange = (event) => {
+  //   setOfferAvailable(event.target.id);
+  // };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: Handle submit
-    console.log('Selected Categories:', selectedCategories);
-    console.log('Selected Price:', sliderValue.x * 10);
-    console.log('Selected Rating:', selectedRating);
-    console.log('Offer Available:', offerAvailable);
-  };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  // TODO: Handle submit
+  // console.log('Selected Categories:', selectedCategories);
+  // console.log('Selected Price:', sliderValue.x * 10);
+  // console.log('Selected Rating:', selectedRating);
+  // console.log('Offer Available:', offerAvailable);
+  // };
 
   return (
     <div className="flex lg:flex-row flex-col">
       <div className="lg:block hidden flex lg:flex-col w-96 min-h-screen bg-secondaryLight p-4">
-        <form onSubmit={handleSubmit}>
+        <form
+        // onSubmit={handleSubmit}
+        >
           <div className="flex flex-row justify-between items-center">
             <h1 className="font-heading font-bold text-xll">Filters</h1>
             <p
@@ -85,12 +88,20 @@ function ProductsPage() {
                 <AccordionContent>
                   <div className="items-top flex flex-col">
                     <div className="flex flex-row mb-2 items-center font-subheading text-base">
-                      <Checkbox id="option1" className="m-1" onClick={handleCategoryChange} />
+                      <Checkbox
+                        id="option1"
+                        className="m-1"
+                        // onClick= {handleCategoryChange}
+                      />
 
                       <label htmlFor="option1">Category 1</label>
                     </div>
                     <div className="flex flex-row mb-2 items-center font-subheading text-base">
-                      <Checkbox id="option2" className="m-1" onClick={handleCategoryChange} />
+                      <Checkbox
+                        id="option2"
+                        className="m-1"
+                        // onClick={handleCategoryChange}
+                      />
 
                       <label htmlFor="option2">Category 2</label>
                     </div>
@@ -139,26 +150,16 @@ function ProductsPage() {
                 <AccordionContent>
                   <div className="flex items-center">
                     {[1, 2, 3, 4, 5].map((index) => (
-                      <button
-                        aria-label="Save"
+                      <Star
+                        fill={`
+                                  ${index <= selectedRating ? 'yellow' : 'gray'}
+                                `}
+                        strokeWidth={0}
                         key={index}
                         type="button"
-                        className={`w-5 h-5 inline-flex justify-center items-center text-2xl rounded-full ${
-                          index <= selectedRating ? 'text-yellow-400' : 'text-gray-300'
-                        } hover:text-yellow-400`}
+                        className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
                         onMouseEnter={() => handleRatingChange(index)}
-                      >
-                        <svg
-                          className="flex-shrink-0 w-5 h-5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                        </svg>
-                      </button>
+                      />
                     ))}
                   </div>
                 </AccordionContent>
@@ -175,7 +176,7 @@ function ProductsPage() {
                       <RadioGroupItem
                         value="default"
                         id="option3"
-                        onClick={handleOfferAvailableChange}
+                        // onClick={handleOfferAvailableChange}
                       />
                       <Label htmlFor="option3">Offers-only</Label>
                     </div>
@@ -183,7 +184,7 @@ function ProductsPage() {
                       <RadioGroupItem
                         value="comfortable"
                         id="option4"
-                        onClick={handleOfferAvailableChange}
+                        // onClick={handleOfferAvailableChange}
                       />
                       <Label htmlFor="option4">Show all</Label>
                     </div>
@@ -208,7 +209,9 @@ function ProductsPage() {
               </DrawerTrigger>
               <DrawerContent className="lg:hidden sm:flex hidden">
                 <div className="mx-auto w-4/5">
-                  <form onSubmit={handleSubmit}>
+                  <form
+                  // onSubmit={handleSubmit}
+                  >
                     <div className="flex flex-row justify-between items-center">
                       <h1 className="font-heading font-bold text-xll">Filters</h1>
                       <DrawerClose>
@@ -233,7 +236,7 @@ function ProductsPage() {
                                 <Checkbox
                                   id="option1"
                                   className="m-1"
-                                  onClick={handleCategoryChange}
+                                  // onClick={handleCategoryChange}
                                 />
 
                                 <label htmlFor="option1">Category 1</label>
@@ -242,7 +245,7 @@ function ProductsPage() {
                                 <Checkbox
                                   id="option2"
                                   className="m-1"
-                                  onClick={handleCategoryChange}
+                                  // onClick={handleCategoryChange}
                                 />
 
                                 <label htmlFor="option2">Category 2</label>
@@ -292,26 +295,16 @@ function ProductsPage() {
                           <AccordionContent>
                             <div className="flex items-center">
                               {[1, 2, 3, 4, 5].map((index) => (
-                                <button
-                                  aria-label="Save"
+                                <Star
+                                  fill={`
+                                    ${index <= selectedRating ? 'yellow' : 'gray'}
+                                  `}
+                                  strokeWidth={0}
                                   key={index}
                                   type="button"
-                                  className={`w-5 h-5 inline-flex justify-center items-center text-2xl rounded-full ${
-                                    index <= selectedRating ? 'text-yellow-400' : 'text-gray-300'
-                                  } hover:text-yellow-400`}
+                                  className="w-6 h-6 inline-flex justify-center items-center hover:text-yellow-400"
                                   onMouseEnter={() => handleRatingChange(index)}
-                                >
-                                  <svg
-                                    className="flex-shrink-0 w-5 h-5"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="currentColor"
-                                    viewBox="0 0 16 16"
-                                  >
-                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                                  </svg>
-                                </button>
+                                />
                               ))}
                             </div>
                           </AccordionContent>
@@ -340,7 +333,10 @@ function ProductsPage() {
                     </div>
                     <div className="flex justify-center mt-6">
                       <DrawerClose>
-                        <Button className="bg-accentLight hover:bg-accent" onClick={handleSubmit}>
+                        <Button
+                          className="bg-accentLight hover:bg-accent"
+                          // onClick={handleSubmit}
+                        >
                           Apply Filters
                         </Button>
                       </DrawerClose>
