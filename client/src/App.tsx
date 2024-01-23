@@ -10,11 +10,14 @@ function App() {
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/stores/store_id" element={<ProductsPage />} />
-          <Route path="*" element={<Error404 />} />
-        </Routes>
+        <div className="flex grow">
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            {/* <Route path="/services/service_id" element={<StoresList/>} /> */}
+            <Route path="*" element={<Error404 />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
       <Footer />
     </BrowserRouter>
