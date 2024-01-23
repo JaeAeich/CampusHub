@@ -50,21 +50,21 @@ export default function DealOfTheDay() {
                       <p className="font-subheading text-primary mr-3">Gone in</p>
                       <Badge
                         variant="secondary"
-                        className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
+                        className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center hover:bg-secondary"
                       >
                         12h
                       </Badge>
 
                       <Badge
                         variant="secondary"
-                        className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
+                        className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center hover:bg-secondary"
                       >
                         16m
                       </Badge>
 
                       <Badge
                         variant="secondary"
-                        className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center"
+                        className="font-bold text-body xl:text-lg md:text-md text-sm mr-2 px-3 py-1 gap-2 flex flex-row justify-center items-center hover:bg-secondary"
                       >
                         48s
                       </Badge>

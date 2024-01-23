@@ -19,8 +19,10 @@ module.exports = {
     },
     fontSize: {
       sm: '0.750rem',
+      smm: '0.90rem',
       base: '1rem',
-      lgg: '1.15rem',
+      lg: '1.15rem',
+      lgg: '1.23rem',
       xl: '1.333rem',
       xll: '1.53rem',
       '2xl': '1.777rem',
@@ -58,6 +60,9 @@ module.exports = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+        },
+        secondaryLight: {
+          DEFAULT: 'hsl(var(--secondary-light))',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',

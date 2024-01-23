@@ -3,12 +3,12 @@ import Landing from './components/Landing';
 import Error404 from './components/Error404';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-// import StoresList from './components/StoresList';
+import ProductsPage from './components/ProductsPage';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen justify-between">
+      <div className="flex flex-col min-h-screen">
         <Navbar />
         <div className="flex grow">
           <Routes>
@@ -19,6 +19,7 @@ function App() {
         </div>
         <Footer />
       </div>
+      <Footer />
     </BrowserRouter>
   );
 }
