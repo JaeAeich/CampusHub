@@ -4,7 +4,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -124,10 +128,10 @@ function ProductsPage() {
                         onChange={handleSliderChange}
                         styles={{
                           track: {
-                            backgroundColor: '/ccc',
+                            backgroundColor: '#ccc',
                           },
                           active: {
-                            backgroundColor: '/e99ba2',
+                            backgroundColor: '#e99ba2',
                           },
                           thumb: {
                             width: 25,
@@ -201,28 +205,27 @@ function ProductsPage() {
       <div className="lg:hidden flex w-full">
         <div className="flex flex-row justify-between w-full px-6 py-3">
           <div className="flex">
-            <Drawer>
-              <DrawerTrigger asChild>
+            <Dialog>
+              <DialogTrigger>
                 <Button variant="default" className="px-6 font-normal text-smm">
                   Filters
                 </Button>
-              </DrawerTrigger>
-              <DrawerContent className="lg:hidden sm:flex hidden">
+              </DialogTrigger>
+              <DialogContent className="lg:hidden sm:flex hidden">
                 <div className="mx-auto w-4/5">
                   <form
                   // onSubmit={handleSubmit}
                   >
                     <div className="flex flex-row justify-between items-center">
                       <h1 className="font-heading font-bold text-xll">Filters</h1>
-                      <DrawerClose>
-                        <p
-                          className="font-subheading hover:underline hover:cursor-pointer"
-                          onMouseOver={clearFilter}
-                          onFocus={clearFilter}
-                        >
-                          Clear Filters
-                        </p>
-                      </DrawerClose>
+
+                      <p
+                        className="font-subheading hover:underline hover:cursor-pointer"
+                        onMouseOver={clearFilter}
+                        onFocus={clearFilter}
+                      >
+                        Clear Filters
+                      </p>
                     </div>
                     <div className="flex">
                       <Accordion type="single" collapsible className="w-full">
@@ -332,19 +335,17 @@ function ProductsPage() {
                       </Accordion>
                     </div>
                     <div className="flex justify-center mt-6">
-                      <DrawerClose>
-                        <Button
-                          className="bg-accentLight hover:bg-accent"
-                          // onClick={handleSubmit}
-                        >
-                          Apply Filters
-                        </Button>
-                      </DrawerClose>
+                      <Button
+                        className="bg-accentLight hover:bg-accent"
+                        // onClick={handleSubmit}
+                      >
+                        Apply Filters
+                      </Button>
                     </div>
                   </form>
                 </div>
-              </DrawerContent>
-            </Drawer>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="lg:hidden flex">
             <Select>
@@ -359,7 +360,8 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      <div className="justify-center">
+      <div className="lg:block grid lg:justify-left justify-center">
+        <ProductCard />
         <ProductCard />
         <ProductCard />
       </div>

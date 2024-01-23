@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCartIcon, Star, StarHalf } from 'lucide-react';
+import { Toaster } from "@/components/ui/toaster"
+import { useToast } from './ui/use-toast';
+import { ToastAction } from './ui/toast';
 
 function getStarElement(index, rating) {
   if (rating - index >= 0) {
@@ -7,7 +10,7 @@ function getStarElement(index, rating) {
       <Star
         fill="#e89ba1"
         strokeWidth={0}
-        type="button"
+        type="Button"
         className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
       />
     );
@@ -17,7 +20,7 @@ function getStarElement(index, rating) {
       <StarHalf
         fill="#e89ba1"
         strokeWidth={0}
-        type="button"
+        type="Button"
         className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
       />
     );
@@ -26,13 +29,14 @@ function getStarElement(index, rating) {
     <Star
       fill="gray"
       strokeWidth={0}
-      type="button"
+      type="Button"
       className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
     />
   );
 }
 
 function ProductCard() {
+  const {toast}= useToast();
   return (
     <div className="relative inline-block m-7 w-full max-w-xs overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <Link className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" to="/">
@@ -47,13 +51,13 @@ function ProductCard() {
       </Link>
       <div className="mt-4 px-5 pb-5">
         <Link to="/">
-          <h5 className="text-xl font-subheading tracking-tight text-primary">
+          <h5 className="text-lgg font-subheading tracking-tight text-primary">
             Nike Air MX Super 2500 - Red
           </h5>
         </Link>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
-            <span className="text-3xl font-bold text-primary">&#8377;449</span>
+            <span className="text-xll font-bold text-primary">&#8377;449</span>
             <span className="text-sm text-primary line-through">&#8377;699</span>
           </p>
           <div className="flex items-center">
@@ -66,13 +70,21 @@ function ProductCard() {
             </span>
           </div>
         </div>
-        <Link
-          to="/"
-          className="flex items-center justify-center rounded-md bg-accentLight px-5 py-2.5 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300"
-        >
+        <Toaster />
+        {/* //TODO: Add to cart */}
+        <div onMouseDown ={() => {
+    toast({
+      title: "Product Added Successfully",
+      action: (
+        <ToastAction altText="Goto schedule to undo">View Cart</ToastAction>
+      ),
+    });
+  }}
+       className="w-full flex items-center justify-center rounded-md bg-accentLight px-5 py-2.5 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300" >
           <ShoppingCartIcon className="mb-1 mr-2 h-7" />
           Add to cart
-        </Link>
+        </div>
+        
       </div>
     </div>
   );
