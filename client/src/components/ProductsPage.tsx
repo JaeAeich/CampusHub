@@ -248,10 +248,10 @@ function ProductsPage() {
                           <AccordionContent className="m-1">
                             {/* //TODO: Get price range from APIs */}
                             <div className="flex flex-col font-subheading font-semibold text-base items-center">
-                              <div className="flex flex-row items-center mb-5">
+                              <div className="flex gap-2 w-full">
                                 <p>0</p>
                                 <Slider
-                                  defaultValue={[33]}
+                                  defaultValue={[500]}
                                   max={1000}
                                   step={1}
                                   onValueChange={handleSliderChange}
@@ -259,7 +259,7 @@ function ProductsPage() {
                                 <p>1000</p>
                               </div>
                               <div className="flex justify-center">
-                                <p>Price: {sliderValue.x * 10}</p>
+                                <p>Price: {sliderValue[0]}</p>
                               </div>
                             </div>
                           </AccordionContent>
