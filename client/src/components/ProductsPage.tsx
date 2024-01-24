@@ -25,44 +25,20 @@ import ProductCard from './ProductCard';
 
 function ProductsPage() {
   const [sliderValue, setSliderValue] = useState([500]);
-  // const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
-  // const [offerAvailable, setOfferAvailable] = useState('option-4');
+
   const clearFilter = () => {
     setSliderValue({ x: 50 });
-    // setSelectedCategories([]);
     setSelectedRating(0);
-    // setOfferAvailable('option-4');
   };
+
   const handleSliderChange = (value) => {
     setSliderValue([value[0]]);
   };
 
-  // const handleCategoryChange = (event) => {
-  //   setSelectedCategories((prevCategories) => {
-  //     if (prevCategories.includes(event.target.id)) {
-  //       return prevCategories.filter((c) => c !== event.target.id);
-  //     }
-  //     return [...prevCategories, event.target.id];
-  //   });
-  // };
-
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
   };
-
-  // const handleOfferAvailableChange = (event) => {
-  //   setOfferAvailable(event.target.id);
-  // };
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  // TODO: Handle submit
-  // console.log('Selected Categories:', selectedCategories);
-  // console.log('Selected Price:', sliderValue.x * 10);
-  // console.log('Selected Rating:', selectedRating);
-  // console.log('Offer Available:', offerAvailable);
-  // };
 
   return (
     <div className="flex lg:flex-row flex-col w-full">
@@ -158,8 +134,6 @@ function ProductsPage() {
                   Offers
                 </AccordionTrigger>
                 <AccordionContent>
-                  {/* <div className="items-top flex flex-col">
-      <div className="flex flex-row mb-2 items-center font-subheading text-base"> */}
                   <RadioGroup defaultValue="comfortable">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem
@@ -290,8 +264,6 @@ function ProductsPage() {
                             Offers
                           </AccordionTrigger>
                           <AccordionContent>
-                            {/* <div className="items-top flex flex-col">
-      <div className="flex flex-row mb-2 items-center font-subheading text-base"> */}
                             <RadioGroup defaultValue="comfortable">
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="default" id="option3" />
