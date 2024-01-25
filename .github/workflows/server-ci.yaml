@@ -31,14 +31,6 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
 
-      # Load cached venv if cache exists
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
       # Install dependencies if cache does not exist
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -81,14 +73,6 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
 
-      # Load cached venv if cache exists
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
       # Install dependencies if cache does not exist
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -125,40 +109,12 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
 
-      # Load cached venv if cache exists
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
       # Install dependencies if cache does not exist
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
           cd server
           poetry install
-
-      # Set env variables
-      - name: Set mongo env variables
-        run: |
-          echo "MONGO_INITDB_ROOT_USERNAME=root" >> mongo.env
-          echo "MONGO_INITDB_ROOT_PASSWORD=example" >> mongo.env
-
-      - name: Set server env variables
-        run: |
-          echo "MONGO_USERNAME"=root >> server.env
-          echo "MONGO_PASSWORD"=password >> server.env
-          echo "MONGO_DB_NAME"=campus_hub >> server.env
-          echo "MONGO_URL"=mongo:27017 >> server.env
-
-      - name: Set client env variables
-        run: touch client.env
-
-      # Deploy mongo
-      - name: Deploy mongo
-        run: docker-compose up -d mongo
 
       # Run test suite
       - name: Run tests
