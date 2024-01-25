@@ -151,7 +151,7 @@ def get_range_of_cost_in_store(store_id) -> APIResponse:
         Flask response: JSON response containing the list of products.
     """
     
-    products_collection_name = "products"
+    products_collection_name = db_connector.db["products"]
     
     # Query without including _id field in the result
     query: dict = {}
@@ -160,29 +160,8 @@ def get_range_of_cost_in_store(store_id) -> APIResponse:
         query["store_id"] = store_id
 
     try:
-        _products = db_connector.query_data(products_collection_name, query)
-
-        # If there are no products, return 404 error
-        if not _products or len(_products) == 0:
-            return response(
-                Status.NOT_FOUND, **message("No products found in the database.")
-            )
-
-        try:
-            products = [Product(**product) for product in _products]
-        except Exception as e:
-            return response(
-                Status.INTERNAL_SERVER_ERROR,
-                **message(f"Invalid product data in DB: {str(e)}"),
-            )
-
-        max_cost : float = 0
-        min_cost : float = 1000000
-        for product in products:
-            if product.product_cost > max_cost:
-                max_cost = product.product_cost
-            if product.product_cost < min_cost:
-                min_cost = product.product_cost
+        max_cost = products_collection_name.find(query).sort("product_cost", -1).limit(1)
+        min_cost = products_collection_name.find(query).sort("product_cost", 1).limit(1)
 
         # If products are found, return a JSON response
         return response(Status.SUCCESS, max_cost = max_cost, min_cost = min_cost)
