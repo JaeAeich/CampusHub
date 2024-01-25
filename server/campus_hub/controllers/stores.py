@@ -255,6 +255,14 @@ def get_orders_by_store_id(store_id) -> APIResponse:
 
         try:
             orders: List[Order] = [Order(**r) for r in _orders]
+            try:
+                [datetime.fromisoformat(order["created_at"]) for order in _orders]
+            except ValueError as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Invalid order data in DB: {str(e)}"),
+                )
+            
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -514,7 +522,7 @@ def add_product(store_id: str) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
-def get_product_by_id(product_id) -> APIResponse:
+def get_product_by_id(store_id, product_id) -> APIResponse:
     """
     Get details of a product by its product_id from the MongoDB database.
     Args:
@@ -545,6 +553,13 @@ def get_product_by_id(product_id) -> APIResponse:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Invalid product data in DB: {str(e)}"),
+            )
+
+        # Check if the product belongs to the store
+        if product.store_id != store_id:
+            return response(
+                Status.NOT_FOUND,
+                **message(f"product with product_id {product_id} does not exist in store with store_id {store_id}."),
             )
 
         # If products are found, return a JSON response

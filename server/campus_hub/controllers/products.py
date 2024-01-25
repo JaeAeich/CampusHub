@@ -5,7 +5,7 @@ from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
 
 
-def get_products(service_id, store_id, max_rating, min_rating) -> APIResponse:
+def get_products(service_id, store_id, max_rating, min_rating, category) -> APIResponse:
     """
     Get all products from the MongoDB database with filters based on query parameters.
     Args:
@@ -29,6 +29,8 @@ def get_products(service_id, store_id, max_rating, min_rating) -> APIResponse:
         query["rating"] = {"$lte": max_rating}
     if min_rating:
         query["rating"] = {"$gte": min_rating}
+    if category:
+        query["category"] = {"$in": category}
     
     projection = {"_id": False}
 
