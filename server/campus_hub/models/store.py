@@ -40,3 +40,14 @@ class Store(BaseModel):
     stripe_public_key: str
     timings: Optional[Tuple[float, float]]
     overall_rating: Optional[float]
+
+
+class StoreList(BaseModel):
+    """
+    Pydantic model representing list of store.
+
+    Attributes:
+        stores: Name of the store.
+    """
+
+    stores: List[Store]

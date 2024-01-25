@@ -1,6 +1,8 @@
+import os
 from pathlib import Path
 from connexion import FlaskApp
 from connexion.resolver import RelativeResolver
+from flask_cors import CORS
 
 
 def create_app():
@@ -15,6 +17,10 @@ def create_app():
 
 
 app = create_app()
+
+# Use CORS_ORIGIN from environment variable
+cors_origin = os.getenv("CORS_ORIGIN", "https://localhost:5173")
+CORS(app.app, origin=[cors_origin])
 
 if __name__ == "__main__":
     # for development only

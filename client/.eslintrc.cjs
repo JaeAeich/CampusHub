@@ -2,16 +2,27 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
-    'prettier',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'airbnb',
+    'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/components/ui/**', '**/*.css'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', '/src/components/ui/**', '**/*.css'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'prettier'],
   rules: {
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        labelComponents: ['label'],
+        labelAttributes: ['htmlFor'],
+        controlComponents: ['Checkbox'],
+        depth: 3,
+      },
+    ],
+    camelcase: 'off',
+    'object-curly-newline': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
@@ -39,21 +50,13 @@ module.exports = {
         alwaysTryTypes: true,
       },
       node: {
+        path: ['src'],
         extensions: ['.ts', '.tsx'],
       },
       alias: {
-        map: [['@', './src']],
-        extensions: ['.ts', '.tsx'],
+        map: [['@', `${__dirname}/src`]],
+        extensions: ['.js', '.jsx', '.ts', '.d.ts', '.tsx', '.css'],
       },
     },
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
-    },
   },
-  overrides: [
-    {
-      files: ['*.ts', '*.tsx'],
-      parser: '@typescript-eslint/parser',
-    },
-  ],
 };

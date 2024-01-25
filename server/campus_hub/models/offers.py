@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from datetime import timedelta
 from typing import List
 
 
@@ -14,11 +13,24 @@ class Offers(BaseModel):
         discount: discount amount for the product
         validity_duration: expiration date of the discount
         offer_id: offer id for the product
+        created_at: created_date of the offer
     """
 
     product_ids: List[str]
     service_id: str
     store_id: str
     discount: float
-    validity_duration: timedelta
+    validity_duration: int
     offer_id: str
+    created_at: str
+
+
+class OffersList(BaseModel):
+    """
+    Pydantic model representing list of store.
+
+    Attributes:
+        stores: Name of the store.
+    """
+
+    offers: List[Offers]

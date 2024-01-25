@@ -19,11 +19,13 @@ pymongo = {version = "3.11", extras = ["srv"]}
 mongo-types = "^0.15.1"
 types-pytz = "^2023.3.1.1"
 shortuuid = "^1.0.11"
+flask-cors = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.9"
 mypy = "^1.8.0"
 pytest = "^7.4.4"
+types-flask-cors = "^4.0.0.20240106"
 
 [build-system]
 requires = ["poetry-core"]
