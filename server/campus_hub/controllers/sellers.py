@@ -17,13 +17,25 @@ def get_sellers() -> APIResponse:
 
     sellers_collection_name = "sellers"
 
+    # Get the query parameters
+    try:
+        _page_size = request.args.get('page_size')
+        _current_page_number = request.args.get('current_page_number')
+    except Exception as e:
+        return response(
+            Status.BAD_REQUEST,
+            **message(f"Invalid query parameters: {str(e)}"),
+        )
+    
     # Query without including _id field in the result
     query: dict = {}
     projection = {"_id": False}
 
     try:
-        _sellers = db_connector.query_data(sellers_collection_name, query, projection)
-
+        if _page_size and _current_page_number:
+            _sellers = db_connector.query_data(sellers_collection_name, query, projection, page_size= int(_page_size), current_page_number= int(_current_page_number))
+        else:
+            _sellers = db_connector.query_data(sellers_collection_name, query, projection)
         # If there are no sellers, raise a custom exception
         if not _sellers or len(_sellers) == 0:
             return response(Status.NOT_FOUND, **message("No sellers found."))
