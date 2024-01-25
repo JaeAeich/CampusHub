@@ -1,0 +1,56 @@
+name: E2E CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  e2e-app-deployment-check:
+    name: Check e2e app deployment
+    runs-on: ubuntu-latest
+    env:
+      PROBE_ENDPOINT: localhost:8080/campus_hub/v1/services
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install sed
+        run: sudo apt-get update && sudo apt-get install -y sed
+
+      - name: Add client env file
+        run: |
+          cp client.env.sample client.env
+          sed -i '1,2d' client.env
+
+      - name: Add server env file
+        run: |
+          cp server.env.sample server.env
+          sed -i '1,2d' server.env
+
+      - name: Add mongo env file
+        run: |
+          cp mongo.env.sample mongo.env
+          sed -i '1,2d' mongo.env
+
+      - name: Deploy app
+        run: docker-compose up -d --build
+
+      - name: Wait for app startup
+        run: sleep 20
+
+      - name: Probe endpoint
+        run: |
+          http_code=$(curl -sL -o /dev/null -w '%{http_code}' -X GET --header 'Accept: application/json' "${PROBE_ENDPOINT}")
+          test "${http_code}" == '200' || exit 1
