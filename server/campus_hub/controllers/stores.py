@@ -15,8 +15,6 @@ from pymongo.errors import PyMongoError
 def get_store_by_id(store_id) -> APIResponse:
     """
     Get details of a store by its store_id from the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store to be fetched
     Returns:
         Flask response: JSON response containing the list of stores.
     """
@@ -66,7 +64,7 @@ def get_trending_stores() -> APIResponse:
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     try:
         # aggregate pipeline
-        _pipeline: Sequence[Mapping[str, Any]] = [
+        _pipeline : Sequence[Mapping[str, Any]] = [
             {
                 "$addFields": {
                     "created_at": {"$dateFromString": {"dateString": "$created_at"}}
@@ -134,8 +132,6 @@ def get_trending_stores() -> APIResponse:
 def get_offers_by_store_id(store_id) -> APIResponse:
     """
     Get a list of offers of a store the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store whose offers are to be fetched
     Returns:
         Flask response: JSON response containing the list of stores.
     """
@@ -164,13 +160,6 @@ def get_offers_by_store_id(store_id) -> APIResponse:
 
         try:
             offers: List[Offers] = [Offers(**o) for o in _offers]
-            try:
-                [datetime.fromisoformat(offer["created_at"]) for offer in _offers]
-            except ValueError as e:
-                return response(
-                    Status.INTERNAL_SERVER_ERROR,
-                    **message(f"Invalid offer data in DB: {str(e)}"),
-                )
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -191,8 +180,6 @@ def get_offers_by_store_id(store_id) -> APIResponse:
 def get_reviews_by_store_id(store_id) -> APIResponse:
     """
     Get a list of reviews of a store from the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store whose reviews are to be fetched
     Returns:
         Flask response: JSON response containing the list of reviews.
     """
@@ -240,8 +227,6 @@ def get_reviews_by_store_id(store_id) -> APIResponse:
 def get_orders_by_store_id(store_id) -> APIResponse:
     """
     Get a list of orders of a store from the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store whose orders are to be fetched
     Returns:
         Flask response: JSON response containing the list of orders.
     """
@@ -277,7 +262,7 @@ def get_orders_by_store_id(store_id) -> APIResponse:
                     Status.INTERNAL_SERVER_ERROR,
                     **message(f"Invalid order data in DB: {str(e)}"),
                 )
-
+            
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -298,8 +283,6 @@ def get_orders_by_store_id(store_id) -> APIResponse:
 def get_products_by_store_id(store_id) -> APIResponse:
     """
     Get a list of products of a store from the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store whose products are to be fetched
     Returns:
         Flask response: JSON response containing the list of products.
     """
@@ -348,8 +331,7 @@ def get_products_by_store_id(store_id) -> APIResponse:
 def update_store(store_id: str) -> APIResponse:
     """
     Updates a store in the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store that is to be updated.
+
     Returns:
         Flask response: JSON response containing the id of the updated store.
     """
@@ -361,12 +343,7 @@ def update_store(store_id: str) -> APIResponse:
     try:
         # Check if request.json is not None before assignment
         if request_json is not None:
-            if "store_id" in request_json and request_json["store_id"] == store_id:
-                store_data: MutableMapping[Any, Any] = request_json
-            else:
-                return response(
-                    Status.BAD_REQUEST, **message("Query and request store_id mismatch")
-                )
+            store_data: MutableMapping[Any, Any] = request_json
         else:
             # Handle the case when request.json is None
             store_data = {}
@@ -403,8 +380,7 @@ def update_store(store_id: str) -> APIResponse:
 def delete_store(store_id: str) -> APIResponse:
     """
     Delete a store from the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store that is to be deleted.
+
     Returns:
         Flask response: JSON response containing the id of the deleted store.
     """
@@ -436,8 +412,7 @@ def delete_store(store_id: str) -> APIResponse:
 def add_offer(store_id) -> APIResponse:
     """
     Adds a new offer to the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store in which offer is to be added.
+
     Returns:
         Flask response: JSON response containing the id of the new offer.
     """
@@ -465,7 +440,6 @@ def add_offer(store_id) -> APIResponse:
         offer_id: str = db_connector.generate_unique_id("offers")
         offer_data["offer_id"] = offer_id
         offer_data["store_id"] = store_id
-        offer_data["created_at"] = str(datetime.utcnow())
 
         # Validate the incoming data using Pydantic model
         try:
@@ -495,8 +469,7 @@ def add_offer(store_id) -> APIResponse:
 def add_product(store_id: str) -> APIResponse:
     """
     Adds a new product to the MongoDB database.
-    Args:
-    store_id (str): The store_id of the store in which product is to be added.
+
     Returns:
         Flask response: JSON response containing the status of the operation.
     """
@@ -536,6 +509,145 @@ def add_product(store_id: str) -> APIResponse:
         # Add the product data to the database
         try:
             db_connector.insert_data(products_collection_name, product.dict())
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
+            )
+
+        # Return a success response
+        return response(Status.SUCCESS, **{"id": product_id})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
+
+def get_product_by_id(store_id, product_id) -> APIResponse:
+    """
+    Get details of a product by its product_id from the MongoDB database.
+    Args:
+    product_id (str): The product_id of the product to be fetched
+    Returns:
+        Flask response: JSON response containing the list of products.
+    """
+
+    products_collection_name = "products"
+
+    # Query without including _id field in the result
+    query: dict = {"product_id": product_id}
+    projection = {"_id": False}
+
+    try:
+        _product = db_connector.query_data(products_collection_name, query, projection)
+
+        # If there are no products, return 404 error
+        if not _product or len(_product) == 0:
+            return response(
+                Status.NOT_FOUND,
+                **message(f"product with product_id {product_id} does not exist."),
+            )
+
+        try:
+            product: Product = Product(**_product[0])
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid product data in DB: {str(e)}"),
+            )
+
+        # Check if the product belongs to the store
+        if product.store_id != store_id:
+            return response(
+                Status.NOT_FOUND,
+                **message(f"product with product_id {product_id} does not exist in store with store_id {store_id}."),
+            )
+
+        # If products are found, return a JSON response
+        return response(Status.SUCCESS, product=product.model_dump())
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving product from MongoDB: {e}"),
+        )
+
+def update_product(product_id, request_data) -> APIResponse:
+    """
+    Updates a product in the MongoDB database.
+    Args:
+        product_id (str): The product_id of the product to be updated
+        request_data (dict): The request body
+    Returns:
+        Flask response: JSON response containing the updated product.
+    """ 
+    
+    products_collection_name = "products"
+    request_json = request_data.get_json()
+
+    # Query without including _id field in the result
+    query: dict = {"product_id": product_id}
+
+    try:
+        # Check if request.json is not None before assignment
+        if request_json is not None:
+            if "product_id" in request_json and request_json["product_id"] == product_id:
+                product_data: MutableMapping[Any, Any] = request_json
+            else:
+                return response(
+                    Status.BAD_REQUEST, **message("Query and request product_id mismatch")
+                )
+        else:
+            # Handle the case when request.json is None
+            product_data = {}
+
+        # Validate the incoming data using Pydantic model
+        try:
+            product: Product = Product(**product_data)
+        except ValidationError as ve:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid product data in DB: {str(ve)}"),
+            )
+
+        # Update the product data to the database
+        try:
+            db_connector.update_data(products_collection_name, query, product.model_dump())
+        except LookupError as e:
+            return response(
+                Status.NOT_FOUND, **message(f"product does not exist: {str(e)}")
+            )
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
+            )
+        
+        # Return a success response
+        return response(Status.SUCCESS, **{"id": product_id})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving product from MongoDB: {e}"),
+        )
+
+def delete_product(product_id) -> APIResponse:
+    """
+    Delete a product from the MongoDB database.
+    Args:
+    product_id (str): The product_id of the product that is to be deleted.
+    Returns:
+        Flask response: JSON response containing the id of the deleted product.
+    """
+
+    products_collection_name = "products"
+    query: dict = {"product_id": product_id}
+    try:
+        # Delete the product data from the database
+        try:
+            db_connector.delete_data(products_collection_name, query)
+        except LookupError as e:
+            return response(
+                Status.NOT_FOUND, **message(f"product does not exist: {str(e)}")
+            )
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
