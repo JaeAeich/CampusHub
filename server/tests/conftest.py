@@ -10,7 +10,7 @@ def client():
     :return: App for testing
     """
 
-    app.config['TESTING'] = True
-    client = app.test_client()
+    app.app.config['TESTING'] = True
+    client = app.app.test_client()
 
     yield client

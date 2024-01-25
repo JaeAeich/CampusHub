@@ -1,5 +1,5 @@
 import json
-import pytest
+# import pytest
 from tests.conftest import client
 
 # def test_add_seller(client):
