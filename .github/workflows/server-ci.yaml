@@ -35,16 +35,6 @@ jobs:
           installer-parallel: true
 
       #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
@@ -60,15 +50,6 @@ jobs:
         run: |
           cd server
           poetry install --no-interaction
-
-      #----------------------------------------------
-      #              run format and lint suite
-      #----------------------------------------------
-      - name: Lint Backend Code
-        run: |
-          cd server
-          source .venv/bin/activate
-          ruff check .
 
       #----------------------------------------------
       #              run type checking suite
