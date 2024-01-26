@@ -33,8 +33,11 @@ function StoreCard({ store }: { store: Store }) {
             </span>
           </div>
           <div className="flex items-center mt-2 md:mt-0">
-            <span className="md:block hidden rounded text-xs font-medium">
-              Timings: {timings[0]}:00hrs - {timings[1]}:00hrs
+            <span className="rounded text-xs font-medium md:flex md:items-center md:gap-2 mt-2">
+              <div className="md:block hidden text-gray-600">Timings:</div>
+              <div className="text-smm md:text-sm flex gap-2">
+                <div>{timings[0]}:00hrs</div>-<div>{timings[1]}:00hrs</div>
+              </div>
             </span>
           </div>
         </div>
