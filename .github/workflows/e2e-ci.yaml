@@ -47,8 +47,8 @@ jobs:
       - name: Deploy app
         run: docker-compose up -d --build
 
+      # Since mongo won't have data, should return 404
       - name: Probe endpoint
-        # Since mongo won't have data, should return 404
         run: |
           http_code=$(curl -sL -o /dev/null -w '%{http_code}' -X GET --header 'Accept: application/json' "${PROBE_ENDPOINT}")
           test "${http_code}" == '404' || exit 1
