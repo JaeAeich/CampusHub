@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Star } from 'lucide-react';
-
+import Store from '@/api/stores/types';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -21,7 +21,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import StoreCard from './StoreCard';
 import { stores } from '../../app/constants';
-import Store from '@/api/stores/types';
 
 function StorePage() {
   return (
@@ -247,7 +246,7 @@ function StorePage() {
           </div>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 lg:justify-left justify-center">
+      <div className="flex flex-col w-full p-10">
         {stores.map((store: Store) => (
           <StoreCard key={store.store_id} store={store} />
         ))}

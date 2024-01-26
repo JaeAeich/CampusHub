@@ -1,39 +1,9 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCartIcon, Star, StarHalf } from 'lucide-react';
+import { ShoppingCartIcon } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
-
-function getStarElement(index, rating) {
-  if (rating - index >= 0) {
-    return (
-      <Star
-        fill="#e89ba1"
-        strokeWidth={0}
-        type="Button"
-        className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
-      />
-    );
-  }
-  if (rating - index > -1) {
-    return (
-      <StarHalf
-        fill="#e89ba1"
-        strokeWidth={0}
-        type="Button"
-        className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
-      />
-    );
-  }
-  return (
-    <Star
-      fill="gray"
-      strokeWidth={0}
-      type="Button"
-      className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
-    />
-  );
-}
+import Stars from './Stars';
 
 function ProductCard() {
   const { toast } = useToast();
@@ -61,11 +31,9 @@ function ProductCard() {
             <span className="text-sm text-primary line-through">&#8377;699</span>
           </p>
           <div className="flex items-center">
-            {[1, 2, 3, 4, 5].map((index) => (
-              // TODO: Rating is hardcoded here.
-              <span key={index}>{getStarElement(index, 4.8)}</span>
-            ))}
-            <span className="mr-2 ml-3 rounded bg-secondaryLight px-2.5 py-0.5 text-xs font-semibold">
+            {/* //TODO: Rating is hardcoded */}
+            <Stars rating={4.8} />
+            <span className="mr-2 md:ml-3 rounded bg-secondaryLight md:px-2.5 md:py-0.5 px-1.5 py-0.5 text-xs font-semibold">
               5.0
             </span>
           </div>

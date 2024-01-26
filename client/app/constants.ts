@@ -87,9 +87,10 @@ export const stores: Store[] = [
     service_id: 'service1',
     store_address: '123, Main Street',
     store_categories: ['Cafe', 'Restaurant'],
-    store_description: 'A popular cafe chain with delicious coffee options.',
+    store_description:
+      'A popular cafe chain with delicious coffee options. A popular cafe chain with delicious coffee options. A popular cafe chain with delicious coffee options.A popular cafe chain with delicious coffee options.',
     store_email: 'ccd@example.com',
-    store_images: ['./ccd.png', './ccd.png'],
+    store_images: ['./ccd.png'],
     store_name: 'Cafe Coffee Day',
     store_phone_number: '9876543210',
     stripe_public_key: 'your_stripe_public_key',

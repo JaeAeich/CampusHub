@@ -1,68 +1,45 @@
 import Store from '@/api/stores/types';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel';
-import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import Stars from './Stars';
+// store_name, address, offeravailable, storeDescription, storeImages, Timings
 
-function StoreCard(props: { store: Store }) {
+function StoreCard(this_store: Store) {
+  const { store } = this_store;
+  const { store_name, store_address, store_description, store_images, timings } = store;
   return (
-    <Card className="w-72 h-96 overflow-hidden bg-white border rounded-md shadow-md transition-transform transform hover:scale-105">
-      <CardHeader className="flex flex-col justify-between h-1/4 p-4">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-lg font-bold">{props.store.store_name}</CardTitle>
-          {props.store.offer_available && (
-            <Badge variant="destructive" className="w-14 h-4">
-              Sale
-            </Badge>
-          )}
-        </div>
-        <CardDescription className="mt-2 text-sm">{props.store.store_description}</CardDescription>
-      </CardHeader>
-      <CardContent className="h-1/2 p-4">
-        <Carousel className="w-full h-full">
-          <CarouselContent className="flex">
-            {props.store.store_images.map((image, index) => (
-              <CarouselItem key={index} className="w-full">
-                <div className="p-1">
-                  <Card className="w-full h-full">
-                    <CardContent className="aspect-w-4 aspect-h-3">
-                      <img src={image} alt="" className="object-cover w-full h-full" />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </CardContent>
-      <CardFooter className="flex justify-center h-1/4 p-4">
-        <div className="mt-4 text-smm hover:block">
-          <p>
-            <strong>Address:</strong> <code>{props.store.store_address}</code>
-          </p>
-          <p>
-            <strong>Phone Number:</strong> <code>{props.store.store_phone_number}</code>
-          </p>
-          <p>
-            <strong>Timings:</strong>{' '}
-            <code>
-              {props.store.timings[0]}:00 - {props.store.timings[1]}:00
-            </code>
+    <Card id="app" className="w-full mb-10 md:h-60 h-50 rounded shadow-md flex card">
+      <img
+        className="lg:w-72 md:w-48 w-32 h-full rounded-l-sm object-cover"
+        src={store_images[0]}
+        alt="Room"
+      />
+      <div className="m-4 ml-7 w-full flex flex-col justify-between">
+        <div className="flex flex-col">
+          <h1 className="lg:text-2xl text-lgg font-heading font-bold overflow-hidden line-clamp-1">
+            {store_name}
+          </h1>
+          <h1 className="text-md font-body font-semibold text-accent overflow-hidden line-clamp-1">
+            {store_address}
+          </h1>
+          <p className="mt-5 mb-5 text-md font-body text-gray-600 overflow-hidden line-clamp-2">
+            {store_description}
           </p>
         </div>
-        <Button className="w-full bg-accent">Visit</Button>
-      </CardFooter>
+        <div className="flex xl:flex-row flex-col justify-between">
+          {/* // TODO: Rating is hardcoded here. */}
+          <div className="flex items-center">
+            <Stars rating={4.8} />
+            <span className="mr-2 md:ml-3 rounded bg-secondaryLight md:px-2.5 md:py-0.5 px-1.5 py-0.5 text-xs font-semibold">
+              5.0
+            </span>
+          </div>
+          <div className="flex items-center mt-2 md:mt-0">
+            <span className="md:block hidden rounded text-xs font-medium">
+              Timings: {timings[0]}:00hrs - {timings[1]}:00hrs
+            </span>
+          </div>
+        </div>
+      </div>
     </Card>
   );
 }
