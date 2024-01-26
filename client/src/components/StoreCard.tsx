@@ -3,8 +3,7 @@ import { Card } from '@/components/ui/card';
 import Stars from './Stars';
 // store_name, address, offeravailable, storeDescription, storeImages, Timings
 
-function StoreCard(this_store: Store) {
-  const { store } = this_store;
+function StoreCard({ store }: { store: Store }) {
   const { store_name, store_address, store_description, store_images, timings } = store;
   return (
     <Card id="app" className="w-full mb-10 md:h-60 h-50 rounded shadow-md flex card">

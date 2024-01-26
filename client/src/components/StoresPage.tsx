@@ -248,7 +248,7 @@ function StorePage() {
       </div>
       <div className="flex flex-col w-full p-10">
         {stores.map((store: Store) => (
-          <StoreCard key={store.store_id} store={store} />
+          <StoreCard store={store} />
         ))}
       </div>
     </div>
