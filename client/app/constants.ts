@@ -87,7 +87,8 @@ export const stores: Store[] = [
     service_id: 'service1',
     store_address: '123, Main Street',
     store_categories: ['Cafe', 'Restaurant'],
-    store_description: 'A popular cafe chain with delicious coffee options.',
+    store_description:
+      'A popular cafe chain with delicious coffee options. A popular cafe chain with delicious coffee options. A popular cafe chain with delicious coffee options.A popular cafe chain with delicious coffee options.',
     store_email: 'ccd@example.com',
     store_images: ['./ccd.png'],
     store_name: 'Cafe Coffee Day',
@@ -108,7 +109,7 @@ export const stores: Store[] = [
     store_categories: ['Grocery', 'Dairy'],
     store_description: 'A popular store for dairy and grocery needs.',
     store_email: 'amul@store.com',
-    store_images: ['./amul.jpg'],
+    store_images: ['./amul.jpg', './amul.jpg'],
     store_name: 'Amul Store',
     store_phone_number: '9876543211',
     stripe_public_key: 'your_stripe_public_key',
