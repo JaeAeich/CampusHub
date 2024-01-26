@@ -12,6 +12,15 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'prettier'],
   rules: {
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        labelComponents: ['label'],
+        labelAttributes: ['htmlFor'],
+        controlComponents: ['Checkbox'],
+        depth: 3,
+      },
+    ],
     camelcase: 'off',
     'object-curly-newline': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
