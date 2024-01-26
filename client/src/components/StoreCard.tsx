@@ -10,7 +10,7 @@ function StoreCard({ store }: { store: Store }) {
       <img
         className="lg:w-72 md:w-48 w-32 h-full rounded-l-sm object-cover"
         src={store_images[0]}
-        alt={store_description}
+        alt={store_name}
       />
       <div className="m-4 ml-7 w-full flex flex-col justify-between">
         <div className="flex flex-col">
