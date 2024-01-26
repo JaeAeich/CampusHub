@@ -28,11 +28,11 @@ function ProductsPage() {
   const [selectedRating, setSelectedRating] = useState(0);
 
   const clearFilter = () => {
-    setSliderValue({ x: 50 });
+    setSliderValue([50]);
     setSelectedRating(0);
   };
 
-  const handleSliderChange = (value) => {
+  const handleSliderChange = (value: number[]) => {
     setSliderValue([value[0]]);
   };
 

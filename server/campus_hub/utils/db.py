@@ -209,7 +209,6 @@ class DBConnector:
                 result = list(collection.find(query, projection))
             else:
                 result = list(collection.find(query))
-
             return result
         except PyMongoError as e:
             self.logger.error(

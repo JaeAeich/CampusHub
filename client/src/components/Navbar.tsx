@@ -30,7 +30,7 @@ const routes = [
     to: '/',
     label: 'Services',
     content: services.map((service) => ({
-      name: service.name,
+      name: service.service_name,
     })),
   },
   {
