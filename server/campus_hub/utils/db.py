@@ -291,6 +291,31 @@ class DBConnector:
                 e,
             )
             raise DBDeletionError(str(e))
+        
+    def get_count(self, collection_name: str) -> int:
+        """
+        Get the number of documents.
+
+        Args:
+            collection_name (str): Name of the collection.
+        Returns:
+            int: Number of documents matching the query.
+        """
+        try:
+            collection = self.db[collection_name]
+            return collection.count_documents({})
+        except PyMongoError as e:
+            self.logger.error(
+                response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(
+                        "Error(DBConnector.get_count) getting count of documents."
+                    ),
+                ),
+                e,
+            )
+            raise DBQueryError(str(e))
+        
 
 
 db_connector = DBConnector()

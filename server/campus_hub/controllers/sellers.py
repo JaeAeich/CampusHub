@@ -51,8 +51,10 @@ def get_sellers() -> APIResponse:
 
         seller_list: SellerList = SellerList(sellers=sellers)
 
+        total_number_of_sellers = db_connector.get_count(sellers_collection_name)
+
         # If sellers are found, return a JSON response
-        return response(Status.SUCCESS, **seller_list.model_dump())
+        return response(Status.SUCCESS, total_docs=total_number_of_sellers, **seller_list.model_dump())
 
     except Exception as e:
         return response(
