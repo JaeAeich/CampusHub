@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
 
-function getStarElement(index, rating) {
+function getStarElement(index: number, rating: number) {
   if (rating - index >= 0) {
     return (
       <Star
