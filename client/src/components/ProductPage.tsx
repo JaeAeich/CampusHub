@@ -1,41 +1,18 @@
 // Product Page
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { products } from '../../app/constants';
 import Product from '@/api/products/types';
-// import Review from '@/api/reviews/types';
 
 export const ProductPage = () => {
-  //   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [productsl, setProductsL] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  //   const [reviews, setReviews] = useState<Review[]>([]);
-
-  const productt: Product = {
-    product_id: 'product',
-    offer_id: 'offer1',
-    product_categories: ['Food', 'Beverages'],
-    product_description: 'A delicious coffee blend with a rich aroma.',
-    product_images: ['./products/coffee.png'],
-    product_name: 'Coffee',
-    product_cost: 50,
-    stock: 100,
-    store_id: 'store1',
-    product_specifications: {
-      size: '250g',
-      brand: 'Cafe Coffee Day',
-    },
-    service_id: 'service1',
-    rating: 4.5,
-  };
 
   useEffect(() => {
     // Simulated asynchronous data fetching (replace with your actual data fetching logic)
     setTimeout(() => {
       setProductsL(products);
-      console.log(products[0]);
       setIsLoading(false);
     }, 2000);
   }, []);
@@ -43,8 +20,6 @@ export const ProductPage = () => {
   useEffect(() => {
     console.log(productsl);
     if (productsl.length > 0) {
-      // Set the first product when products change
-      console.log(productsl);
       setProduct(productsl[0]);
     }
   }, [productsl]);
