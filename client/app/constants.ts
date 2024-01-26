@@ -1,5 +1,7 @@
 import Service from '../src/api/services/types'; // Update the path accordingly
 import Store from '../src/api/stores/types'; // Update the path accordingly
+import Product from '@/api/products/types'; // Update the path accordingly
+import Review from '@/api/reviews/types'; // Update the path accordingly
 
 export const services: Service[] = [
   {
@@ -113,5 +115,159 @@ export const stores: Store[] = [
     store_phone_number: '9876543211',
     stripe_public_key: 'your_stripe_public_key',
     timings: [10, 20],
+  },
+];
+
+export const products: Product[] = [
+  {
+    product_id: 'product1',
+    offer_id: 'offer1',
+    product_categories: ['Food', 'Beverages'],
+    product_description: 'A delicious coffee blend with a rich aroma.',
+    product_images: ['./products/coffee.png'],
+    product_name: 'Coffee',
+    product_cost: 50,
+    stock: 100,
+    store_id: 'store1',
+    product_specifications: {
+      size: '250g',
+      brand: 'Cafe Coffee Day',
+    },
+    service_id: 'service1',
+    rating: 4.5,
+  },
+  {
+    product_id: 'product2',
+    offer_id: 'offer2',
+    product_categories: ['Food', 'Beverages'],
+    product_description: 'A delicious tea blend with a rich aroma.',
+    product_images: ['./products/tea.png'],
+    product_name: 'Tea',
+    product_cost: 30,
+    stock: 100,
+    store_id: 'store1',
+    product_specifications: {
+      size: '250g',
+      brand: 'Cafe Coffee Day',
+    },
+    service_id: 'service1',
+    rating: 4.5,
+  },
+  {
+    product_id: 'product3',
+    offer_id: 'offer3',
+    product_categories: ['Dairy', 'Milk'],
+    product_description: 'Fresh milk from the farm.',
+    product_images: ['./products/milk.png'],
+    product_name: 'Milk',
+    product_cost: 30,
+    stock: 100,
+    store_id: 'store2',
+    product_specifications: {
+      size: '1L',
+      brand: 'Amul',
+    },
+    service_id: 'service2',
+    rating: 4.0,
+  },
+  {
+    product_id: 'product4',
+    offer_id: 'offer4',
+    product_categories: ['Dairy', 'Cheese'],
+    product_description: 'Fresh cheese from the farm.',
+    product_images: ['./products/cheese.png'],
+    product_name: 'Cheese',
+    product_cost: 50,
+    stock: 100,
+    store_id: 'store2',
+    product_specifications: {
+      size: '250g',
+      brand: 'Amul',
+    },
+    service_id: 'service2',
+    rating: 4.0,
+  },
+];
+
+export const reviews: Review[] = [
+  {
+    product_id: 'product1',
+    reviews: [
+      {
+        comment: 'Great coffee!',
+        comment_headline: 'Great coffee!',
+        rating: 5,
+        review_images: ['./products/coffee.png'],
+        user_id: 'user1',
+      },
+      {
+        comment: 'Great coffee!',
+        comment_headline: 'Great coffee!',
+        rating: 5,
+        review_images: ['./products/coffee.png'],
+        user_id: 'user2',
+      },
+    ],
+    store_id: 'store1',
+  },
+  {
+    product_id: 'product2',
+    reviews: [
+      {
+        comment: 'Great tea!',
+        comment_headline: 'Great tea!',
+        rating: 5,
+        review_images: ['./products/tea.png'],
+        user_id: 'user1',
+      },
+      {
+        comment: 'Great tea!',
+        comment_headline: 'Great tea!',
+        rating: 5,
+        review_images: ['./products/tea.png'],
+        user_id: 'user2',
+      },
+    ],
+    store_id: 'store1',
+  },
+  {
+    product_id: 'product3',
+    reviews: [
+      {
+        comment: 'Great milk!',
+        comment_headline: 'Great milk!',
+        rating: 5,
+        review_images: ['./products/milk.png'],
+        user_id: 'user1',
+      },
+      {
+        comment: 'Great milk!',
+        comment_headline: 'Great milk!',
+        rating: 5,
+        review_images: ['./products/milk.png'],
+        user_id: 'user2',
+      },
+    ],
+    store_id: 'store2',
+  },
+  {
+    product_id: 'product4',
+    reviews: [
+      {
+        comment: 'Great cheese!',
+        comment_headline: 'Great cheese!',
+        rating: 5,
+        review_images: ['./products/cheese.png'],
+        user_id: 'user1',
+      },
+      {
+        comment: 'Great cheese!',
+        comment_headline: 'Great cheese!',
+        rating: 5,
+        review_images: ['./products/cheese.png'],
+        user_id: 'user2',
+      },
+    ],
+    store_id: 'store2',
   },
 ];

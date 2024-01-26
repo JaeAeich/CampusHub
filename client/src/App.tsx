@@ -4,6 +4,7 @@ import Error404 from './components/Error404';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProductsPage from './components/ProductsPage';
+import { ProductPage } from './components/ProductPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/stores/store_id/products" element={<ProductsPage />} />
             {/* <Route path="/services/service_id" element={<StoresList />} /> */}
+            <Route path="/product" element={<ProductPage />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>

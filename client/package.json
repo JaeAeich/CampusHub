@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@nodelib/fs.scandir": "^3.0.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -36,6 +37,7 @@
     "clsx": "^2.1.0",
     "embla-carousel-autoplay": "^8.0.0-rc19",
     "embla-carousel-react": "^8.0.0-rc19",
+    "fastq": "^1.16.0",
     "lucide-react": "^0.303.0",
     "next-themes": "^0.2.1",
     "react-router-dom": "^6.21.3",
@@ -65,7 +67,7 @@
     "prettier": "3.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwindcss": "^3.4.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2"
   }
 }
