@@ -13,48 +13,25 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Star } from 'lucide-react';
-
+import Store from '@/api/stores/types';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useState } from 'react';
 import { Slider } from '@/components/ui/slider';
-// import Slider from 'react-input-slider';
-import ProductCard from './ProductCard';
+import StoreCard from './StoreCard';
+import { stores } from '../../app/constants';
 
-function ProductsPage() {
-  const [sliderValue, setSliderValue] = useState([500]);
-  const [selectedRating, setSelectedRating] = useState(0);
-
-  const clearFilter = () => {
-    setSliderValue([50]);
-    setSelectedRating(0);
-  };
-
-  const handleSliderChange = (value: number[]) => {
-    setSliderValue([value[0]]);
-  };
-
-  const handleRatingChange = (rating: number) => {
-    setSelectedRating(rating);
-  };
-
+function StorePage() {
   return (
     <div className="flex lg:flex-row flex-col w-full">
       <div className="lg:block hidden flex w-full lg:flex-col lg:w-96 bg-secondaryLight p-4">
-        <form
-        // onSubmit={handleSubmit}
-        >
+        {/* TODO: implement onSubmit={handleSubmit} */}
+        <form onSubmit={() => {}}>
           <div className="flex flex-row justify-between items-center">
             <h1 className="font-heading font-bold text-xll">Filters</h1>
-            <p
-              className="font-subheading hover:underline hover:cursor-pointer"
-              onMouseOver={clearFilter}
-              onFocus={clearFilter}
-            >
-              Clear Filters
-            </p>
+            {/* TODO: implemment clearFilter */}
+            <p className="font-subheading hover:underline hover:cursor-pointer">Clear Filters</p>
           </div>
           <div className="flex">
             <Accordion type="single" collapsible className="w-full">
@@ -63,23 +40,14 @@ function ProductsPage() {
                   Category
                 </AccordionTrigger>
                 <AccordionContent>
+                  {/* TODO: implement changeCategory */}
                   <div className="items-top flex flex-col">
                     <div className="flex flex-row mb-2 items-center font-subheading text-base">
-                      <Checkbox
-                        id="option1"
-                        className="m-1"
-                        // onClick= {handleCategoryChange}
-                      />
-
+                      <Checkbox id="option1" className="m-1" onClick={() => {}} />
                       <label htmlFor="option1">Category 1</label>
                     </div>
                     <div className="flex flex-row mb-2 items-center font-subheading text-base">
-                      <Checkbox
-                        id="option2"
-                        className="m-1"
-                        // onClick={handleCategoryChange}
-                      />
-
+                      <Checkbox id="option2" className="m-1" onClick={() => {}} />
                       <label htmlFor="option2">Category 2</label>
                     </div>
                   </div>
@@ -90,20 +58,16 @@ function ProductsPage() {
                   Price
                 </AccordionTrigger>
                 <AccordionContent className="m-1">
-                  {/* //TODO: Get price range from APIs */}
+                  {/* TODO: Get price range from APIs */}
                   <div className="flex flex-col font-subheading font-semibold text-base items-center">
                     <div className="flex gap-2 w-full">
                       <p>0</p>
-                      <Slider
-                        defaultValue={[500]}
-                        max={1000}
-                        step={1}
-                        onValueChange={handleSliderChange}
-                      />
+                      <Slider defaultValue={[500]} max={1000} step={1} onValueChange={() => {}} />
                       <p>1000</p>
                     </div>
+                    {/* TODO: get slider value from state which change on above onValueChange */}
                     <div className="flex justify-center">
-                      <p>Price: {sliderValue[0]}</p>
+                      <p>Price: {}</p>
                     </div>
                   </div>
                 </AccordionContent>
@@ -114,16 +78,17 @@ function ProductsPage() {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="flex items-center">
+                    {/* TODO: implement rating change to trigger API call for stores */}
+                    {/* TODO: add below line to change color, and be compliant to @aishikanandi's 
+                    productsPage implementation:
+                    fill={`${index <= selectedRating ? '#e89ba1' : 'gray'} `} */}
                     {[1, 2, 3, 4, 5].map((index) => (
                       <Star
-                        fill={`
-                                  ${index <= selectedRating ? '#e89ba1' : 'gray'} 
-                                `}
                         strokeWidth={0}
                         key={index}
                         type="button"
                         className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
-                        onMouseEnter={() => handleRatingChange(index)}
+                        onMouseEnter={() => {}}
                       />
                     ))}
                   </div>
@@ -134,31 +99,22 @@ function ProductsPage() {
                   Offers
                 </AccordionTrigger>
                 <AccordionContent>
+                  {/* TODO: implement filter store based on offer avail */}
                   <RadioGroup defaultValue="comfortable">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="default"
-                        id="option3"
-                        // onClick={handleOfferAvailableChange}
-                      />
+                      <RadioGroupItem value="default" id="option3" onClick={() => {}} />
                       <Label htmlFor="option3">Offers-only</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="comfortable"
-                        id="option4"
-                        // onClick={handleOfferAvailableChange}
-                      />
+                      <RadioGroupItem value="comfortable" id="option4" onClick={() => {}} />
                       <Label htmlFor="option4">Show all</Label>
                     </div>
                   </RadioGroup>
-                  {/* </div> */}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </div>
-
-          {/* <Button>Apply Filters</Button> */}
+          <Button>Apply Filters</Button>
         </form>
       </div>
       <div className="lg:hidden flex w-full">
@@ -172,16 +128,14 @@ function ProductsPage() {
               </DialogTrigger>
               <DialogContent className="lg:hidden sm:flex hidden">
                 <div className="mx-auto w-4/5">
-                  <form
-                  // onSubmit={handleSubmit}
-                  >
+                  <form onSubmit={() => {}}>
                     <div className="flex flex-row justify-between items-center">
                       <h1 className="font-heading font-bold text-xll">Filters</h1>
-
+                      {/* TODO: implement filter change as above */}
                       <p
                         className="font-subheading hover:underline hover:cursor-pointer"
-                        onMouseOver={clearFilter}
-                        onFocus={clearFilter}
+                        onMouseOver={() => {}}
+                        onFocus={() => {}}
                       >
                         Clear Filters
                       </p>
@@ -193,23 +147,14 @@ function ProductsPage() {
                             Category
                           </AccordionTrigger>
                           <AccordionContent>
+                            {/* TODO: implement change in category */}
                             <div className="items-top flex flex-col">
                               <div className="flex flex-row mb-2 items-center font-subheading text-base">
-                                <Checkbox
-                                  id="option1"
-                                  className="m-1"
-                                  // onClick={handleCategoryChange}
-                                />
-
+                                <Checkbox id="option1" className="m-1" onClick={() => {}} />
                                 <label htmlFor="option1">Category 1</label>
                               </div>
                               <div className="flex flex-row mb-2 items-center font-subheading text-base">
-                                <Checkbox
-                                  id="option2"
-                                  className="m-1"
-                                  // onClick={handleCategoryChange}
-                                />
-
+                                <Checkbox id="option2" className="m-1" onClick={() => {}} />
                                 <label htmlFor="option2">Category 2</label>
                               </div>
                             </div>
@@ -220,7 +165,8 @@ function ProductsPage() {
                             Price
                           </AccordionTrigger>
                           <AccordionContent className="m-1">
-                            {/* //TODO: Get price range from APIs */}
+                            {/* TODO: Get price range from APIs */}
+                            {/* TODO: Get slider value and display below */}
                             <div className="flex flex-col font-subheading font-semibold text-base items-center">
                               <div className="flex gap-2 w-full">
                                 <p>0</p>
@@ -228,12 +174,12 @@ function ProductsPage() {
                                   defaultValue={[500]}
                                   max={1000}
                                   step={1}
-                                  onValueChange={handleSliderChange}
+                                  onValueChange={() => {}}
                                 />
                                 <p>1000</p>
                               </div>
                               <div className="flex justify-center">
-                                <p>Price: {sliderValue[0]}</p>
+                                <p>Price: </p>
                               </div>
                             </div>
                           </AccordionContent>
@@ -243,17 +189,17 @@ function ProductsPage() {
                             Rating
                           </AccordionTrigger>
                           <AccordionContent>
+                            {/* TODO: implement rating change */}
+                            {/* TODO:
+                              add fill={`${index <= selectedRating ? '#e89ba1' : 'gray'}`} */}
                             <div className="flex items-center">
                               {[1, 2, 3, 4, 5].map((index) => (
                                 <Star
-                                  fill={`
-                                    ${index <= selectedRating ? '#e89ba1' : 'gray'}
-                                  `}
                                   strokeWidth={0}
                                   key={index}
                                   type="button"
                                   className="w-6 h-6 inline-flex justify-center items-center hover:text-accent"
-                                  onMouseEnter={() => handleRatingChange(index)}
+                                  onMouseEnter={() => {}}
                                 />
                               ))}
                             </div>
@@ -274,18 +220,13 @@ function ProductsPage() {
                                 <Label htmlFor="option4">Show all</Label>
                               </div>
                             </RadioGroup>
-                            {/* </div> */}
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>
                     </div>
                     <div className="flex justify-center mt-6">
-                      <Button
-                        className="bg-accentLight hover:bg-accent"
-                        // onClick={handleSubmit}
-                      >
-                        Apply Filters
-                      </Button>
+                      {/* TODO: implement apply change */}
+                      <Button className="bg-accentLight hover:bg-accent">Apply Filters</Button>
                     </div>
                   </form>
                 </div>
@@ -305,13 +246,13 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      <div className="lg:block grid lg:justify-left justify-center">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+      <div className="flex flex-col w-full p-10">
+        {stores.map((store: Store) => (
+          <StoreCard store={store} />
+        ))}
       </div>
     </div>
   );
 }
 
-export default ProductsPage;
+export default StorePage;

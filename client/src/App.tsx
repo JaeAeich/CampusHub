@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProductsPage from './components/ProductsPage';
 import { ProductPage } from './components/ProductPage';
+import StorePage from './components/StoresPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/stores/store_id/products" element={<ProductsPage />} />
             {/* <Route path="/services/service_id" element={<StoresList />} /> */}
             <Route path="/product" element={<ProductPage />} />
+            <Route path="/store" element={<StorePage />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>
