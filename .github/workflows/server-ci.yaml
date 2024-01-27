@@ -121,7 +121,8 @@ jobs:
         run: |
           cd server
           source .venv/bin/activate
-          pytest --cov=. tests
+          cd ..
+          pytest --cov=./server/ ./server/tests
 
       # Upload coverage reports to Codecov 
       - name: Upload coverage reports to Codecov
