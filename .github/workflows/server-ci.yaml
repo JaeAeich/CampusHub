@@ -118,7 +118,8 @@ jobs:
 
       # Run test suite
       - name: Run tests
-        run:
+        run: |
+          source server/.venv/bin/activate
           pytest --cov=./server/ ./server/tests
 
       # Upload coverage reports to Codecov 
