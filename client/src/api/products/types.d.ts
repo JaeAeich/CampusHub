@@ -12,5 +12,5 @@ export default interface Product {
   service_id: string;
   stock: number;
   store_id: string;
-  rating: float;
+  rating: number;
 }

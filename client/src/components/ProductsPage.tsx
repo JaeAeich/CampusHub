@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import {
   Accordion,
   AccordionContent,
@@ -13,19 +14,52 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Star } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
-// import Slider from 'react-input-slider';
+import Product from '@/api/products/types';
+import { products } from '../../app/constants';
 import ProductCard from './ProductCard';
 
 function ProductsPage() {
+  const { store_id } = useParams();
+  const [store_products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [sliderValue, setSliderValue] = useState([500]);
   const [selectedRating, setSelectedRating] = useState(0);
+
+  useEffect(() => {
+    // Simulated asynchronous data fetching (replace with your actual data fetching logic)
+    const fetchProducts = async () => {
+      try {
+        // Assuming your products data has a property named 'store_id'
+        const filteredProducts = products.filter((product) => product.store_id === store_id);
+        // Simulate delay for loading
+        await new Promise((resolve) => {
+          setTimeout(resolve, 2000);
+        });
+
+        setProducts(filteredProducts);
+        setIsLoading(false);
+      } catch (error) {
+        // console.error('Error fetching products:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [store_id]);
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (!store_products) {
+    return <span>Products not found</span>;
+  }
 
   const clearFilter = () => {
     setSliderValue([50]);
@@ -306,9 +340,9 @@ function ProductsPage() {
         </div>
       </div>
       <div className="lg:block grid lg:justify-left justify-center">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        {store_products.map((prod: Product) => (
+          <ProductCard product={prod} />
+        ))}
       </div>
     </div>
   );

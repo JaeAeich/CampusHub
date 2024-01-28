@@ -15,6 +15,8 @@ module.exports = {
       padding: '2rem',
       screens: {
         '2xl': '1400px',
+        '8xl': '1500px',
+        '9xl': '1600px',
       },
     },
     fontSize: {
