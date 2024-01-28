@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Carousel, CarouselItem, CarouselContent } from './ui/carousel';
@@ -75,7 +75,7 @@ export default function ProductPage() {
                     <p className="font-medium font-subheading text-primary capitalize mr-2 txt-md">
                       {key}:
                     </p>
-                    <p className="font-subheading text-darkgray text-md">{value}</p>
+                    <p className="font-subheading text-darkgray text-md">{value as React.ReactNode}</p>
                   </div>
                 ))}
               </div>
