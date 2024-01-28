@@ -21,7 +21,7 @@ export default function ProductPage() {
         const foundProduct = products.find((prod) => prod.product_id === product_id);
 
         // Simulate delay for loading
-        await new Promise((resolve) => {
+        await new Promise<void>((resolve) => {
           setTimeout(() => {
             setProduct(foundProduct || null);
             setIsLoading(false);
