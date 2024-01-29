@@ -1,7 +1,6 @@
 import Store from '@/api/stores/types';
 import { Card } from '@/components/ui/card';
 import Stars from './Stars';
-// store_name, address, offeravailable, storeDescription, storeImages, Timings
 
 function StoreCard({ store }: { store: Store }) {
   const { store_name, store_address, store_description, store_images, timings } = store;

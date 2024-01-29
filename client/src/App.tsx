@@ -4,6 +4,7 @@ import Error404 from './components/Error404';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProductsPage from './components/ProductsPage';
+import ProductPage from './components/ProductPage';
 import StorePage from './components/StoresPage';
 
 function App() {
@@ -14,8 +15,9 @@ function App() {
         <div className="flex grow">
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/stores/store_id/products" element={<ProductsPage />} />
-            <Route path="/store" element={<StorePage />} />
+            <Route path="/stores/:store_id/products" element={<ProductsPage />} />
+            <Route path="/products/:product_id" element={<ProductPage />} />
+            <Route path="/services/:service_id/stores" element={<StorePage />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>

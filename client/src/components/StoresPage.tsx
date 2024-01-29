@@ -12,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import Store from '@/api/stores/types';
 import { Button } from '@/components/ui/button';
@@ -23,6 +25,39 @@ import StoreCard from './StoreCard';
 import { stores } from '../../app/constants';
 
 function StorePage() {
+  const { service_id } = useParams();
+  const [service_stores, setStores] = useState<Store[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulated asynchronous data fetching (replace with your actual data fetching logic)
+    const fetchStores = async () => {
+      try {
+        // Assuming your store data has a property named 'service_id'
+        const filteredStores = stores.filter((store) => store.service_id === service_id);
+        // Simulate delay for loading
+        await new Promise((resolve) => {
+          setTimeout(resolve, 2000);
+        });
+
+        setStores(filteredStores);
+        setIsLoading(false);
+      } catch (error) {
+        // console.error('Error fetching stores:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchStores();
+  }, [service_id]);
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (!service_stores) {
+    return <span>Stores not found</span>;
+  }
   return (
     <div className="flex lg:flex-row flex-col w-full">
       <div className="lg:block hidden flex w-full lg:flex-col lg:w-96 bg-secondaryLight p-4">
@@ -247,8 +282,10 @@ function StorePage() {
         </div>
       </div>
       <div className="flex flex-col w-full p-10">
-        {stores.map((store: Store) => (
-          <StoreCard store={store} />
+        {service_stores.map((store: Store) => (
+          <Link to={`/stores/${store.store_id}/products`}>
+            <StoreCard store={store} />
+          </Link>
         ))}
       </div>
     </div>

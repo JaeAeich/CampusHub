@@ -4,12 +4,13 @@ export default interface Product {
   product_categories: string[];
   product_cost: number;
   product_description: string;
-  product_image: string[];
+  product_images: string[];
   product_name: string;
   product_specifications: {
     [key: string]: string;
   };
   service_id: string;
-  stocks: number;
+  stock: number;
   store_id: string;
+  rating: number;
 }

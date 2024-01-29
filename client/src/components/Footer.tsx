@@ -54,9 +54,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-3 py-2">
-          <p className="text-center font-extralight text-xs">
-            @2024 All rights reserved by Runaways
-          </p>
+          <p className="text-center text-sm">@2024 All rights reserved by Runaways</p>
         </div>
       </Container>
     </footer>
