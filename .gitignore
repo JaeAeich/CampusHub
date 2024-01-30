@@ -7,3 +7,6 @@ nodemodules/
 
 # ignore local vscode settings 
 .vscode/
+
+# ignore coverage reports
+.coverage
