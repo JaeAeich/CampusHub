@@ -1205,8 +1205,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-<<<<<<< Updated upstream
 content-hash = "9196f00e1bfdbbf89e53e1a73bb7962be2000f0e6102e61e3f971f57e5c1e29b"
-=======
-content-hash = "e33103e677317142927dd87cd8ff56a51528e0fb4ff12d158d730c5553495bba"
->>>>>>> Stashed changes
