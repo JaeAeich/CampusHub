@@ -20,7 +20,11 @@ mongo-types = "^0.15.1"
 types-pytz = "^2023.3.1.1"
 shortuuid = "^1.0.11"
 flask-cors = "^4.0.0"
+<<<<<<< Updated upstream
 pytest-cov = "^4.1.0"
+=======
+types-requests = "^2.31.0.20240125"
+>>>>>>> Stashed changes
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.9"
