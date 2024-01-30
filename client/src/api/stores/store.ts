@@ -11,7 +11,7 @@ import Order from '../orders/types';
 /**
  * Represents the base URL for the store API.
  */
-const storeURL = `${baseURL}/store`;
+const storeURL = `${baseURL}/stores`;
 
 /**
  * Fetches trending stores.
