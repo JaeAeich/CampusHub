@@ -9,6 +9,7 @@ from typing import MutableMapping, Any
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from datetime import datetime
+from campus_hub.utils.distance_matix import get_distance_matrix
 
 
 def get_services() -> APIResponse:
@@ -201,7 +202,7 @@ def delete_service(service_id: str) -> APIResponse:
         )
 
 
-def get_stores_by_service_id(service_id: str) -> APIResponse:
+def get_stores_by_service_id(service_id: str, max_rating: float, min_rating: float, distance:float, category:str, ) -> APIResponse:
     """
     Get stores by service id from the MongoDB database.
 
@@ -215,6 +216,13 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
     services_collection_name = "services"
     stores_collection_name = "stores"
     query: dict = {"service_id": service_id}
+
+    if max_rating:
+        query["rating"] = {"$lte": max_rating}
+    if min_rating:
+        query["rating"] = {"$gte": min_rating}
+    if category:
+        query["category"] = {"$in": category}
     projection = {"_id": False}
 
     try:
@@ -243,6 +251,21 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
 
         store_list: StoreList = StoreList(stores=stores)
 
+        # If distance is specified, filter stores by distance
+        if distance:
+            try:
+                origin = (float(request.args.get("latitude")), float(request.args.get("longitude")))
+                for store in stores:
+                    destination = store.coordinates
+                    distance_matrix = get_distance_matrix(origin, destination)
+                    store["distance"] = distance_matrix["rows"][0]["elements"][0]["distance"]["text"]
+            except Exception as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Error calculating distance: {str(e)}"),
+                )
+            stores = list(filter(lambda store: float(store["distance"].split(" ")[0]) <= distance, stores))
+        
         # If stores are found, return a JSON response
         return response(Status.SUCCESS, **store_list.model_dump())
 

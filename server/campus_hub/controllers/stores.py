@@ -10,7 +10,6 @@ from campus_hub.utils.response import Status, APIResponse, response, message
 from datetime import datetime, timedelta
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
-from campus_hub.utils.distance_matix import get_distance_matrix
 
 
 def get_store_by_id(store_id) -> APIResponse:
