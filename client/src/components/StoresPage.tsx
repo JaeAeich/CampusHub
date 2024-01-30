@@ -52,10 +52,12 @@ function StorePage() {
   }, [service_id]);
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <div className="h-auto my-auto mx-auto justify-center items-center">
+      {/* <div className="w-12 h-12 rounded-full animate-spin border-x-4 border-solid border-accent border-t-transparent" /> */}
+      <img src="/loading.gif" alt=""  className='opacity-70'/>
+    </div>;
   }
-
-  if (!service_stores) {
+  if (service_stores.length===0) {
     return <span>Stores not found</span>;
   }
   return (
