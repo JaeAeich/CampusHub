@@ -1,16 +1,50 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Service from '@/api/services/types';
 import Container from './ui/container';
-import { services } from '../../app/constants';
+// import { services } from '../../app/constants';
+import { getServices } from '../api/services/services';
 
 export default function ServiceCards() {
-  const handleRouteToStore = () => {};
+  const [services, setServices] = useState<Service[]>([]);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const response = await getServices();
+        if ('services' in response) {
+          setServices(response.services);
+        } else {
+          setFetchError('No services found.');
+        }
+      } catch (error: unknown) {
+        setFetchError('No services found.');
+      }
+    }
+
+    fetchServices();
+  }, []);
+
+  if (fetchError) {
+    return (
+      <Container>
+        <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-10 sm:mb-2">
+          Services
+        </h2>
+        <h2 className="xl:text-xl sm:text-lg text-lg text-secondary font-body sm:my-4 mt-10 mt-0 sm:mb-24 mb-12">
+          {fetchError}
+        </h2>
+      </Container>
+    );
+  }
+  const handleRouteToStore = () => {};
   return (
     <Container>
       <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-10 sm: mb-2">
-        Services{' '}
+        Services
       </h2>
       <div className="mb-10">
         <Carousel
