@@ -1,5 +1,6 @@
 # ignore mongo data
 data/
+nodemodules/ 
 
 # ignore env file
 *.env

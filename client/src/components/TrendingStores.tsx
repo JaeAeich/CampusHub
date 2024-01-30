@@ -1,5 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
+import { Link } from 'react-router-dom';
 import Container from './ui/container';
 import { stores } from '../../app/constants';
 
@@ -17,11 +18,13 @@ export default function TrendingStores() {
                 key={store.store_id}
                 className="w-full flex items-center justify-center"
               >
-                <img
-                  src={store.store_images[0]}
-                  alt={store.store_name}
-                  className="rounded-md object-cover w-full h-full"
-                />
+                <Link to={`/stores/${store.store_id}/products`} className="w-full h-full">
+                  <img
+                    src={store.store_images[0]}
+                    alt={store.store_name}
+                    className="rounded-md object-cover w-full h-full"
+                  />
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>
