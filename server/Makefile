@@ -17,3 +17,7 @@ lint-fix:
 # Format all the files
 format:
 	ruff format .
+
+# Run tests
+test:
+	pytest --cov-report term --cov-report html --cov=./ ./tests

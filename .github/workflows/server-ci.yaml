@@ -120,7 +120,7 @@ jobs:
       - name: Run tests
         run: |
           source server/.venv/bin/activate
-          pytest --cov=./server/ ./server/tests
+          pytest --cov-report term --cov-report html --cov=./server/ ./server/tests
 
       # Upload coverage reports to Codecov 
       - name: Upload coverage reports to Codecov
