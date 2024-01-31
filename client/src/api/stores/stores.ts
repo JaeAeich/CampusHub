@@ -11,7 +11,7 @@ import Order from '../orders/types';
 /**
  * Represents the base URL for the store API.
  */
-const storeURL = `${baseURL}/store`;
+const storeURL = `${baseURL}/stores`;
 
 /**
  * Fetches trending stores.
@@ -51,6 +51,27 @@ export async function getStoreById(
     return response.data;
   } catch (error) {
     return errorResponse(Error.toString(), 'api.store.getStoreById');
+  }
+}
+
+/**
+ * Fetches a product by its ID.
+ * @param {string} store_id - The ID of the store.
+ * @param {string} product_id - The ID of the product.
+ * @returns {Promise<Product | ErrorResponse | MessageResponse>} A promise
+ * that resolves to the product data or an error response.
+ */
+export async function getProductById(
+  store_id: string,
+  product_id: string,
+): Promise<Product | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(
+      `${storeURL}/${store_id}/products/${product_id}`,
+    );
+    return response.data;
+  } catch (error) {
+    return errorResponse(Error.toString(), 'api.product.getProductById');
   }
 }
 
