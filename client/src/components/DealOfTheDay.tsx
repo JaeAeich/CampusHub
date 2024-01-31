@@ -22,7 +22,7 @@ export default function DealOfTheDay({trendingOffersProducts, error }:{trendingO
           <CarouselContent>
             {trendingOffersProducts.map((deal) => (
               <CarouselItem key={deal.product_name} className="w-full">
-                <Link to={`/products/${deal.product_id}`}>
+                <Link to={`stores/${deal.store_id}/products/${deal.product_id}/`}>
                   <div className="flex flex-col lg:flex-row w-full">
                     <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-36 my-3">
                       <img src={deal.product_images?deal.product_images[0]:'./noImage.png'} alt={deal.product_name} className="rounded-md h-full mx-auto" />

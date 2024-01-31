@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Product from '@/api/products/types';
+import { getProductById } from '@/api/stores/stores';
 import { products } from '../../app/constants';
 import { Button } from './ui/button';
 import { Carousel, CarouselItem, CarouselContent } from './ui/carousel';
@@ -10,35 +11,51 @@ import NotFound from './NotFound';
 
 export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
-  const { product_id } = useParams();
+  const [errorProduct, setErrorProduct] = useState(false);
+  const { store_id, product_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [current, setCurrent] = useState('/noImage.png');
 
+  // useEffect(() => {
+  //   // Simulated asynchronous data fetching (replace with your actual data fetching logic)
+  //   const fetchProduct = async () => {
+  //     try {
+  //       // Assuming your product data has a property named 'product_id'
+  //       const foundProduct = products.find((prod) => prod.product_id === product_id);
+
+  //       // Simulate delay for loading
+  //       await new Promise<void>((resolve) => {
+  //         setTimeout(() => {
+  //           setProduct(foundProduct || null);
+  //           setIsLoading(false);
+  //           if (foundProduct && foundProduct.product_images) {
+  //             setCurrent(foundProduct.product_images[0]);
+  //           }
+  //           resolve();
+  //         }, 2000);
+  //       });
+  //     } catch (error) {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchProduct();
+  // }, [product_id]);
+
   useEffect(() => {
-    // Simulated asynchronous data fetching (replace with your actual data fetching logic)
-    const fetchProduct = async () => {
-      try {
-        // Assuming your product data has a property named 'product_id'
-        const foundProduct = products.find((prod) => prod.product_id === product_id);
+    async function fetchProductById() {
+        const response = await getProductById(store_id, product_id);
+        if('error' in response){
+          setErrorProduct(true)
+        }else if('product' in response){
+          console.log(response.product)
+          setProduct(response.product);
+          setIsLoading(false);
+        }
+    }
 
-        // Simulate delay for loading
-        await new Promise<void>((resolve) => {
-          setTimeout(() => {
-            setProduct(foundProduct || null);
-            setIsLoading(false);
-            if (foundProduct && foundProduct.product_images) {
-              setCurrent(foundProduct.product_images[0]);
-            }
-            resolve();
-          }, 2000);
-        });
-      } catch (error) {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [product_id]);
+    fetchProductById();
+  }, [store_id, product_id]);
 
   if (isLoading) {
     return (
@@ -58,7 +75,7 @@ export default function ProductPage() {
       <div className="w-full mx-auto px-4 flex flex-col lg:flex-row sm:mx-4 mx-2">
         <div className="w-full lg:flex-1 lg:mx-10">
           <div className="lg:h-[460px] md:h-[400px] h-auto sm:w-[600px] w-full rounded-lg overflow-hidden mx-auto">
-            <img src={current} alt="current" className="w-full h-full object-contain" />
+            <img src={product.product_images.length>0?product.product_images[0]:current} alt="current" className="w-full h-full object-contain" />
           </div>
           <Carousel className="my-10">
             <CarouselContent>
