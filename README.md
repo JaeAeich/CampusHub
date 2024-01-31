@@ -85,6 +85,7 @@ Specify the tag based on your requirements and changelogs. Don't forget to confi
 
 
 > **Note:** Currently we are only rolling server as container.
+
 ## Tech Stack
 
 ### Client
