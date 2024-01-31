@@ -23,6 +23,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import StoreCard from './StoreCard';
 import { stores } from '../../app/constants';
+import NotFound from './NotFound';
 
 function StorePage() {
   const { service_id } = useParams();
@@ -60,7 +61,7 @@ function StorePage() {
     );
   }
   if (service_stores.length === 0) {
-    return <span>Stores not found</span>;
+   return <div className="mx-auto items-center my-auto"><NotFound item="Stores"/></div>
   }
   return (
     <div className="flex lg:flex-row flex-col w-full">

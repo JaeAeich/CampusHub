@@ -13,13 +13,13 @@ export default function TrendingStores({
   error: boolean;
 }) {
   return (
-    <div className="my-2 md:my-4">
+    <div className="my-2 md:my-4 md:mb-15">
       <Container>
         <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Trending
         </h2>
         {error ? (
-          <NotFound item="Trending Stores" />
+          <NotFound item="Trending stores" />
         ) : (
           <Carousel className="w-full" plugins={[Autoplay({ delay: 3000 })]}>
             <CarouselContent>

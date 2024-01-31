@@ -1,43 +1,49 @@
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Product from '@/api/products/types';
 import Autoplay from 'embla-carousel-autoplay';
 import { Link } from 'react-router-dom';
+import NotFound from './NotFound';
 import Container from './ui/container';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { deals } from '../../app/constants';
+// import { deals } from '../../app/constants';
 
-export default function DealOfTheDay() {
+export default function DealOfTheDay({trendingOffersProducts, error }:{trendingOffersProducts: (Product & { discount?: number })[], error: boolean}) {
+  console.log(trendingOffersProducts)
   return (
     <div>
       <Container>
         <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Deals of the Day
         </h2>
+        {error ? (
+          <NotFound item="Trending offers" />
+        ) : (
         <Carousel plugins={[Autoplay({ delay: 6000 })]}>
           <CarouselContent>
-            {deals.map((deal) => (
-              <CarouselItem key={deal.name} className="w-full">
+            {trendingOffersProducts.map((deal) => (
+              <CarouselItem key={deal.product_name} className="w-full">
                 <Link to={`/products/${deal.product_id}`}>
                   <div className="flex flex-col lg:flex-row w-full">
                     <div className="flex-shrink-0 lg:w-1/3 w-full items-center sm:h-40 md:h-60 lg:h-full h-36 my-3">
-                      <img src={deal.image} alt={deal.name} className="rounded-md h-full mx-auto" />
+                      <img src={deal.product_images?deal.product_images[0]:'./noImage.png'} alt={deal.product_name} className="rounded-md h-full mx-auto" />
                     </div>
                     <div className="flex flex-col lg:w-2/3 justify-center xl:px-16 lg:px-3">
                       <h3 className="font-subheading xl:text-xl md:text-xl text-lgg font-bold my-3">
-                        {deal.name}
+                        {deal.product_name}
                       </h3>
                       <p className="font-body  text-md text-darkgray overflow-hidden line-clamp-3">
-                        {deal.desc}
+                        {deal.product_description}
                       </p>
                       <div className="lg:flex-col flex-row lg:justify-left">
                         <div className="flex flex-row items-center py-2">
                           <p className="font-helvetica flex xl:text-2xl text-xl font-bold text-accent pr-2">
                             &#8377;
-                            {deal.discountedCost}
+                            {deal.discount}
                           </p>
                           <p className="font-helvetica flex text-primary xl:text-lg text-md line-through">
                             &#8377;
-                            {deal.originalCost}
+                            {deal.product_cost}
                           </p>
                         </div>
 
@@ -77,7 +83,7 @@ export default function DealOfTheDay() {
               </CarouselItem>
             ))}
           </CarouselContent>
-        </Carousel>
+        </Carousel>)}
       </Container>
     </div>
   );

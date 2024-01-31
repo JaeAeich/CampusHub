@@ -23,6 +23,7 @@ import { Slider } from '@/components/ui/slider';
 import Product from '@/api/products/types';
 import { products } from '../../app/constants';
 import ProductCard from './ProductCard';
+import NotFound from './NotFound';
 
 function ProductsPage() {
   const { store_id } = useParams();
@@ -63,7 +64,7 @@ function ProductsPage() {
   }
 
   if (store_products.length === 0) {
-    return <span>Products not found</span>;
+    return <div className="mx-auto items-center my-auto"><NotFound item="Products"/></div>
   }
 
   const clearFilter = () => {

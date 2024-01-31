@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { Carousel, CarouselItem, CarouselContent } from './ui/carousel';
 import Stars from './Stars';
 import { Badge } from './ui/badge';
+import NotFound from './NotFound';
 
 export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -49,7 +50,7 @@ export default function ProductPage() {
   }
 
   if (!product) {
-    return <span>Product not found</span>;
+    return <div className="mx-auto items-center my-auto"><NotFound item="Product"/></div>
   }
 
   return (
