@@ -9,7 +9,6 @@ import { Badge } from './ui/badge';
 // import { deals } from '../../app/constants';
 
 export default function DealOfTheDay({trendingOffersProducts, error }:{trendingOffersProducts: (Product & { discount?: number })[], error: boolean}) {
-  console.log(trendingOffersProducts)
   return (
     <div>
       <Container>

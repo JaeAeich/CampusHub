@@ -7,6 +7,7 @@ import Product from '@/api/products/types';
 import Stars from './Stars';
 
 function ProductCard({ product }: { product: Product }) {
+  console.log(product.rating)
   const { product_id, product_images, product_name, rating, product_cost } = product;
   // const { toast } = useToast();
   return (

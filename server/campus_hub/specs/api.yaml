@@ -1074,6 +1074,9 @@ components:
             type: string
         offer_id: 
           type: string
+        rating:
+          type: number
+          format: float
       required:
         - product_categories
         - product_name

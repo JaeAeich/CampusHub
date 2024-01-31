@@ -17,6 +17,7 @@ class Product(BaseModel):
         product_description: Description of the product.
         stock: Available quantity of the product.
         product_specifications: Dictionary of product specifications.
+        rating: Rating of the product
     """
 
     product_id: str
@@ -30,7 +31,7 @@ class Product(BaseModel):
     stock: int
     product_specifications: Optional[Dict]
     offer_id: str
-
+    rating: float
 
 class ProductList(BaseModel):
     """
