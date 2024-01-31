@@ -31,7 +31,7 @@ def get_products(service_id, store_id, max_rating, min_rating, category) -> APIR
         query["rating"] = {"$gte": min_rating}
     if category:
         query["category"] = {"$in": category}
-    
+
     projection = {"_id": False}
 
     try:
@@ -52,12 +52,15 @@ def get_products(service_id, store_id, max_rating, min_rating, category) -> APIR
             )
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, products=[product.model_dump() for product in products])
+        return response(
+            Status.SUCCESS, products=[product.model_dump() for product in products]
+        )
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
+
 
 def get_reviews_by_product_id(product_id) -> APIResponse:
     """
@@ -81,7 +84,8 @@ def get_reviews_by_product_id(product_id) -> APIResponse:
         # If there are no products, return 404 error
         if not _reviews or len(_reviews) == 0:
             return response(
-                Status.NOT_FOUND, **message("No reviews found for the product in the database.")
+                Status.NOT_FOUND,
+                **message("No reviews found for the product in the database."),
             )
 
         try:
@@ -93,12 +97,15 @@ def get_reviews_by_product_id(product_id) -> APIResponse:
             )
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, reviews=[review.model_dump() for review in reviews])
+        return response(
+            Status.SUCCESS, reviews=[review.model_dump() for review in reviews]
+        )
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
+
 
 def get_product_cost(product_id) -> APIResponse:
     """
@@ -132,15 +139,16 @@ def get_product_cost(product_id) -> APIResponse:
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
 
-        cost : float = products.product_cost
+        cost: float = products.product_cost
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, cost = cost)
+        return response(Status.SUCCESS, cost=cost)
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
+
 
 def get_range_of_cost_in_store(store_id) -> APIResponse:
     """
@@ -150,9 +158,9 @@ def get_range_of_cost_in_store(store_id) -> APIResponse:
     Returns:
         Flask response: JSON response containing the list of products.
     """
-    
+
     products_collection_name = db_connector.db["products"]
-    
+
     # Query without including _id field in the result
     query: dict = {}
 
@@ -160,16 +168,19 @@ def get_range_of_cost_in_store(store_id) -> APIResponse:
         query["store_id"] = store_id
 
     try:
-        max_cost = products_collection_name.find(query).sort("product_cost", -1).limit(1)
+        max_cost = (
+            products_collection_name.find(query).sort("product_cost", -1).limit(1)
+        )
         min_cost = products_collection_name.find(query).sort("product_cost", 1).limit(1)
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, max_cost = max_cost, min_cost = min_cost)
+        return response(Status.SUCCESS, max_cost=max_cost, min_cost=min_cost)
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
+
 
 def search_products(str_query, service_id) -> APIResponse:
     """
@@ -212,7 +223,9 @@ def search_products(str_query, service_id) -> APIResponse:
             )
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, products=[product.model_dump() for product in products])
+        return response(
+            Status.SUCCESS, products=[product.model_dump() for product in products]
+        )
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

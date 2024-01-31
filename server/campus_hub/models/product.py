@@ -12,11 +12,12 @@ class Product(BaseModel):
         product_name: Name of the product.
         store_id: Identifier for the store associated with the product.
         service_id: Identifier for the store associated with the product.
-        product_image: Image reference of the product.
+        product_images: Image reference of the product.
         product_cost: Cost of the product.
         product_description: Description of the product.
-        stocks: Available quantity of the product.
+        stock: Available quantity of the product.
         product_specifications: Dictionary of product specifications.
+        rating: Rating of the product
     """
 
     product_id: str
@@ -24,12 +25,13 @@ class Product(BaseModel):
     product_name: str
     store_id: str
     service_id: str
-    product_image: List[str]
+    product_images: List[str]
     product_cost: float
     product_description: Optional[str]
-    stocks: int
+    stock: int
     product_specifications: Optional[Dict]
     offer_id: str
+    rating: float
 
 
 class ProductList(BaseModel):

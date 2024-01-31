@@ -41,6 +41,7 @@ class Store(BaseModel):
     overall_rating: Optional[float]
     offer_available: Optional[bool]
 
+
 class StoreList(BaseModel):
     """
     Pydantic model representing list of store.
