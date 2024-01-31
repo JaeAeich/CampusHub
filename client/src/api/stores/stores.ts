@@ -62,10 +62,13 @@ export async function getStoreById(
  * that resolves to the product data or an error response.
  */
 export async function getProductById(
-  store_id: string, product_id: string
+  store_id: string,
+  product_id: string,
 ): Promise<Product | ErrorResponse | MessageResponse> {
   try {
-    const response: AxiosResponse = await axios.get(`${storeURL}/${store_id}/products/${product_id}`);
+    const response: AxiosResponse = await axios.get(
+      `${storeURL}/${store_id}/products/${product_id}`,
+    );
     return response.data;
   } catch (error) {
     return errorResponse(Error.toString(), 'api.product.getProductById');

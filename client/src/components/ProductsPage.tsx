@@ -34,38 +34,16 @@ function ProductsPage() {
   const [sliderValue, setSliderValue] = useState([500]);
   const [selectedRating, setSelectedRating] = useState(0);
 
-  // useEffect(() => {
-  //   // Simulated asynchronous data fetching (replace with your actual data fetching logic)
-  //   const fetchProducts = async () => {
-  //     try {
-  //       // Assuming your products data has a property named 'store_id'
-  //       const filteredProducts = products.filter((product) => product.store_id === store_id);
-  //       // Simulate delay for loading
-  //       await new Promise((resolve) => {
-  //         setTimeout(resolve, 2000);
-  //       });
-
-  //       setProducts(filteredProducts);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       // console.error('Error fetching products:', error);
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, [store_id]);
-
   useEffect(() => {
     async function fetchProductsByStoreId() {
-        const response = await getProductsByStoreId(store_id);
-        if('error' in response){
-          setErrorProducts(true)
-        }else if('products' in response){
-          console.log(response.products)
-          setProducts(response.products);
-          setIsLoading(false);
-        }
+      const response = await getProductsByStoreId(store_id);
+      if ('error' in response) {
+        setErrorProducts(true);
+        setIsLoading(false);
+      } else if ('products' in response) {
+        setProducts(response.products);
+        setIsLoading(false);
+      }
     }
 
     fetchProductsByStoreId();
@@ -80,8 +58,12 @@ function ProductsPage() {
     );
   }
 
-  if (store_products.length === 0) {
-    return <div className="mx-auto items-center my-auto"><NotFound item="Products"/></div>
+  if (store_products.length === 0 || errorProducts) {
+    return (
+      <div className="mx-auto items-center my-auto">
+        <NotFound item="Products" />
+      </div>
+    );
   }
 
   const clearFilter = () => {

@@ -33,6 +33,7 @@ class Product(BaseModel):
     offer_id: str
     rating: float
 
+
 class ProductList(BaseModel):
     """
     Pydantic model representing a list of products.

@@ -111,16 +111,16 @@ def add_store(seller_id) -> APIResponse:
 
     projection = {"_id": False}
 
-
     try:
         # NOTE: Check if seller exists
-        _sellers = db_connector.query_data(sellers_collection_name, seller_query, projection)
+        _sellers = db_connector.query_data(
+            sellers_collection_name, seller_query, projection
+        )
 
         # If there are no sellers, return 404 error
         if not _sellers or len(_sellers) == 0:
-
             return response(Status.NOT_FOUND, **message("seller does not exist."))
-        
+
         # Check if request.json is not None before assignment
         if request_json is not None:
             store_data: MutableMapping[Any, Any] = request_json
@@ -144,12 +144,14 @@ def add_store(seller_id) -> APIResponse:
         # NOTE: This is done after validation to ensure that the service_id is present in the request
         services_collection_name = "services"
         service_query: dict = {"service_id": request_json["service_id"]}
-        _services = db_connector.query_data(services_collection_name, service_query, projection)
+        _services = db_connector.query_data(
+            services_collection_name, service_query, projection
+        )
 
         # If there are no services, return 404 error
         if not _services or len(_services) == 0:
             return response(Status.NOT_FOUND, **message("service does not exist."))
-        
+
         # Add the store data to the database
         try:
             db_connector.insert_data(sellers_collection_name, store.model_dump())

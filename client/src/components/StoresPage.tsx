@@ -18,38 +18,33 @@ import { Star } from 'lucide-react';
 import Store from '@/api/stores/types';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { getStoresByServiceId } from '@/api/services/services';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import StoreCard from './StoreCard';
-import { stores } from '../../app/constants';
+// import { stores } from '../../app/constants';
 import NotFound from './NotFound';
 
 function StorePage() {
   const { service_id } = useParams();
   const [service_stores, setStores] = useState<Store[]>([]);
+  const [errorStores, setErrorStores] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulated asynchronous data fetching (replace with your actual data fetching logic)
-    const fetchStores = async () => {
-      try {
-        // Assuming your store data has a property named 'service_id'
-        const filteredStores = stores.filter((store) => store.service_id === service_id);
-        // Simulate delay for loading
-        await new Promise((resolve) => {
-          setTimeout(resolve, 2000);
-        });
-
-        setStores(filteredStores);
+    async function fetchStoresByServiceId() {
+      const response = await getStoresByServiceId(service_id);
+      if ('error' in response) {
+        setErrorStores(true);
         setIsLoading(false);
-      } catch (error) {
-        // console.error('Error fetching stores:', error);
+      } else if ('stores' in response) {
+        setStores(response.stores);
         setIsLoading(false);
       }
-    };
+    }
 
-    fetchStores();
+    fetchStoresByServiceId();
   }, [service_id]);
 
   if (isLoading) {
@@ -60,8 +55,12 @@ function StorePage() {
       </div>
     );
   }
-  if (service_stores.length === 0) {
-   return <div className="mx-auto items-center my-auto"><NotFound item="Stores"/></div>
+  if (service_stores.length === 0 || errorStores) {
+    return (
+      <div className="mx-auto items-center my-auto">
+        <NotFound item="Stores" />
+      </div>
+    );
   }
   return (
     <div className="flex lg:flex-row flex-col w-full">
