@@ -36,13 +36,15 @@ function ProductsPage() {
 
   useEffect(() => {
     async function fetchProductsByStoreId() {
-      const response = await getProductsByStoreId(store_id);
-      if ('error' in response) {
-        setErrorProducts(true);
-        setIsLoading(false);
-      } else if ('products' in response) {
-        setProducts(response.products);
-        setIsLoading(false);
+      if (store_id !== undefined) {
+        const response = await getProductsByStoreId(store_id);
+        if ('error' in response) {
+          setErrorProducts(true);
+          setIsLoading(false);
+        } else if ('products' in response) {
+          setProducts(response.products);
+          setIsLoading(false);
+        }
       }
     }
 

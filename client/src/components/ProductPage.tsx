@@ -17,13 +17,16 @@ export default function ProductPage() {
 
   useEffect(() => {
     async function fetchProductById() {
-      const response = await getProductById(store_id, product_id);
-      if ('error' in response) {
-        setErrorProduct(true);
-        setIsLoading(false);
-      } else if ('product' in response) {
-        setProduct(response.product);
-        setIsLoading(false);
+      if (store_id !== undefined && product_id !== undefined) {
+        const response = await getProductById(store_id, product_id);
+
+        if ('error' in response) {
+          setErrorProduct(true);
+          setIsLoading(false);
+        } else if ('product' in response) {
+          setProduct(response.product as Product);
+          setIsLoading(false);
+        }
       }
     }
 

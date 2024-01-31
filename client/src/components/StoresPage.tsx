@@ -34,13 +34,15 @@ function StorePage() {
 
   useEffect(() => {
     async function fetchStoresByServiceId() {
-      const response = await getStoresByServiceId(service_id);
-      if ('error' in response) {
-        setErrorStores(true);
-        setIsLoading(false);
-      } else if ('stores' in response) {
-        setStores(response.stores);
-        setIsLoading(false);
+      if (service_id !== undefined) {
+        const response = await getStoresByServiceId(service_id);
+        if ('error' in response) {
+          setErrorStores(true);
+          setIsLoading(false);
+        } else if ('stores' in response) {
+          setStores(response.stores);
+          setIsLoading(false);
+        }
       }
     }
 
