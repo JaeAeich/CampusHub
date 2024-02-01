@@ -1,8 +1,8 @@
 import { ErrorResponse } from "react-router-dom";
-import { MessageResponse } from "../types";
 import axios, { AxiosResponse } from "axios";
-import baseURL from "../config";
 import errorResponse from "@/utils/response";
+import { MessageResponse } from "../types";
+import baseURL from "../config";
 import Product from "./types";
 
 /**
@@ -10,7 +10,13 @@ import Product from "./types";
  */
 const productsURL = `${baseURL}/products`;
 
-export async function getProductsByQuery(
+/**
+ * Fetches all products based on search query.
+ * 
+ * @param query - The search query.
+ * @returns {Promise<{ products: Product[] } | ErrorResponse | MessageResponse>} A promise
+ */
+export default async function getProductsByQuery(
     query: string,
 ): Promise<{ products: Product[] } | MessageResponse | ErrorResponse> {
     try {

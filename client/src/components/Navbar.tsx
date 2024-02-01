@@ -25,8 +25,8 @@ import {
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
 import { useDispatch } from 'react-redux';
+import getProductsByQuery from '@/api/products/products';
 import ProfileButton from './ProfileButton';
-import { getProductsByQuery } from '@/api/products/products';
 import { services } from '../../app/constants';
 import { authenticated } from '../store/auth/authSlice';
 
