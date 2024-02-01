@@ -30,6 +30,7 @@ module.exports = {
       '2xl': '1.777rem',
       '3xl': '2.369rem',
       '4xl': '3.158rem',
+      '4xll': '3.6rem',
       '5xl': '4.210rem',
     },
     fontFamily: {
