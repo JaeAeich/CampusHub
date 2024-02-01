@@ -6,22 +6,25 @@ import Footer from './components/Footer';
 import ProductsPage from './components/ProductsPage';
 import ProductPage from './components/ProductPage';
 import StorePage from './components/StoresPage';
+import Login from './components/Login';
 
 function App() {
+  const isVisible = !window.location.pathname.includes('/login');
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
-        <Navbar />
+        {isVisible && <Navbar />}
         <div className="flex grow">
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
             <Route path="/services/:service_id/stores" element={<StorePage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>
-        <Footer />
+        {isVisible && <Footer />}
       </div>
     </BrowserRouter>
   );
