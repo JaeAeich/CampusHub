@@ -226,17 +226,46 @@ export async function addProduct(
 }
 
 /**
- * Exports the store API functions.
+ * Updates a product in the store.
+ *
+ * @param {string} store_id - The ID of the store.
+ * @param {string} product_id - The ID of the product to be updated.
+ * @param {Product} product - The updated product information.
+ * @returns {Promise<IdResponse | ErrorResponse | MessageResponse>} A promise resolving to the response data.
  */
-export default {
-  getTrendingStore,
-  getStoreById,
-  getOffersByStoreId,
-  getReviewsByStoreId,
-  getOrdersByStoreId,
-  getProductsByStoreId,
-  updateStore,
-  deleteStore,
-  addOffer,
-  addProduct,
-};
+export async function updateProduct(
+  store_id: string,
+  product_id: string,
+  product: Product,
+): Promise<IdResponse | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.put(
+      `${storeURL}/${store_id}/products/${product_id}`,
+      product,
+    );
+    return response.data;
+  } catch (error) {
+    return errorResponse(Error.toString(), 'api.store.updateProduct');
+  }
+}
+
+/**
+ * Deletes a product from the store.
+ *
+ * @param {string} store_id - The ID of the store.
+ * @param {string} product_id - The ID of the product to be deleted.
+ * @returns {Promise<IdResponse | ErrorResponse | MessageResponse>} A promise resolving to the response data.
+ */
+export async function deleteProduct(
+  store_id: string,
+  product_id: string,
+): Promise<IdResponse | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.delete(
+      `${storeURL}/${store_id}/products/${product_id}`,
+    );
+    return response.data;
+  } catch (error) {
+    return errorResponse(Error.toString(), 'api.store.deleteProduct');
+  }
+}
