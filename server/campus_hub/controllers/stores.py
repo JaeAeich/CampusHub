@@ -64,7 +64,7 @@ def get_trending_stores() -> APIResponse:
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     try:
         # aggregate pipeline
-        _pipeline : Sequence[Mapping[str, Any]] = [
+        _pipeline: Sequence[Mapping[str, Any]] = [
             {
                 "$addFields": {
                     "created_at": {"$dateFromString": {"dateString": "$created_at"}}
@@ -262,7 +262,7 @@ def get_orders_by_store_id(store_id) -> APIResponse:
                     Status.INTERNAL_SERVER_ERROR,
                     **message(f"Invalid order data in DB: {str(e)}"),
                 )
-            
+
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -522,6 +522,7 @@ def add_product(store_id: str) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
+
 def get_product_by_id(store_id, product_id) -> APIResponse:
     """
     Get details of a product by its product_id from the MongoDB database.
@@ -559,7 +560,9 @@ def get_product_by_id(store_id, product_id) -> APIResponse:
         if product.store_id != store_id:
             return response(
                 Status.NOT_FOUND,
-                **message(f"product with product_id {product_id} does not exist in store with store_id {store_id}."),
+                **message(
+                    f"product with product_id {product_id} does not exist in store with store_id {store_id}."
+                ),
             )
 
         # If products are found, return a JSON response
@@ -570,6 +573,7 @@ def get_product_by_id(store_id, product_id) -> APIResponse:
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
 
+
 def update_product(product_id, request_data) -> APIResponse:
     """
     Updates a product in the MongoDB database.
@@ -578,8 +582,8 @@ def update_product(product_id, request_data) -> APIResponse:
         request_data (dict): The request body
     Returns:
         Flask response: JSON response containing the updated product.
-    """ 
-    
+    """
+
     products_collection_name = "products"
     request_json = request_data.get_json()
 
@@ -589,11 +593,15 @@ def update_product(product_id, request_data) -> APIResponse:
     try:
         # Check if request.json is not None before assignment
         if request_json is not None:
-            if "product_id" in request_json and request_json["product_id"] == product_id:
+            if (
+                "product_id" in request_json
+                and request_json["product_id"] == product_id
+            ):
                 product_data: MutableMapping[Any, Any] = request_json
             else:
                 return response(
-                    Status.BAD_REQUEST, **message("Query and request product_id mismatch")
+                    Status.BAD_REQUEST,
+                    **message("Query and request product_id mismatch"),
                 )
         else:
             # Handle the case when request.json is None
@@ -610,7 +618,9 @@ def update_product(product_id, request_data) -> APIResponse:
 
         # Update the product data to the database
         try:
-            db_connector.update_data(products_collection_name, query, product.model_dump())
+            db_connector.update_data(
+                products_collection_name, query, product.model_dump()
+            )
         except LookupError as e:
             return response(
                 Status.NOT_FOUND, **message(f"product does not exist: {str(e)}")
@@ -620,7 +630,7 @@ def update_product(product_id, request_data) -> APIResponse:
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Internal Server Error: {str(e)}"),
             )
-        
+
         # Return a success response
         return response(Status.SUCCESS, **{"id": product_id})
     except Exception as e:
@@ -628,6 +638,7 @@ def update_product(product_id, request_data) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
+
 
 def delete_product(product_id) -> APIResponse:
     """

@@ -21,44 +21,51 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import Product from '@/api/products/types';
-import { products } from '../../app/constants';
+import { getProductsByStoreId } from '@/api/stores/stores';
+// import { products } from '../../app/constants';
 import ProductCard from './ProductCard';
+import NotFound from './NotFound';
 
 function ProductsPage() {
   const { store_id } = useParams();
   const [store_products, setProducts] = useState<Product[]>([]);
+  const [errorProducts, setErrorProducts] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sliderValue, setSliderValue] = useState([500]);
   const [selectedRating, setSelectedRating] = useState(0);
 
   useEffect(() => {
-    // Simulated asynchronous data fetching (replace with your actual data fetching logic)
-    const fetchProducts = async () => {
-      try {
-        // Assuming your products data has a property named 'store_id'
-        const filteredProducts = products.filter((product) => product.store_id === store_id);
-        // Simulate delay for loading
-        await new Promise((resolve) => {
-          setTimeout(resolve, 2000);
-        });
-
-        setProducts(filteredProducts);
-        setIsLoading(false);
-      } catch (error) {
-        // console.error('Error fetching products:', error);
-        setIsLoading(false);
+    async function fetchProductsByStoreId() {
+      if (store_id !== undefined) {
+        const response = await getProductsByStoreId(store_id);
+        if ('error' in response) {
+          setErrorProducts(true);
+          setIsLoading(false);
+        } else if ('products' in response) {
+          setProducts(response.products);
+          setIsLoading(false);
+        }
       }
-    };
+    }
 
-    fetchProducts();
+    fetchProductsByStoreId();
   }, [store_id]);
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return (
+      <div className="h-auto my-auto mx-auto justify-center items-center">
+        {/* <div className="w-12 h-12 rounded-full animate-spin border-x-4 border-solid border-accent border-t-transparent" /> */}
+        <img src="/loading.gif" alt="" className="opacity-70" />
+      </div>
+    );
   }
 
-  if (!store_products) {
-    return <span>Products not found</span>;
+  if (store_products.length === 0 || errorProducts) {
+    return (
+      <div className="mx-auto items-center my-auto">
+        <NotFound item="Products" />
+      </div>
+    );
   }
 
   const clearFilter = () => {

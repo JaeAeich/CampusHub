@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.0.2
+  version: 1.0.3
 servers:
   - url: /campus_hub/v1
 tags:
@@ -1057,7 +1057,7 @@ components:
           type: string
         service_id:
           type: string
-        product_image:
+        product_images:
           type: array
           items:
             type: string
@@ -1066,7 +1066,7 @@ components:
           format: float
         product_description:
           type: string
-        stocks:
+        stock:
           type: integer
         product_specifications:
           type: object
@@ -1074,13 +1074,16 @@ components:
             type: string
         offer_id: 
           type: string
+        rating:
+          type: number
+          format: float
       required:
         - product_categories
         - product_name
         - store_id
         - service_id
         - product_cost
-        - stocks
+        - stock
     ProductList:
       type: object
       properties:
