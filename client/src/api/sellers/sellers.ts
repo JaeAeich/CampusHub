@@ -56,7 +56,7 @@ export async function add_store(
   store: Store,
 ): Promise<ErrorResponse | MessageResponse> {
   try {
-    const response: AxiosResponse = await axios.put(`${baseURL}/${seller_id}/store`, store);
+    const response: AxiosResponse = await axios.put(`${baseURL}/seller/${seller_id}/store`, store);
     return response.data;
   } catch (error: unknown) {
     return errorResponse(error, 'api.sellers.updateSeller');
