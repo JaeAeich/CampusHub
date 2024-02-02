@@ -56,7 +56,7 @@ export default function Landing() {
         setErrorTrendingOffer(true);
       } else if ('offers' in response) {
         setTrendingOffersid(response.offers);
-        setLoaded2(true)
+        setLoaded2(true);
       }
     }
 
@@ -93,7 +93,7 @@ export default function Landing() {
     fetchTrendingOffersProducts();
   }, [trendingOffersid]);
 
-  if(!(loaded1&&loaded2&&loaded3)){
+  if (!(loaded1 && loaded2 && loaded3)) {
     return (
       <div className="h-auto my-auto mx-auto justify-center items-center">
         <img src="/loading.gif" alt="" className="opacity-70" />
@@ -102,7 +102,7 @@ export default function Landing() {
   }
 
   return (
-    <div className='mx-auto w-full sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out'>
+    <div className="mx-auto w-full sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out">
       <TrendingStores trendingStores={trendingStores} error={errorTrendingStore} />
       <DealOfTheDay trendingOffersProducts={trendingOffersProducts} error={errorTrendingOffer} />
       <ServiceCards services={services} error={errorService} />

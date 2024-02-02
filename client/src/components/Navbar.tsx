@@ -25,6 +25,8 @@ import {
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 
+// TODO: ADD ID AFTER AUTH
+const user_id = 1;
 const routes = [
   {
     to: '/',
@@ -34,18 +36,17 @@ const routes = [
     })),
   },
   {
-    //TODO: ADD USER_ID AFTER AUTH
-    to: `/users/user_id`,
+    to: `/users/${user_id}/details`,
     label: 'My Account',
     content: null,
   },
   {
-    to: '/',
+    to: `/users/${user_id}/wishlist`,
     label: 'Wishlist',
     content: null,
   },
   {
-    to: '/',
+    to: `/users/${user_id}/orders`,
     label: 'Past Orders',
     content: null,
   },

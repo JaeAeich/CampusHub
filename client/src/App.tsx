@@ -17,7 +17,9 @@ function App() {
         {isVisible && <Navbar />}
         <div className="flex grow">
           <Routes>
-            <Route path="/users/:user_id" element={<UserProfile />} />
+            <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
+            <Route path="/users/:user_id/wishlist" element={<UserProfile active="wishlist" />} />
+            <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
             <Route path="/" element={<Landing />} />
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />

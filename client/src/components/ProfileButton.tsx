@@ -10,18 +10,24 @@ import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
 
+// TODO: ADD ID AFTER AUTH
+const user_id = 1;
 const routes = [
   {
-    to: 'profile',
+    to: `/users/${user_id}/details`,
     label: 'Profile',
   },
   {
-    to: 'Wishlist',
-    label: 'wishlist',
+    to: `/users/${user_id}/wishlist`,
+    label: 'Wishlist',
   },
   {
-    to: 'settings',
-    label: 'Setting',
+    to: `/users/${user_id}/orders`,
+    label: 'Past Orders',
+  },
+  {
+    to: '/',
+    label: 'Notifications',
   },
 ];
 
