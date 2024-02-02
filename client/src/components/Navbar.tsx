@@ -76,7 +76,7 @@ function Navbar() {
                 <div className="flex flex-row items-center">
                   <Avatar>
                     {isAuthenticated ? (
-                      <AvatarImage src={user.picture} />
+                      <AvatarImage src={user && user.picture} />
                     ) : (
                       <AvatarFallback>
                         <Cat />
