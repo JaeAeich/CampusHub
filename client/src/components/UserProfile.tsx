@@ -1,14 +1,20 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AccountDetails from './AccountDetails';
 import Wishlist from './Wishlist';
 import PastOrders from './PastOrders';
 import { Button } from './ui/button';
 
+const user_id = 1;
+
 function UserProfile({ active }: { active: string }) {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(active);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
+    navigate(tab); // Navigate to the selected tab route
+    window.location.reload();
   };
 
   return (
@@ -18,11 +24,12 @@ function UserProfile({ active }: { active: string }) {
           <h2 className="pl-3 mb-4 text-xl font-bold font-heading md:justify-left md:mx-0 justify-center mx-auto">
             My Account
           </h2>
+          {/* //TODO: USER_ID IS HARDCODED */}
           <Button
             className={`flex  hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border rounded-full ${
               activeTab === 'account' ? 'bg-accent text-background' : ''
             }`}
-            onClick={() => handleTabClick('account')}
+            onClick={() => handleTabClick(`/users/${user_id}/details`)}
           >
             Account Details
           </Button>
@@ -30,7 +37,7 @@ function UserProfile({ active }: { active: string }) {
             className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border rounded-full ${
               activeTab === 'wishlist' ? 'bg-accent text-background' : ''
             }`}
-            onClick={() => handleTabClick('wishlist')}
+            onClick={() => handleTabClick(`/users/${user_id}/wishlist`)}
           >
             Wishlist
           </Button>
@@ -38,7 +45,7 @@ function UserProfile({ active }: { active: string }) {
             className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border rounded-full ${
               activeTab === 'orders' ? 'bg-accent text-background' : ''
             }`}
-            onClick={() => handleTabClick('orders')}
+            onClick={() => handleTabClick(`/users/${user_id}/orders`)}
           >
             Past Orders
           </Button>

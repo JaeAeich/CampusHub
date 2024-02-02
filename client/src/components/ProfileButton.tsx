@@ -8,9 +8,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-// TODO: ADD ID AFTER AUTH
 const user_id = 1;
 const routes = [
   {
@@ -32,9 +31,12 @@ const routes = [
 ];
 
 function ProfileButton() {
-  // TODO: add different dropdown based on if user is logged in or not
-  // TODO: get user and add its
-  const handleLogOut = () => {};
+  const navigate = useNavigate();
+
+  const handleClick = (link: string) => {
+    navigate(link);
+    window.location.reload();
+  };
 
   return (
     <DropdownMenu>
@@ -47,18 +49,21 @@ function ProfileButton() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {/* TODO: replace My Account with User.name */}
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {routes.map((route) => (
-          <DropdownMenuItem key={route.to} className="cursor-pointer">
-            <Link to={route.to}>{route.label}</Link>
+          <DropdownMenuItem
+            key={route.to}
+            className="cursor-pointer py-2 px-2 text-smm font-medium"
+          >
+            <Link to={route.to} onClick={() => handleClick(route.to)}>
+              {route.label}
+            </Link>
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        {/* TODO: add func to clear use form cash and redirect to '/' */}
-        <DropdownMenuItem className="cursor-pointer">
-          <Link to="/" onClick={handleLogOut}>
+        <DropdownMenuItem className="cursor-pointer text-red-700 font-bold">
+          <Link to="/" className="text-smm">
             Log Out
           </Link>
         </DropdownMenuItem>
