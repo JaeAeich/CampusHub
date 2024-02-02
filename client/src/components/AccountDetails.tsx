@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Select,
   SelectContent,
@@ -122,7 +121,7 @@ function AccountDetails() {
               </label>
               <textarea
                 id="address"
-                rows="4"
+                rows={4}
                 className="block p-2.5 w-full text-sm text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary "
                 placeholder="Address 1"
               />

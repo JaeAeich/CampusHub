@@ -4,10 +4,10 @@ import Wishlist from './Wishlist';
 import PastOrders from './PastOrders';
 import { Button } from './ui/button';
 
-function UserProfile({active}:{active: string}) {
+function UserProfile({ active }: { active: string }) {
   const [activeTab, setActiveTab] = useState(active);
 
-  const handleTabClick = (tab) => {
+  const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 
