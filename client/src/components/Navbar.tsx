@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Menu, ShoppingCart, Search, Cat, Plus, Minus } from 'lucide-react';
@@ -53,15 +54,12 @@ const routes = [
     label: 'Notifications',
     content: null,
   },
-  {
-    to: '/',
-    label: 'Log Out',
-    content: null,
-  },
 ];
 
 function Navbar() {
   const [searchValue, setSearchValue] = useState('');
+  const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+
   const handleSearch = () => {
     // TODO: add search functionality
   };
@@ -77,14 +75,17 @@ function Navbar() {
               <SheetContent side="left" className="w-[300px] sm:w-[400px] gap-2">
                 <div className="flex flex-row items-center">
                   <Avatar>
-                    <AvatarImage src="" />
-                    <AvatarFallback>
-                      <Cat />
-                    </AvatarFallback>
+                    {isAuthenticated ? (
+                      <AvatarImage src={user && user.picture} />
+                    ) : (
+                      <AvatarFallback>
+                        <Cat />
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                   <div className="flex flex-col justify-left m-1 ml-2">
                     {/* // TODO: Add name and address of user. */}
-                    <p className="flex font-subheading font-bold">Hi, User</p>
+                    <p className="flex font-subheading font-bold">Hi, {user?.name}</p>
                     <p className="flex font-subheading">Delivering to your address.</p>
                   </div>
                 </div>
@@ -118,6 +119,15 @@ function Navbar() {
                           <Separator />
                         </>
                       ),
+                    )}
+                    {isAuthenticated ? (
+                      <Button variant="destructive" className="w-full" onClick={() => logout()}>
+                        Logout
+                      </Button>
+                    ) : (
+                      <Button className="w-full bg-accent" onClick={() => loginWithRedirect()}>
+                        Login
+                      </Button>
                     )}
                   </Accordion>
                 </nav>
