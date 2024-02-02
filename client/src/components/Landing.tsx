@@ -18,6 +18,9 @@ export default function Landing() {
   const [trendingOffersid, setTrendingOffersid] = useState<Offers[]>([]);
   const [errorTrendingOffer, setErrorTrendingOffer] = useState(false);
   const [trendingOffersProducts, setTrendingOffersProducts] = useState<Product[]>([]);
+  const [loaded1, setLoaded1] = useState(false);
+  const [loaded2, setLoaded2] = useState(false);
+  const [loaded3, setLoaded3] = useState(false);
 
   useEffect(() => {
     async function fetchServices() {
@@ -39,6 +42,7 @@ export default function Landing() {
         setErrorTrendingStore(true);
       } else if ('stores' in response) {
         setTrendingStores(response.stores);
+        setLoaded1(true);
       }
     }
 
@@ -52,6 +56,7 @@ export default function Landing() {
         setErrorTrendingOffer(true);
       } else if ('offers' in response) {
         setTrendingOffersid(response.offers);
+        setLoaded2(true)
       }
     }
 
@@ -82,13 +87,22 @@ export default function Landing() {
       );
 
       setTrendingOffersProducts(updatedTrendingOffersProducts);
+      setLoaded3(true);
     };
 
     fetchTrendingOffersProducts();
   }, [trendingOffersid]);
 
+  if(!(loaded1&&loaded2&&loaded3)){
+    return (
+      <div className="h-auto my-auto mx-auto justify-center items-center">
+        <img src="/loading.gif" alt="" className="opacity-70" />
+      </div>
+    );
+  }
+
   return (
-    <div className="mx-auto w-full sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl">
+    <div className='mx-auto w-full sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out'>
       <TrendingStores trendingStores={trendingStores} error={errorTrendingStore} />
       <DealOfTheDay trendingOffersProducts={trendingOffersProducts} error={errorTrendingOffer} />
       <ServiceCards services={services} error={errorService} />

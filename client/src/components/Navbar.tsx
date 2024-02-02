@@ -34,7 +34,8 @@ const routes = [
     })),
   },
   {
-    to: '/',
+    //TODO: ADD USER_ID AFTER AUTH
+    to: `/users/user_id`,
     label: 'My Account',
     content: null,
   },
