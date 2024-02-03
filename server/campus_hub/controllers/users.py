@@ -4,6 +4,7 @@ from flask import request
 from typing import Any, MutableMapping
 from campus_hub.models.user import User
 from pydantic import ValidationError
+from pymongo.errors import PyMongoError
 
 
 def add_user() -> APIResponse:
@@ -55,7 +56,7 @@ def add_user() -> APIResponse:
 
         # Add the user to the database
         try:
-            db_connector.insert_data(users_collection_name, user.dict())
+            db_connector.insert_data(users_collection_name, user.model_dump())
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR, **message(f"Failed to add user: {str(e)}")
@@ -101,4 +102,87 @@ def get_user_by_id(user_id: str) -> APIResponse:
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Failed to get user: {str(e)}")
+        )
+
+
+def update_user_by_id(user_id: str):
+    """
+    Update a user in the database using the user ID.
+
+    Args:
+        user_id (str): Unique identifier for the user.
+
+    Returns:
+        Flask response: Response containing the user data
+    """
+
+    users_collection_name = "users"
+    request_json = request.json
+    query: dict = {"user_id": user_id}
+
+    try:
+        if request_json is not None:
+            if ("user_id" in request_json) and (request_json["user_id"] != user_id):
+                user_data: MutableMapping[Any, Any] = request_json
+        else:
+            user_data = {}
+
+        # Validate the incoming user data using Pydanctic model
+        try:
+            user: User = User(**user_data)
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+            )
+
+        try:
+            db_connector.update_data(users_collection_name, query, user.model_dump())
+        except LookupError as e:
+            return response(
+                Status.NOT_FOUND, **message(f"Service does not exist: {str(e)}")
+            )
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Failed to update user: {str(e)}"),
+            )
+
+        return response(Status.SUCCESS, **{"id": user_id})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to update user: {str(e)}")
+        )
+
+
+def delete_user_by_id(user_id: str) -> APIResponse:
+    """
+    Delete a user from the database using the user ID.
+
+    Args:
+        user_id (str): Unique identifier for the user.
+
+    Returns:
+        Flask response: JSON response containing the id of the deleted service.
+    """
+
+    users_collection_name = "users"
+    query: dict = {"user_id": user_id}
+
+    try:
+        try:
+            db_connector.delete_data(users_collection_name, query)
+        except LookupError as e:
+            return response(
+                Status.NOT_FOUND, **message(f"User does not exist: {str(e)}")
+            )
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
+            )
+        
+        return response(Status.SUCCESS, **{"id": user_id})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to delete user: {str(e)}")
         )
