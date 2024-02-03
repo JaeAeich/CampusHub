@@ -1042,7 +1042,74 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-              
+  '/users/{user_id}/cart':
+    get:
+      summary: Get a specific cart.
+      operationId: users.get_cart_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+    put:
+      summary: Update a cart
+      operationId: users.update_cart_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
@@ -1455,6 +1522,20 @@ components:
 
       required:
         - user_id
+    Cart:
+      type: object
+      properties:
+        cart_id:
+          type: string
+        cart_items:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+              quantity:
+                type: integer
   parameters:
     service_id:
       name: service_id

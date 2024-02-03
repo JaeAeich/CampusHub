@@ -1,3 +1,4 @@
+from campus_hub.models.carts import Cart
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import response, message, Status, APIResponse
 from flask import request
@@ -51,7 +52,7 @@ def add_user() -> APIResponse:
             user: User = User(**user_data)
         except ValidationError as e:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
             )
 
         # Add the user to the database
@@ -95,7 +96,7 @@ def get_user_by_id(user_id: str) -> APIResponse:
             user: User = User(**_user[0])
         except ValidationError as e:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
             )
 
         return response(Status.SUCCESS, user=user.model_dump())
@@ -139,7 +140,7 @@ def update_user_by_id(user_id: str):
             db_connector.update_data(users_collection_name, query, user.model_dump())
         except LookupError as e:
             return response(
-                Status.NOT_FOUND, **message(f"Service does not exist: {str(e)}")
+                Status.NOT_FOUND, **message(f"User does not exist: {str(e)}")
             )
         except PyMongoError as e:
             return response(
@@ -180,9 +181,117 @@ def delete_user_by_id(user_id: str) -> APIResponse:
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Internal Server Error: {str(e)}"),
             )
-        
+
         return response(Status.SUCCESS, **{"id": user_id})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Failed to delete user: {str(e)}")
         )
+
+
+def get_cart_by_id(user_id: str) -> APIResponse:
+    """
+    Get a user's cart from the database using the user ID.
+
+    Args:
+        user_id (str): Unique identifier for the user.
+
+    Returns:
+        Flask response: Response containing the user's cart data
+    """
+
+    users_collection_name = "users"
+
+    query = {"user_id": user_id}
+    projection = {"_id": False, "cart_id": True}
+
+    try:
+        _user = db_connector.query_data(users_collection_name, query, projection)
+
+        if not _user or len(_user) == 0:
+            return response(Status.NOT_FOUND, **message(f"User {user_id} not found"))
+
+        try:
+            user: User = User(**_user[0])
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
+            )
+
+        cart_id = user.cart_id
+        _cart = db_connector.query_data("carts", {"cart_id": cart_id})
+
+        try:
+            cart: Cart = Cart(**_cart[0])
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid cart data: {str(e)}")
+            )
+
+        return response(Status.SUCCESS, cart=cart.model_dump())
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Failed to get user's cart: {str(e)}"),
+        )
+
+def update_cart_by_id(user_id:str) -> APIResponse:
+    """
+    Update a user's cart in the database using the user ID.
+        
+    Args:
+        user_id (str): Unique identifier for the user.
+        
+    Returns:
+        Flask response: Response containing the user's cart data
+    """
+
+    carts_collection_name = "carts"
+    request_json = request.json
+    query: dict = {"user_id": user_id}
+    projection = {"_id": False, "cart_id": True}
+
+    try:
+        if request_json is not None:
+            cart_data: MutableMapping[Any, Any] = request_json
+        else:
+            cart_data = {}
+
+        # Validate the incoming cart data using Pydanctic model
+        try:
+            cart: Cart = Cart(**cart_data)
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+            )
+
+        # fetch cart_id from user_id
+        try:
+            _user = db_connector.query_data("users", query, projection)
+            user: User = User(**_user[0])
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
+            )
+
+        query = {"cart_id": user.cart_id}
+
+        try:
+            db_connector.update_data(carts_collection_name, query, cart.model_dump())
+        except LookupError as e:
+            return response(
+                Status.NOT_FOUND, **message(f"User does not exist: {str(e)}")
+            )
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Failed to update user's cart: {str(e)}"),
+            )
+
+        return response(Status.SUCCESS, **{"id": cart})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to update user's cart: {str(e)}")
+        )
+    
+
