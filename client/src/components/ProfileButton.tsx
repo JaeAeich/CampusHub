@@ -66,6 +66,15 @@ function ProfileButton() {
             ))}
             <DropdownMenuSeparator />
             {/* TODO: add func to clear user form cache and redirect to '/' */}
+            {isAuthenticated && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem key="/login" className="cursor-pointer">
+                  <Link to="/seller/register">Become a seller</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <Button
               className="w-full bg-accent"
               onKeyDown={() => logout({ logoutParams: { returnTo: window.location.origin } })}
