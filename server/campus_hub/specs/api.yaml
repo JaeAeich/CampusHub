@@ -24,6 +24,8 @@ tags:
     description: 'Operations related to notifications (Get, Get by ID)'
   - name: Offers
     description: 'Operations related to offers (Get, Get by Id, Get trending)'
+  - name: Users
+    description: 'Operations related to users (Get, Update, Delete)'
 paths:
   '/services':
     get:
@@ -909,6 +911,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/users':
+    post:
+      summary: Add a new user
+      operationId: users.add_user
+      tags:
+        - Users
+      requestBody:
+        description: User object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostUser"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '405':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
@@ -1281,6 +1315,28 @@ components:
           description: A user-friendly message.
       required:
         - message
+    PostUser:
+      type: object
+      properties:
+        user_name:
+          type: string
+        user_email:
+          type: string
+          format: email
+        user_phone_number:
+          type: string
+        user_address:
+          type: string
+        user_gender:
+          type: string
+        user_image:
+          type: string
+      required:
+        - user_name
+        - user_email
+        - user_phone_number
+        - user_address
+        - user_gender
   parameters:
     service_id:
       name: service_id
