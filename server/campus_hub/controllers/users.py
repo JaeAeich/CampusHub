@@ -28,15 +28,19 @@ def add_user() -> APIResponse:
         user_id: str = db_connector.generate_unique_id(users_collection_name)
         user_data["user_id"] = user_id
 
-         # create a cart for the user
+        # create a cart for the user
         cart_id = db_connector.generate_unique_id(carts_collection_name)
         user_data["cart_id"] = cart_id
-        db_connector.insert_data(carts_collection_name, {"cart_id": cart_id, "carts": []})
+        db_connector.insert_data(
+            carts_collection_name, {"cart_id": cart_id, "carts": []}
+        )
 
         # create a wishlist for the user
         wishlist_cart_id = db_connector.generate_unique_id(carts_collection_name)
         user_data["wishlist_cart_id"] = wishlist_cart_id
-        db_connector.insert_data(carts_collection_name, {"cart_id": cart_id, "carts": []})
+        db_connector.insert_data(
+            carts_collection_name, {"cart_id": cart_id, "carts": []}
+        )
 
         # add order_ids as an empty list
         user_data["order_ids"] = []
@@ -61,4 +65,40 @@ def add_user() -> APIResponse:
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Failed to add user: {str(e)}")
+        )
+
+
+def get_user_by_id(user_id: str) -> APIResponse:
+    """
+    Get a user from the database using the user ID.
+
+    Args:
+        user_id (str): Unique identifier for the user.
+
+    Returns:
+        Flask response: Response containing the user data
+    """
+
+    users_collection_name = "users"
+
+    query = {"user_id": user_id}
+    projection = {"_id": False}
+
+    try:
+        _user = db_connector.query_data(users_collection_name, query, projection)
+
+        if not _user or len(_user) == 0:
+            return response(Status.NOT_FOUND, **message(f"User {user_id} not found"))
+
+        try:
+            user: User = User(**_user[0])
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+            )
+
+        return response(Status.SUCCESS, user=user.model_dump())
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to get user: {str(e)}")
         )

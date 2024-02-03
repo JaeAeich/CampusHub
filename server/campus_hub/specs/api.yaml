@@ -943,6 +943,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/users/{user_id}':
+    get:
+      summary: Get a specific user.
+      operationId: users.get_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
@@ -1337,6 +1369,24 @@ components:
         - user_phone_number
         - user_address
         - user_gender
+    User:
+      allOf:
+        - type: object
+          properties:
+            user_id:
+              type: string
+            cart_id:
+              type: string
+            wishlist_cart_id:
+              type: string
+            order_ids:
+              type: array
+              items:
+                type: string
+        - $ref: '#/components/schemas/PostUser'
+
+      required:
+        - user_id
   parameters:
     service_id:
       name: service_id
