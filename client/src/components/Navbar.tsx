@@ -96,7 +96,7 @@ function Navbar() {
                     {routes.map((route, index) =>
                       route.content ? (
                         <AccordionItem value={`item-${index}`} key={route.label}>
-                          <AccordionTrigger className="text-lg font-subheading">
+                          <AccordionTrigger className="text-base font-subheading">
                             {route.label}
                           </AccordionTrigger>
                           {route.content ? (
@@ -112,7 +112,7 @@ function Navbar() {
                       ) : (
                         <>
                           <Link
-                            className="flex text-lg font-subheading py-5 hover:underline"
+                            className="flex text-base font-subheading py-5 hover:underline"
                             to={route.to}
                           >
                             {route.label}

@@ -18,15 +18,15 @@ function UserProfile({ active }: { active: string }) {
   };
 
   return (
-    <div className="bg-background w-full flex flex-col md:gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-primary">
-      <aside className="md:py-4 md:w-1/3 lg:w-1/4 md:block">
-        <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-secondary top-12">
-          <h2 className="pl-3 mb-4 text-xl font-bold font-heading md:justify-left md:mx-0 justify-center mx-auto">
+    <div className="bg-background w-full flex flex-col lg:gap-5 px-3 lg:pr-10 lg:flex-row text-primary">
+      <aside className="lg:py-4 xl:w-1/5 lg:w-1/4 lg:block">
+        <div className="flex flex-col gap-2 w-full p-4 text-sm h-1/2 lg:border-r border-secondary top-12">
+          <h2 className="pl-3 mb-4 text-xl font-bold font-heading lg:justify-left lg:mx-0 justify-center mx-auto">
             My Account
           </h2>
           {/* //TODO: USER_ID IS HARDCODED */}
           <Button
-            className={`flex  hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border rounded-full ${
+            className={`flex  hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border ${
               activeTab === 'account' ? 'bg-accent text-background' : ''
             }`}
             onClick={() => handleTabClick(`/users/${user_id}/details`)}
@@ -34,7 +34,7 @@ function UserProfile({ active }: { active: string }) {
             Account Details
           </Button>
           <Button
-            className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border rounded-full ${
+            className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border ${
               activeTab === 'wishlist' ? 'bg-accent text-background' : ''
             }`}
             onClick={() => handleTabClick(`/users/${user_id}/wishlist`)}
@@ -42,7 +42,7 @@ function UserProfile({ active }: { active: string }) {
             Wishlist
           </Button>
           <Button
-            className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border rounded-full ${
+            className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border  ${
               activeTab === 'orders' ? 'bg-accent text-background' : ''
             }`}
             onClick={() => handleTabClick(`/users/${user_id}/orders`)}
@@ -51,7 +51,7 @@ function UserProfile({ active }: { active: string }) {
           </Button>
         </div>
       </aside>
-      <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
+      <main className="w-full min-h-screen py-1 xl:w-4/5 lg:w-3/4">
         {activeTab === 'account' && <AccountDetails />}
         {activeTab === 'wishlist' && <Wishlist />}
         {activeTab === 'orders' && <PastOrders />}
