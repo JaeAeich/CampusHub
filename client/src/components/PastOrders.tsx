@@ -34,12 +34,12 @@ function PastOrders() {
               </div>
               <div className="mt-4 flex sm:flex-row flex-col justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
                 <div className="flex sm:justify-start justify-center items-center border-secondary">
-                  <span
+                  <Button
                     onClick={() => handleIncrement()}
                     className="cursor-pointer rounded-l bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
                   >
                     <Plus className="md:h-6 h-4" />
-                  </span>
+                  </Button>
                   <input
                     className="md:h-8 h-7 w-12 border bg-background text-center text-xs outline-none"
                     type="number"
@@ -47,12 +47,12 @@ function PastOrders() {
                     min="1"
                     readOnly
                   />
-                  <span
+                  <Button
                     onClick={() => handleDecrement()}
                     className="cursor-pointer rounded-r bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
                   >
                     <Minus className="md:h-6 h-4" />
-                  </span>
+                  </Button>
                   <X
                     // TODO: Handle remove.
                     // onClick={handleRemove}
