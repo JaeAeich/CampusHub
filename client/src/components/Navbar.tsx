@@ -26,6 +26,8 @@ import {
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 
+// TODO: ADD ID AFTER AUTH
+const user_id = 1;
 const routes = [
   {
     to: '/',
@@ -35,17 +37,17 @@ const routes = [
     })),
   },
   {
-    to: '/',
+    to: `/users/${user_id}/details`,
     label: 'My Account',
     content: null,
   },
   {
-    to: '/',
+    to: `/users/${user_id}/wishlist`,
     label: 'Wishlist',
     content: null,
   },
   {
-    to: '/',
+    to: `/users/${user_id}/orders`,
     label: 'Past Orders',
     content: null,
   },
@@ -95,7 +97,7 @@ function Navbar() {
                     {routes.map((route, index) =>
                       route.content ? (
                         <AccordionItem value={`item-${index}`} key={route.label}>
-                          <AccordionTrigger className="text-lg font-subheading">
+                          <AccordionTrigger className="text-base font-subheading">
                             {route.label}
                           </AccordionTrigger>
                           {route.content ? (
@@ -111,7 +113,7 @@ function Navbar() {
                       ) : (
                         <>
                           <Link
-                            className="flex text-lg font-subheading py-5 hover:underline"
+                            className="flex text-base font-subheading py-5 hover:underline"
                             to={route.to}
                           >
                             {route.label}

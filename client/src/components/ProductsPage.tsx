@@ -346,10 +346,13 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      <div className="lg:block grid lg:justify-left justify-center">
-        {store_products.map((prod: Product) => (
-          <ProductCard product={prod} />
-        ))}
+      <div className="flex h-full w-full p-3 my-auto justify-center lg:justify-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          {store_products.map((prod: Product) => (
+            // TODO: Fetch wishlist status.
+            <ProductCard product={prod} wishlisted={false} />
+          ))}
+        </div>
       </div>
     </div>
   );

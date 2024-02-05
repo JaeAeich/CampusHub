@@ -7,6 +7,7 @@ import ProductsPage from './components/ProductsPage';
 import ProductPage from './components/ProductPage';
 import StorePage from './components/StoresPage';
 import Login from './components/Login';
+import UserProfile from './components/UserProfile';
 
 function App() {
   const isVisible = !window.location.pathname.includes('/login');
@@ -16,6 +17,9 @@ function App() {
         {isVisible && <Navbar />}
         <div className="flex grow">
           <Routes>
+            <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
+            <Route path="/users/:user_id/wishlist" element={<UserProfile active="wishlist" />} />
+            <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
             <Route path="/" element={<Landing />} />
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
