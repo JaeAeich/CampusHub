@@ -26,3 +26,21 @@ export default async function getProductsByQuery(
         return errorResponse(error, 'api.products') as MessageResponse | ErrorResponse;
     }
 }
+
+
+/**
+ * Fetches all products based on search query.
+ * 
+ * @param query - The search query.
+ * @returns {Promise<{ products: Product[] } | ErrorResponse | MessageResponse>} A promise
+ */
+export async function getProductsBySearchQuery(
+    query: string,
+): Promise<{ products: Product[] } | MessageResponse | ErrorResponse> {
+    try {
+        const response: AxiosResponse = await axios.get(`${productsURL}`, { params: { search_query: query } });
+        return response.data;
+    } catch (error: unknown) {
+        return errorResponse(error, 'api.products') as MessageResponse | ErrorResponse;
+    }
+}

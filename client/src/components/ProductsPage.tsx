@@ -23,11 +23,13 @@ import { Slider } from '@/components/ui/slider';
 import Product from '@/api/products/types';
 import { getProductsByStoreId } from '@/api/stores/stores';
 // import { products } from '../../app/constants';
+import getProductsByQuery from '@/api/products/products';
 import ProductCard from './ProductCard';
 import NotFound from './NotFound';
 
 function ProductsPage() {
   const { store_id } = useParams();
+  const { search_query } = useParams();
   const [store_products, setProducts] = useState<Product[]>([]);
   const [errorProducts, setErrorProducts] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,11 +47,21 @@ function ProductsPage() {
           setProducts(response.products);
           setIsLoading(false);
         }
+      } else if (search_query !== "") {
+        const query = search_query;
+        const response = await getProductsByQuery(query || "");
+        if ('error' in response) {
+          setErrorProducts(true);
+          setIsLoading(false);
+        } else if ('products' in response) {
+          setProducts(response.products);
+          setIsLoading(false);
+        }
       }
     }
 
     fetchProductsByStoreId();
-  }, [store_id]);
+  }, [search_query, store_id]);
 
   if (isLoading) {
     return (

@@ -25,7 +25,6 @@ import {
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
 import { useDispatch } from 'react-redux';
-import getProductsByQuery from '@/api/products/products';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 import { authenticated } from '../store/auth/authSlice';
@@ -88,9 +87,10 @@ function Navbar() {
   };
 
   const handleSearch = () => {
-    // TODO: add search functionality
-    const result = await getProductsByQuery(searchValue);
-    // TODO: Route to preffered page dont know that yet.
+    if (searchValue === '') {
+      return;
+    }
+    navigate(`/products/${searchValue}`);
   };
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">
