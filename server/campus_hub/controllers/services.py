@@ -202,7 +202,13 @@ def delete_service(service_id: str) -> APIResponse:
         )
 
 
-def get_stores_by_service_id(service_id: str, max_rating: float, min_rating: float, distance:float, category:str, ) -> APIResponse:
+def get_stores_by_service_id(
+    service_id: str,
+    max_rating: float,
+    min_rating: float,
+    distance: float,
+    category: str,
+) -> APIResponse:
     """
     Get stores by service id from the MongoDB database.
 
@@ -254,18 +260,40 @@ def get_stores_by_service_id(service_id: str, max_rating: float, min_rating: flo
         # If distance is specified, filter stores by distance
         if distance:
             try:
-                origin = (float(request.args.get("latitude")), float(request.args.get("longitude")))
+                latitude_str = request.args.get("latitude")
+                longitude_str = request.args.get("longitude")
+                latitude: float = (
+                    float(latitude_str) if latitude_str is not None else 0.0
+                )
+                longitude: float = (
+                    float(longitude_str) if longitude_str is not None else 0.0
+                )
+
+                origin = (latitude, longitude)
+
                 for store in stores:
                     destination = store.coordinates
                     distance_matrix = get_distance_matrix(origin, destination)
-                    store["distance"] = distance_matrix["rows"][0]["elements"][0]["distance"]["text"]
+                    distance_str: str = (
+                        distance_matrix.get("rows", [{}])[0]
+                        .get("elements", [{}])[0]
+                        .get("distance", {})
+                        .get("text", "")
+                    )
+                    store.distance = distance_str
             except Exception as e:
                 return response(
                     Status.INTERNAL_SERVER_ERROR,
                     **message(f"Error calculating distance: {str(e)}"),
                 )
-            stores = list(filter(lambda store: float(store["distance"].split(" ")[0]) <= distance, stores))
-        
+
+            stores = [
+                store
+                for store in stores
+                if store.distance
+                if float(store.distance.split(" ")[0]) <= distance
+            ]
+
         # If stores are found, return a JSON response
         return response(Status.SUCCESS, **store_list.model_dump())
 
@@ -274,7 +302,7 @@ def get_stores_by_service_id(service_id: str, max_rating: float, min_rating: flo
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving stores from MongoDB: {e}"),
         )
-    
+
 
 def get_products_by_service_id(service_id):
     # Placeholder logic to get details of a specific service by ID
