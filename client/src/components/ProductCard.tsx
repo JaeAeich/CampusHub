@@ -38,7 +38,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
           size="35"
           className="absolute top-0 right-0 ml-2 pl-2"
         />
-        <img className="object-cover" src={product_images[0]} alt="product" />
+        <img className="object-cover w-full h-full" src={product_images[0]} alt="product" />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
           {/* //TODO: OFFER API CALL, TO CHECK IF THIS HAS ANY DISCOUNT */}
           39% OFF
@@ -62,7 +62,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
               {/* //TODO: OFFER API CALL, TO CHECK IF THIS HAS ANY DISCOUNT */}
               <span className="text-sm text-primary line-through">&#8377;699</span>
             </p>
-            <div className="flex items-center">
+            <div className="flex items-center overflow-hidden">
               <Stars rating={rating} />
               <span className="mr-1 md:ml-1 rounded bg-secondaryLight md:px-1 md:py-0.5 px-1.5 py-0.5 text-xs font-semibold">
                 {rating}

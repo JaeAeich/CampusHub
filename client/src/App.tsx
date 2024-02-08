@@ -19,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
             <Route path="/users/:user_id/wishlist" element={<UserProfile active="wishlist" />} />
+            <Route path="/users/:user_id/cart" element={<UserProfile active="cart" />} />
             <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
             <Route path="/" element={<Landing />} />
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />

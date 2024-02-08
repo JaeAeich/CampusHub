@@ -73,7 +73,7 @@ function ProfileButton() {
             {routes.map((route) => (
               <DropdownMenuItem
                 key={route.to}
-                className="cursor-pointer py-2 px-2 text-smm font-medium"
+                className="cursor-pointer py-2 pr-20 text-smm font-medium"
               >
                 <Link to={route.to} onClick={() => handleClick(route.to)}>
                   {route.label}

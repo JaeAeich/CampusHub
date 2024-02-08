@@ -9,11 +9,9 @@ import {
 
 function AccountDetails() {
   return (
-    <div className="px-2 md:p-4">
-      <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
-        <h2 className="justify-center mx-auto md:text-xl font-semibold text-lgg">
-          Account Details
-        </h2>
+    <div className="justify-center mx-auto px-2 md:px-4 lg:pt-6">
+      <div className="w-full px-6 pb-8 sm:max-w-3xl sm:rounded-lg justify-center mx-auto ">
+        <h2 className="text-center mx-auto md:text-xl font-semibold text-lgg">Account Details</h2>
 
         <div className="grid max-w-2xl mx-auto mt-8">
           <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
@@ -26,13 +24,13 @@ function AccountDetails() {
             <div className="flex flex-col space-y-5 sm:ml-8">
               <button
                 type="button"
-                className="py-1.5 px-3 sm:text-smm text-sm font-medium text-primary focus:outline-none bg-accent rounded-lg border border-accent hover:bg-accentDark focus:z-10 focus:ring-4 focus:ring-accent "
+                className="py-1.5 px-3 sm:text-smm text-basefont-medium text-primary focus:outline-none bg-accent rounded-lg border border-accent hover:bg-accentDark focus:z-10 focus:ring-4 focus:ring-accent "
               >
                 Change picture
               </button>
               <button
                 type="button"
-                className="py-1.5 px-3 sm:text-smm text-sm font-medium text-primary focus:outline-none bg-secondary rounded-lg border border-secondary hover:bg-darkgray hover:text-primary focus:z-10 focus:ring-4 focus:ring-darkgray "
+                className="py-1.5 px-3 sm:text-smm text-basefont-medium text-primary focus:outline-none bg-secondary rounded-lg border border-secondary hover:bg-darkgray hover:text-primary focus:z-10 focus:ring-4 focus:ring-darkgray "
               >
                 Delete picture
               </button>
@@ -44,14 +42,14 @@ function AccountDetails() {
               <div className="w-full">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-primary dark:text-background"
+                  className="block mb-2 text-smm font-medium text-primary dark:text-background"
                 >
                   Name
                 </label>
                 <input
                   type="text"
                   id="name"
-                  className="bg-background border darkgray text-primary text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
+                  className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
                   placeholder="Name"
                   value="Jane"
                   required
@@ -62,14 +60,14 @@ function AccountDetails() {
             <div className="mb-2 sm:mb-6">
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-primary dark:text-background"
+                className="block mb-2 text-smm font-medium text-primary dark:text-background"
               >
                 Email
               </label>
               <input
                 type="email"
                 id="email"
-                className="bg-background border darkgray text-primary text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
+                className="bg-background border darkgray text-primary text-smm ounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
                 placeholder="your.email@mail.com"
                 required
               />
@@ -77,14 +75,14 @@ function AccountDetails() {
             <div className="mb-2 sm:mb-6">
               <label
                 htmlFor="phoneNumber"
-                className="block mb-2 text-sm font-medium text-primary dark:text-background"
+                className="block mb-2 text-smm font-medium text-primary dark:text-background"
               >
                 Phone Number
               </label>
               <input
                 type="tel"
                 id="phoneNumber"
-                className="bg-background border darkgray text-primary text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
+                className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
                 placeholder="9876543210"
                 required
               />
@@ -93,7 +91,7 @@ function AccountDetails() {
             <div className="mb-2 sm:mb-6">
               <label
                 htmlFor="gender"
-                className="block mb-2 text-sm font-medium text-primary dark:text-background"
+                className="block mb-2 text-smm  font-medium text-primary dark:text-background"
               >
                 Gender
               </label>
@@ -102,7 +100,7 @@ function AccountDetails() {
                   {/* //TODO: Placeholder to contain user's gender. */}
                   <SelectValue placeholder="Gender" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="text-smm">
                   <SelectGroup>
                     <SelectItem value="Male">Male</SelectItem>
                     <SelectItem value="Female">Female</SelectItem>
@@ -115,14 +113,14 @@ function AccountDetails() {
             <div className="mb-6">
               <label
                 htmlFor="address"
-                className="block mb-2 text-sm font-medium text-primary dark:text-background"
+                className="block mb-2 text-smm font-medium text-primary dark:text-background"
               >
                 Address
               </label>
               <textarea
                 id="address"
                 rows={4}
-                className="block p-2.5 w-full text-sm text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary "
+                className="block p-2.5 w-full text-smm text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary "
                 placeholder="Address 1"
               />
             </div>
@@ -130,7 +128,7 @@ function AccountDetails() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="text-background bg-accent  hover:bg-accentDark focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-accent dark:focus:ring-accentDark"
+                className="text-background bg-accent  hover:bg-accentDark focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-basew-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-accent dark:focus:ring-accentDark"
               >
                 Save
               </button>
