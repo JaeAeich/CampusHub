@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AccountDetails from './AccountDetails';
 import Wishlist from './Wishlist';
-import PastOrders from './PastOrders';
+import Cart from './Cart';
+import Orders from './Orders';
 import { Button } from './ui/button';
 
 const user_id = 1;
@@ -18,15 +19,15 @@ function UserProfile({ active }: { active: string }) {
   };
 
   return (
-    <div className="bg-background w-full flex flex-col lg:gap-5 px-3 lg:pr-10 lg:flex-row text-primary">
-      <aside className="lg:py-4 xl:w-1/5 lg:w-1/4 lg:block">
-        <div className="flex flex-col gap-2 w-full p-4 text-sm h-1/2 lg:border-r border-secondary top-12">
-          <h2 className="pl-3 mb-4 text-xl font-bold font-heading lg:justify-left lg:mx-0 justify-center mx-auto">
-            My Account
-          </h2>
-          {/* //TODO: USER_ID IS HARDCODED */}
+    <div className="bg-background w-full :gap-5 px-3 lg:pr-10 lg:flex-row text-primary">
+      <div className="flex flex-col gap-2 w-full p-4 text-sm border-secondary top-12">
+        <h2 className="mt-3 mb-4 text-xl font-bold font-heading justify-center mx-auto">
+          My Account
+        </h2>
+        {/* //TODO: USER_ID IS HARDCODED */}
+        <div className="flex flex-row justify-center">
           <Button
-            className={`flex  hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border ${
+            className={`flex m-1 hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border ${
               activeTab === 'account' ? 'bg-accent text-background' : ''
             }`}
             onClick={() => handleTabClick(`/users/${user_id}/details`)}
@@ -34,7 +35,7 @@ function UserProfile({ active }: { active: string }) {
             Account Details
           </Button>
           <Button
-            className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border ${
+            className={`flex m-1 hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border ${
               activeTab === 'wishlist' ? 'bg-accent text-background' : ''
             }`}
             onClick={() => handleTabClick(`/users/${user_id}/wishlist`)}
@@ -42,19 +43,28 @@ function UserProfile({ active }: { active: string }) {
             Wishlist
           </Button>
           <Button
-            className={`flex hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border  ${
+            className={`flex m-1 hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border  ${
+              activeTab === 'cart' ? 'bg-accent text-background' : ''
+            }`}
+            onClick={() => handleTabClick(`/users/${user_id}/cart`)}
+          >
+            Cart
+          </Button>
+          <Button
+            className={`flex m-1 hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border  ${
               activeTab === 'orders' ? 'bg-accent text-background' : ''
             }`}
             onClick={() => handleTabClick(`/users/${user_id}/orders`)}
           >
-            Past Orders
+            Orders
           </Button>
         </div>
-      </aside>
-      <main className="w-full min-h-screen py-1 xl:w-4/5 lg:w-3/4">
+      </div>
+      <main className="sm:w-4/5 mx-auto justify-center min-h-screen py-1">
         {activeTab === 'account' && <AccountDetails />}
         {activeTab === 'wishlist' && <Wishlist />}
-        {activeTab === 'orders' && <PastOrders />}
+        {activeTab === 'cart' && <Cart />}
+        {activeTab === 'orders' && <Orders />}
       </main>
     </div>
   );

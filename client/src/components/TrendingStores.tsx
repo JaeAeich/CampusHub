@@ -13,7 +13,7 @@ export default function TrendingStores({
   error: boolean;
 }) {
   return (
-    <div className="my-2 md:my-4 md:mb-15">
+    <div className="my-2 max-h-128 md:my-4 md:mb-15 overflow-hidden object-fit">
       <Container>
         <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Trending
@@ -26,13 +26,16 @@ export default function TrendingStores({
               {trendingStores.map((store) => (
                 <CarouselItem
                   key={store.store_id}
-                  className="w-full flex items-center justify-center"
+                  className="w-full h-full flex items-center justify-center"
                 >
-                  <Link to={`/stores/${store.store_id}/products`} className="w-full h-full">
+                  <Link
+                    to={`/stores/${store.store_id}/products`}
+                    className="w-full h-full object-fit overflow-hidden"
+                  >
                     <img
                       src={store.store_images[0]}
                       alt={store.store_name}
-                      className="rounded-md object-cover w-full h-full"
+                      className="rounded-md object-cover w-full h-1/3 overflow-hidden"
                     />
                   </Link>
                 </CarouselItem>

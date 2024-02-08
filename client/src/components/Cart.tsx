@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Plus, Minus, X } from 'lucide-react';
 import { Button } from './ui/button';
 
-function PastOrders() {
+function Cart() {
   const [quantity, setQuantity] = useState(2);
 
   const handleIncrement = () => {
@@ -17,7 +17,7 @@ function PastOrders() {
 
   return (
     <div className="lg:pt-10 pt-2">
-      <div className="mx-auto max-w-8xl justify-center lg:mx-10 mx-6 xl:flex xl:space-x-6 xl:px-0">
+      <div className="mx-auto max-w-8xl justify-center mx-8 xl:flex xl:space-x-6 xl:px-0">
         <div className="rounded-lg xl:w-2/3">
           <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
             <img
@@ -97,4 +97,4 @@ function PastOrders() {
   );
 }
 
-export default PastOrders;
+export default Cart;
