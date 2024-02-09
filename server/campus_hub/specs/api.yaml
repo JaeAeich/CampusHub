@@ -24,6 +24,8 @@ tags:
     description: 'Operations related to notifications (Get, Get by ID)'
   - name: Offers
     description: 'Operations related to offers (Get, Get by Id, Get trending)'
+  - name: Users
+    description: 'Operations related to users (Get, Update, Delete)'
 paths:
   '/services':
     get:
@@ -909,6 +911,205 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/users':
+    post:
+      summary: Add a new user
+      operationId: users.add_user
+      tags:
+        - Users
+      requestBody:
+        description: User object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostUser"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '405':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}':
+    get:
+      summary: Get a specific user.
+      operationId: users.get_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+    put:
+      summary: Update a user
+      operationId: users.update_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+    delete:
+      summary: Delete a user
+      operationId: users.delete_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}/cart':
+    get:
+      summary: Get a specific cart.
+      operationId: users.get_cart_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+    put:
+      summary: Update a cart
+      operationId: users.update_cart_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
@@ -1281,6 +1482,60 @@ components:
           description: A user-friendly message.
       required:
         - message
+    PostUser:
+      type: object
+      properties:
+        user_name:
+          type: string
+        user_email:
+          type: string
+          format: email
+        user_phone_number:
+          type: string
+        user_address:
+          type: string
+        user_gender:
+          type: string
+        user_image:
+          type: string
+      required:
+        - user_name
+        - user_email
+        - user_phone_number
+        - user_address
+        - user_gender
+    User:
+      allOf:
+        - type: object
+          properties:
+            user_id:
+              type: string
+            cart_id:
+              type: string
+            wishlist_cart_id:
+              type: string
+            order_ids:
+              type: array
+              items:
+                type: string
+        - $ref: '#/components/schemas/PostUser'
+
+      required:
+        - user_id
+    Cart:
+      type: object
+      properties:
+        cart_id:
+          type: string
+        cart_items:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+              quantity:
+                type: integer
   parameters:
     service_id:
       name: service_id
