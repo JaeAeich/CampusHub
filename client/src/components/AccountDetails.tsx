@@ -13,7 +13,7 @@ function AccountDetails() {
   const { user } = useAuth0();
 
   useEffect(() => {
-    console.log("first")
+    console.log('first');
   }, []);
 
   return (

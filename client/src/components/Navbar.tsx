@@ -65,26 +65,28 @@ function Navbar() {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const [userAccountExists, setUserAccountExists] = useState(false);
   const [, setUserAcc] = useState<User>();
-  
-    useEffect(() => {
-      
-      async function fetchUser() {
-        if(user&&user.email){const response = await getUserById(user.email);
+
+  useEffect(() => {
+    async function fetchUser() {
+      if (user && user.email) {
+        const response = await getUserById(user.email);
         if ('user' in response) {
           setUserAcc(response.user as User);
-          setUserAccountExists(true)
-        }}
+          setUserAccountExists(true);
+        }
       }
-  
-      fetchUser();
-    }, []);
-  
-  
-  const navigate=useNavigate();
-  if(isAuthenticated&&!userAccountExists){
+    }
 
-    if(user&&user.email){navigate(`/create/${user.email}`)}else{loginWithRedirect()}
+    fetchUser();
+  }, []);
 
+  const navigate = useNavigate();
+  if (isAuthenticated && !userAccountExists) {
+    if (user && user.email) {
+      navigate(`/create/${user.email}`);
+    } else {
+      loginWithRedirect();
+    }
   }
 
   const handleSearch = () => {
@@ -102,7 +104,7 @@ function Navbar() {
               <SheetContent side="left" className="w-[300px] sm:w-[400px] gap-2">
                 <div className="flex flex-row items-center">
                   <Avatar>
-                    {userAccountExists&&isAuthenticated ? (
+                    {userAccountExists && isAuthenticated ? (
                       <AvatarImage src={user && user.picture} />
                     ) : (
                       <AvatarFallback>
@@ -147,7 +149,7 @@ function Navbar() {
                         </div>
                       ),
                     )}
-                    {userAccountExists&&isAuthenticated? (
+                    {userAccountExists && isAuthenticated ? (
                       <Button variant="destructive" className="w-full" onClick={() => logout()}>
                         Logout
                       </Button>
