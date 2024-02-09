@@ -24,9 +24,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import User from '@/api/users/types';
+import { getUserById } from '@/api/users/users';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
-import { getUserById } from '@/api/users/users';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -64,14 +64,14 @@ function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const [userAccountExists, setUserAccountExists] = useState(false);
-  const [userAcc, setUserAcc] = useState<User>();
+  const [, setUserAcc] = useState<User>();
   
     useEffect(() => {
       
       async function fetchUser() {
         if(user&&user.email){const response = await getUserById(user.email);
         if ('user' in response) {
-          setUserAcc(response.user);
+          setUserAcc(response.user as User);
           setUserAccountExists(true)
         }}
       }
@@ -136,7 +136,7 @@ function Navbar() {
                           )}
                         </AccordionItem>
                       ) : (
-                        <>
+                        <div key={route.label}>
                           <Link
                             className="flex text-base font-subheading py-5 hover:underline"
                             to={route.to}
@@ -144,7 +144,7 @@ function Navbar() {
                             {route.label}
                           </Link>
                           <Separator />
-                        </>
+                        </div>
                       ),
                     )}
                     {userAccountExists&&isAuthenticated? (
