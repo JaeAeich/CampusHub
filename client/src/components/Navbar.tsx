@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import  User
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 
@@ -61,7 +62,25 @@ const routes = [
 function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+  const [userAccountExists, setUserAccountExists] = useState(false);
+  const [userAcc, setUserAcc] = useState<User>('');
 
+  useEffect(() => {
+    async function fetchServices() {
+      const response = await getServices();
+      if ('error' in response) {
+        setErrorService(true);
+      } else if ('services' in response) {
+        setServices(response.services);
+      }
+    }
+
+    fetchServices();
+  }, []);
+  const navigate=useNavigate();
+  if(isAuthenticated&&!userAccountExists){
+    navigate('/createAccount')
+  }
   const handleSearch = () => {
     // TODO: add search functionality
   };
