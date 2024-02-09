@@ -3,7 +3,7 @@ user_id: string;
     user_name: string;
     user_phone_number: string;
     user_email: string;
-    user_gender: 'Male' | 'Female' | 'Other';
+    user_gender: string;
     order_ids: string[];
     user_image: string
     user_address: string;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -23,9 +23,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import  User
+import User from '@/api/users/types';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
+import { getUserById } from '@/api/users/users';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -63,24 +64,29 @@ function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const [userAccountExists, setUserAccountExists] = useState(false);
-  const [userAcc, setUserAcc] = useState<User>('');
-
-  useEffect(() => {
-    async function fetchServices() {
-      const response = await getServices();
-      if ('error' in response) {
-        setErrorService(true);
-      } else if ('services' in response) {
-        setServices(response.services);
+  const [userAcc, setUserAcc] = useState<User>();
+  
+    useEffect(() => {
+      
+      async function fetchUser() {
+        if(user&&user.email){const response = await getUserById(user.email);
+        if ('user' in response) {
+          setUserAcc(response.user);
+          setUserAccountExists(true)
+        }}
       }
-    }
-
-    fetchServices();
-  }, []);
+  
+      fetchUser();
+    }, []);
+  
+  
   const navigate=useNavigate();
   if(isAuthenticated&&!userAccountExists){
-    navigate('/createAccount')
+
+    if(user&&user.email){navigate(`/create/${user.email}`)}else{loginWithRedirect()}
+
   }
+
   const handleSearch = () => {
     // TODO: add search functionality
   };
@@ -96,7 +102,7 @@ function Navbar() {
               <SheetContent side="left" className="w-[300px] sm:w-[400px] gap-2">
                 <div className="flex flex-row items-center">
                   <Avatar>
-                    {isAuthenticated ? (
+                    {userAccountExists&&isAuthenticated ? (
                       <AvatarImage src={user && user.picture} />
                     ) : (
                       <AvatarFallback>
@@ -141,7 +147,7 @@ function Navbar() {
                         </>
                       ),
                     )}
-                    {isAuthenticated ? (
+                    {userAccountExists&&isAuthenticated? (
                       <Button variant="destructive" className="w-full" onClick={() => logout()}>
                         Logout
                       </Button>

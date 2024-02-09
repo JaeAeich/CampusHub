@@ -27,7 +27,7 @@ function App() {
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
             <Route path="/services/:service_id/stores" element={<StorePage />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/createAccount" element={<CreateAccount />} />
+            <Route path="/create/:user_email" element={<CreateAccount />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>
