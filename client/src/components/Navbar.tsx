@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -23,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import User from '@/api/users/types';
 import { getUserById } from '@/api/users/users';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
@@ -64,29 +63,17 @@ function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const [userAccountExists, setUserAccountExists] = useState(false);
-  const [, setUserAcc] = useState<User>();
-
-  useEffect(() => {
-    async function fetchUser() {
-      if (user && user.email) {
-        const response = await getUserById(user.email);
-        if ('user' in response) {
-          setUserAcc(response.user as User);
-          setUserAccountExists(true);
-        }
-      }
-    }
-
-    fetchUser();
-  }, []);
-
   const navigate = useNavigate();
-  if (isAuthenticated && !userAccountExists) {
-    if (user && user.email) {
-      navigate(`/create/${user.email}`);
-    } else {
-      loginWithRedirect();
-    }
+
+  if (user && user.email) {
+    const promise = getUserById(user.email);
+    promise.then((response) => {
+      if ('error' in response) {
+        navigate(`/create/${user.email}`);
+      } else if ('user' in response) {
+        setUserAccountExists(true);
+      }
+    });
   }
 
   const handleSearch = () => {

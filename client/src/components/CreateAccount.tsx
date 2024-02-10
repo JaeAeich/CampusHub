@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -12,21 +13,22 @@ import { useAuth0 } from '@auth0/auth0-react';
 import User from '@/api/users/types';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
 
 function CreateAccount() {
+  const navigate = useNavigate();
+  const { user_email } = useParams();
   const { user } = useAuth0();
   const [userDetails, setUserDetails] = useState<User>({
     user_id: '',
-    user_name: user?.name || '',
+    user_name: '',
     user_phone_number: '',
-    user_email: user?.email || '',
-    user_gender: user?.phone_number || '',
+    user_email: user_email || '',
+    user_gender: '',
     order_ids: [],
     user_image:
       user?.picture ||
       'https://www.nicepng.com/png/full/933-9332131_profile-picture-default-png.png',
-    user_address: user?.address || '',
+    user_address: '',
     cart_id: '',
     wishlist_cart_id: '',
   });
@@ -40,20 +42,9 @@ function CreateAccount() {
     }));
   };
 
-  useEffect(() => {
-    setUserDetails((prevDetails) => ({
-      ...prevDetails,
-      user_name: user?.name || '',
-      user_email: user?.email || '',
-      user_image:
-        user?.picture ||
-        'https://www.nicepng.com/png/full/933-9332131_profile-picture-default-png.png',
-      user_address: user?.address || '',
-    }));
-  });
-
   const handleSubmit = async () => {
-    console.log(userDetails);
+    setMandatory(false);
+    setTryAgain(false);
     if (
       userDetails.user_name === '' ||
       userDetails.user_phone_number === '' ||
@@ -63,15 +54,13 @@ function CreateAccount() {
       setMandatory(true);
       return;
     }
-    setMandatory(false);
-    setTryAgain(false);
     const addedUser = await addUser(userDetails as User);
     if ('error' in addedUser) {
       setMandatory(false);
       setTryAgain(true);
-      console.error('Error adding user');
     } else {
-      console.log('User added successfully. User ID:', addedUser);
+      navigate('/');
+      window.location.reload();
     }
   };
 
@@ -122,7 +111,8 @@ function CreateAccount() {
                   id="name"
                   className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
                   placeholder="Name"
-                  value={user?.name}
+                  defaultValue={user?.name}
+                  value={userDetails.user_name}
                   onChange={(e) => handleChange('user_name', e.target.value)}
                   required
                 />
@@ -140,8 +130,7 @@ function CreateAccount() {
                 type="email"
                 id="email"
                 className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-                value={user?.email}
-                onChange={(e) => handleChange('user_email', e.target.value)}
+                value={user_email}
                 disabled
               />
             </div>
@@ -157,7 +146,7 @@ function CreateAccount() {
                 id="phoneNumber"
                 className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
                 placeholder="9876543210"
-                onChange={(e) => handleChange('user_phone_number', e.target.value)}
+                onChange={(e) => handleChange('user_phone_number', String(e.target.value))}
                 required
               />
             </div>
@@ -169,10 +158,7 @@ function CreateAccount() {
               >
                 Gender
               </label>
-              <Select
-                defaultValue={user?.gender}
-                onValueChange={(e) => handleChange('user_gender', e)}
-              >
+              <Select onValueChange={(e) => handleChange('user_gender', e)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Gender" />
                 </SelectTrigger>
@@ -193,9 +179,8 @@ function CreateAccount() {
               >
                 Address
               </label>
-              <Textarea
+              <Input
                 id="address"
-                rows={4}
                 className="block p-2.5 w-full text-smm text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary"
                 placeholder="Address 1"
                 onChange={(e) => handleChange('user_address', e.target.value)}
