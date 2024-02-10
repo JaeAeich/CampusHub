@@ -106,6 +106,7 @@ def add_store(seller_id) -> APIResponse:
     """
 
     sellers_collection_name = "sellers"
+    stores_collection_name = "stores"
     seller_query: dict = {"seller_id": seller_id}
     request_json = request.json
 
@@ -154,7 +155,7 @@ def add_store(seller_id) -> APIResponse:
 
         # Add the store data to the database
         try:
-            db_connector.insert_data(sellers_collection_name, store.model_dump())
+            db_connector.insert_data(stores_collection_name, store.model_dump())
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
