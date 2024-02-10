@@ -91,7 +91,10 @@ def get_user_by_id(user_email: str) -> APIResponse:
         _user = db_connector.query_data(users_collection_name, query, projection)
 
         if not _user or len(_user) == 0:
-            return response(Status.NOT_FOUND, **message(f"User with email_id {email_id} not found"))
+            return response(
+                Status.NOT_FOUND,
+                **message(f"User with email_id {user_email} not found"),
+            )
 
         try:
             user: User = User(**_user[0])
@@ -103,7 +106,8 @@ def get_user_by_id(user_email: str) -> APIResponse:
         return response(Status.SUCCESS, user=user.model_dump())
     except Exception as e:
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message(f"Error retrieving user from MongoDB: {str(e)}")
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving user from MongoDB: {str(e)}"),
         )
 
 
@@ -236,13 +240,14 @@ def get_cart_by_id(user_id: str) -> APIResponse:
             **message(f"Internal Server Error: {str(e)}"),
         )
 
-def update_cart_by_id(user_id:str) -> APIResponse:
+
+def update_cart_by_id(user_id: str) -> APIResponse:
     """
     Update a user's cart in the database using the user ID.
-        
+
     Args:
         user_id (str): Unique identifier for the user.
-        
+
     Returns:
         Flask response: Response containing the user's cart data
     """
@@ -294,5 +299,3 @@ def update_cart_by_id(user_id:str) -> APIResponse:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
-    
-

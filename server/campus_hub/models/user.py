@@ -1,5 +1,7 @@
 from typing import List, Optional, Literal
 from pydantic import BaseModel
+
+
 class User(BaseModel):
     """
     Pydantic model representing a user.

@@ -7,11 +7,9 @@ export const authSlice = createSlice({
   },
   reducers: {
     authenticated: (state) => {
-      // eslint-disable-next-line
       state.value = true;
     },
     unauthenticated: (state) => {
-      // eslint-disable-next-line
       state.value = false;
     },
   },

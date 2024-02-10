@@ -146,7 +146,7 @@ function Navbar() {
                         </div>
                       ),
                     )}
-                    { isAuthenticated ? (
+                    {isAuthenticated ? (
                       <Button variant="destructive" className="w-full" onClick={handleLogout}>
                         {isLoggingOut ? 'Please Wait' : 'Logout'}
                       </Button>
