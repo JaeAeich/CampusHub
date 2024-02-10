@@ -202,13 +202,7 @@ def delete_service(service_id: str) -> APIResponse:
         )
 
 
-def get_stores_by_service_id(
-    service_id: str,
-    max_rating: float,
-    min_rating: float,
-    distance: float,
-    category: str,
-) -> APIResponse:
+def get_stores_by_service_id() -> APIResponse:
     """
     Get stores by service id from the MongoDB database.
 
@@ -218,6 +212,13 @@ def get_stores_by_service_id(
     Returns:
         Flask response: JSON response containing the list of stores.
     """
+
+    service_id = request.args.get("service_id")
+    max_rating = request.args.get("max_rating")
+    min_rating = request.args.get("min_rating")
+    distance_arg= request.args.get("distance")
+    distance = float(distance_arg) if distance_arg else -1
+    category = request.args.get("category")
 
     services_collection_name = "services"
     stores_collection_name = "stores"
