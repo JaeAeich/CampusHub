@@ -36,10 +36,10 @@ function CreateAccount() {
   const [tryAgain, setTryAgain] = useState(false);
 
   const handleChange = (field: string, value: string) => {
-    setUserDetails((prevDetails) => ({
-      ...prevDetails,
-      [field]: value,
-    }));
+    const details: User = userDetails;
+    // @ts-expect-error: user_address field was not getting set :|
+    details[`${field}`] = value;
+    setUserDetails(details);
   };
 
   const handleSubmit = async () => {
@@ -183,6 +183,7 @@ function CreateAccount() {
                 id="address"
                 className="block p-2.5 w-full text-smm text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary"
                 placeholder="Address 1"
+                // value={userDetails.user_address}
                 onChange={(e) => handleChange('user_address', e.target.value)}
               />
             </div>
