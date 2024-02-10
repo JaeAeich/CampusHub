@@ -9,6 +9,7 @@ from typing import MutableMapping, Any
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from datetime import datetime
+from campus_hub.utils.distance_matix import get_distance_matrix
 
 
 def get_services() -> APIResponse:
@@ -201,7 +202,7 @@ def delete_service(service_id: str) -> APIResponse:
         )
 
 
-def get_stores_by_service_id(service_id: str) -> APIResponse:
+def get_stores_by_service_id() -> APIResponse:
     """
     Get stores by service id from the MongoDB database.
 
@@ -212,9 +213,23 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
         Flask response: JSON response containing the list of stores.
     """
 
+    service_id = request.args.get("service_id")
+    max_rating = request.args.get("max_rating")
+    min_rating = request.args.get("min_rating")
+    distance_arg= request.args.get("distance")
+    distance = float(distance_arg) if distance_arg else -1
+    category = request.args.get("category")
+
     services_collection_name = "services"
     stores_collection_name = "stores"
     query: dict = {"service_id": service_id}
+
+    if max_rating:
+        query["rating"] = {"$lte": max_rating}
+    if min_rating:
+        query["rating"] = {"$gte": min_rating}
+    if category:
+        query["category"] = {"$in": category}
     projection = {"_id": False}
 
     try:
@@ -243,6 +258,43 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
 
         store_list: StoreList = StoreList(stores=stores)
 
+        # If distance is specified, filter stores by distance
+        if distance:
+            try:
+                latitude_str = request.args.get("latitude")
+                longitude_str = request.args.get("longitude")
+                latitude: float = (
+                    float(latitude_str) if latitude_str is not None else 0.0
+                )
+                longitude: float = (
+                    float(longitude_str) if longitude_str is not None else 0.0
+                )
+
+                origin = (latitude, longitude)
+
+                for store in stores:
+                    destination = store.coordinates
+                    distance_matrix = get_distance_matrix(origin, destination)
+                    distance_str: str = (
+                        distance_matrix.get("rows", [{}])[0]
+                        .get("elements", [{}])[0]
+                        .get("distance", {})
+                        .get("text", "")
+                    )
+                    store.distance = distance_str
+            except Exception as e:
+                return response(
+                    Status.INTERNAL_SERVER_ERROR,
+                    **message(f"Error calculating distance: {str(e)}"),
+                )
+
+            stores = [
+                store
+                for store in stores
+                if store.distance
+                if float(store.distance.split(" ")[0]) <= distance
+            ]
+
         # If stores are found, return a JSON response
         return response(Status.SUCCESS, **store_list.model_dump())
 
@@ -253,22 +305,7 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
         )
 
 
-def update_store_by_service_id(service_id, request_data):
-    # Placeholder logic to update a service by ID
-    return {"message": "Service updated successfully"}
-
-
-def delete_store_by_service_id(service_id):
-    # Placeholder logic to delete a service by ID
-    return {"message": "Service deleted successfully"}
-
-
 def get_products_by_service_id(service_id):
-    # Placeholder logic to get details of a specific service by ID
-    return {"id": service_id, "name": "Service", "description": "Description"}
-
-
-def add_store_by_service_id(service_id):
     # Placeholder logic to get details of a specific service by ID
     return {"id": service_id, "name": "Service", "description": "Description"}
 

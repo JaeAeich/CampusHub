@@ -40,6 +40,8 @@ class Store(BaseModel):
     timings: Optional[Tuple[float, float]]
     overall_rating: Optional[float]
     offer_available: Optional[bool]
+    distance: Optional[str]
+
 
 
 class StoreList(BaseModel):
