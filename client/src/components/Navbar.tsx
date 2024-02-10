@@ -24,8 +24,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
+import { useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
+import { authenticated } from '../store/auth/authSlice';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -60,9 +62,10 @@ const routes = [
 ];
 
 function Navbar() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
-  const [userAccountExists, setUserAccountExists] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   if (user && user.email) {
@@ -71,10 +74,17 @@ function Navbar() {
       if ('error' in response) {
         navigate(`/create/${user.email}`);
       } else if ('user' in response) {
-        setUserAccountExists(true);
+        dispatch(authenticated());
       }
     });
   }
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
+    navigate('/');
+  };
 
   const handleSearch = () => {
     // TODO: add search functionality
@@ -91,7 +101,7 @@ function Navbar() {
               <SheetContent side="left" className="w-[300px] sm:w-[400px] gap-2">
                 <div className="flex flex-row items-center">
                   <Avatar>
-                    {userAccountExists && isAuthenticated ? (
+                    {isAuthenticated ? (
                       <AvatarImage src={user && user.picture} />
                     ) : (
                       <AvatarFallback>
@@ -136,9 +146,9 @@ function Navbar() {
                         </div>
                       ),
                     )}
-                    {userAccountExists && isAuthenticated ? (
-                      <Button variant="destructive" className="w-full" onClick={() => logout()}>
-                        Logout
+                    { isAuthenticated ? (
+                      <Button variant="destructive" className="w-full" onClick={handleLogout}>
+                        {isLoggingOut ? 'Please Wait' : 'Logout'}
                       </Button>
                     ) : (
                       <Button className="w-full bg-accent" onClick={() => loginWithRedirect()}>

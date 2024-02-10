@@ -1,4 +1,5 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Landing from './components/Landing';
 import Error404 from './components/Error404';
 import Navbar from './components/Navbar';
@@ -12,22 +13,30 @@ import CreateAccount from './components/CreateAccount';
 
 function App() {
   const isVisible = !window.location.pathname.includes('/login');
+  const userExists = useSelector((state) => state.auth.value);
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
         {isVisible && <Navbar />}
         <div className="flex grow">
           <Routes>
-            <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
-            <Route path="/users/:user_id/wishlist" element={<UserProfile active="wishlist" />} />
-            <Route path="/users/:user_id/cart" element={<UserProfile active="cart" />} />
-            <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
-            <Route path="/" element={<Landing />} />
+            {!userExists && <Route path="/create/:user_email" element={<CreateAccount />} />}
+            {userExists && (
+              <>
+                <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
+                <Route
+                  path="/users/:user_id/wishlist"
+                  element={<UserProfile active="wishlist" />}
+                />
+                <Route path="/users/:user_id/cart" element={<UserProfile active="cart" />} />
+                <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
+                <Route path="/login" element={<Login />} />
+              </>
+            )}
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
             <Route path="/services/:service_id/stores" element={<StorePage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/create/:user_email" element={<CreateAccount />} />
+            <Route path="/" element={<Landing />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>
