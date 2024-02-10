@@ -47,9 +47,9 @@ function ProductsPage() {
           setProducts(response.products);
           setIsLoading(false);
         }
-      } else if (search_query !== "") {
+      } else if (search_query !== '') {
         const query = search_query;
-        const response = await getProductsByQuery(query || "");
+        const response = await getProductsByQuery(query || '');
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
