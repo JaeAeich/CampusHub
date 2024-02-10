@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -23,9 +23,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import  User
+import { getUserById } from '@/api/users/users';
+import { useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
+import { authenticated } from '../store/auth/authSlice';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -60,10 +62,29 @@ const routes = [
 ];
 
 function Navbar() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
-  const [userAccountExists, setUserAccountExists] = useState(false);
-  const [userAcc, setUserAcc] = useState<User>('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  if (user && user.email) {
+    const promise = getUserById(user.email);
+    promise.then((response) => {
+      if ('error' in response) {
+        navigate(`/create/${user.email}`);
+      } else if ('user' in response) {
+        dispatch(authenticated());
+      }
+    });
+  }
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
+    navigate('/');
+  };
 
   useEffect(() => {
     async function fetchServices() {
@@ -77,7 +98,6 @@ function Navbar() {
 
     fetchServices();
   }, []);
-  const navigate=useNavigate();
   if(isAuthenticated&&!userAccountExists){
     navigate('/createAccount')
   }
@@ -130,7 +150,7 @@ function Navbar() {
                           )}
                         </AccordionItem>
                       ) : (
-                        <>
+                        <div key={route.label}>
                           <Link
                             className="flex text-base font-subheading py-5 hover:underline"
                             to={route.to}
@@ -138,12 +158,12 @@ function Navbar() {
                             {route.label}
                           </Link>
                           <Separator />
-                        </>
+                        </div>
                       ),
                     )}
                     {isAuthenticated ? (
-                      <Button variant="destructive" className="w-full" onClick={() => logout()}>
-                        Logout
+                      <Button variant="destructive" className="w-full" onClick={handleLogout}>
+                        {isLoggingOut ? 'Please Wait' : 'Logout'}
                       </Button>
                     ) : (
                       <Button className="w-full bg-accent" onClick={() => loginWithRedirect()}>

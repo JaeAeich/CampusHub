@@ -10,7 +10,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Button } from './ui/button';
+import { unauthenticated } from '../store/auth/authSlice';
 
 const user_id = 1;
 const routes = [
@@ -34,6 +36,7 @@ const routes = [
 
 function ProfileButton() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClick = (link: string) => {
     navigate(link);
@@ -43,6 +46,14 @@ function ProfileButton() {
   // TODO: get user and add its
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
 
+  const handleLogout = async () => {
+    dispatch(unauthenticated());
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -83,10 +94,11 @@ function ProfileButton() {
             <DropdownMenuSeparator />
             {/* TODO: add func to clear user form cache and redirect to '/' */}
             <Button
-              className="w-full bg-accent cursor-pointer text-red-700 font-bold"
-              onKeyDown={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              className="w-full bg-accent cursor-pointer text-red-700 font-bold active:bg-accentDark"
+              onClick={handleLogout}
+              onKeyDown={handleLogout}
             >
-              Log Out
+              {isAuthenticated ? 'Log Out' : 'Please wait'}
             </Button>
           </>
         ) : (
