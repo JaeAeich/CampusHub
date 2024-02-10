@@ -102,7 +102,10 @@ function Navbar() {
     navigate('/createAccount')
   }
   const handleSearch = () => {
-    // TODO: add search functionality
+    if (searchValue === '') {
+      return;
+    }
+    navigate(`/products/${searchValue}`);
   };
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">

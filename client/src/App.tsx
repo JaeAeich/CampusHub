@@ -37,6 +37,7 @@ function App() {
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
             <Route path="/services/:service_id/stores" element={<StorePage />} />
+            <Route path="/products/:search_query" element={<ProductsPage />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
