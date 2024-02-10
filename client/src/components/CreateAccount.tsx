@@ -13,9 +13,11 @@ import User from '@/api/users/types';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
+import { useNavigate } from 'react-router-dom';
 
 function CreateAccount() {
   const { user } = useAuth0();
+  const { navigate } = useNavigate();
   const [userDetails, setUserDetails] = useState<User>({
     user_id: '',
     user_name: user?.name || '',
@@ -34,10 +36,10 @@ function CreateAccount() {
   const [tryAgain, setTryAgain] = useState(false);
 
   const handleChange = (field: string, value: string) => {
-    setUserDetails((prevDetails) => ({
-      ...prevDetails,
-      [field]: value,
-    }));
+    const details: User = userDetails;
+    // @ts-expect-error: user_address field was not getting set :|
+    details[`${field}`] = value;
+    setUserDetails(details);
   };
 
   useEffect(() => {
@@ -72,6 +74,7 @@ function CreateAccount() {
       console.error('Error adding user');
     } else {
       console.log('User added successfully. User ID:', addedUser);
+      navigate('/');
     }
   };
 
@@ -198,6 +201,7 @@ function CreateAccount() {
                 rows={4}
                 className="block p-2.5 w-full text-smm text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary"
                 placeholder="Address 1"
+                // value={userDetails.user_address}
                 onChange={(e) => handleChange('user_address', e.target.value)}
               />
             </div>
