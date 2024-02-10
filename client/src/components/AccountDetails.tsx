@@ -6,8 +6,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect } from 'react';
 
 function AccountDetails() {
+  const { user } = useAuth0();
+
+  useEffect(() => {
+    // console.log('first');
+  }, []);
+
   return (
     <div className="justify-center mx-auto px-2 md:px-4 lg:pt-6">
       <div className="w-full px-6 pb-8 sm:max-w-3xl sm:rounded-lg justify-center mx-auto ">
@@ -17,7 +25,7 @@ function AccountDetails() {
           <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
             <img
               className="object-cover sm:w-40 sm:h-40 w-32 h-32 p-1 rounded-full ring-2 ring-secondary dark:ring-background"
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+              src={user?.picture}
               alt="Bordered avatar"
             />
 
@@ -66,6 +74,7 @@ function AccountDetails() {
               </label>
               <input
                 type="email"
+                value={user?.email}
                 id="email"
                 className="bg-background border darkgray text-primary text-smm ounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
                 placeholder="your.email@mail.com"
@@ -95,7 +104,7 @@ function AccountDetails() {
               >
                 Gender
               </label>
-              <Select>
+              <Select defaultValue={user?.gender}>
                 <SelectTrigger className="w-full">
                   {/* //TODO: Placeholder to contain user's gender. */}
                   <SelectValue placeholder="Gender" />

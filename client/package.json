@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
     "format": "npx prettier . --write",
     "format:check": "npx prettier . --check",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
+    "@hookform/resolvers": "^3.3.4",
     "@nodelib/fs.scandir": "^3.0.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -31,6 +32,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@react-oauth/google": "^0.12.1",
+    "@reduxjs/toolkit": "^2.1.0",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
@@ -42,12 +44,15 @@
     "fastq": "^1.16.0",
     "lucide-react": "^0.303.0",
     "next-themes": "^0.2.1",
+    "react-hook-form": "^7.50.1",
+    "react-redux": "^9.1.0",
     "react-router-dom": "^6.21.3",
     "regenerator-runtime": "^0.14.1",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.8.9",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",

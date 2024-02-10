@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -23,8 +23,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { getUserById } from '@/api/users/users';
+import { useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
+import { authenticated } from '../store/auth/authSlice';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -59,8 +62,29 @@ const routes = [
 ];
 
 function Navbar() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  if (user && user.email) {
+    const promise = getUserById(user.email);
+    promise.then((response) => {
+      if ('error' in response) {
+        navigate(`/create/${user.email}`);
+      } else if ('user' in response) {
+        dispatch(authenticated());
+      }
+    });
+  }
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
+    navigate('/');
+  };
 
   const handleSearch = () => {
     // TODO: add search functionality
@@ -111,7 +135,7 @@ function Navbar() {
                           )}
                         </AccordionItem>
                       ) : (
-                        <>
+                        <div key={route.label}>
                           <Link
                             className="flex text-base font-subheading py-5 hover:underline"
                             to={route.to}
@@ -119,12 +143,12 @@ function Navbar() {
                             {route.label}
                           </Link>
                           <Separator />
-                        </>
+                        </div>
                       ),
                     )}
                     {isAuthenticated ? (
-                      <Button variant="destructive" className="w-full" onClick={() => logout()}>
-                        Logout
+                      <Button variant="destructive" className="w-full" onClick={handleLogout}>
+                        {isLoggingOut ? 'Please Wait' : 'Logout'}
                       </Button>
                     ) : (
                       <Button className="w-full bg-accent" onClick={() => loginWithRedirect()}>

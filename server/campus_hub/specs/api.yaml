@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.0.3
+  version: 1.0.5
 servers:
   - url: /campus_hub/v1
 tags:
@@ -943,16 +943,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  '/users/{user_id}':
+  '/users/{user_email}':
     get:
       summary: Get a specific user.
       operationId: users.get_user_by_id
       tags:
         - Users
       parameters:
-        - name: user_id
+        - name: user_email
           in: path
-          description: ID of user to get
+          description: email ID of user to get
           required: true
           schema:
             type: string
@@ -975,6 +975,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/users/{user_id}':
     put:
       summary: Update a user
       operationId: users.update_user_by_id

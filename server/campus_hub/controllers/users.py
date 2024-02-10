@@ -58,24 +58,25 @@ def add_user() -> APIResponse:
         # Add the user to the database
         try:
             db_connector.insert_data(users_collection_name, user.model_dump())
-        except Exception as e:
+        except PyMongoError as e:
             return response(
-                Status.INTERNAL_SERVER_ERROR, **message(f"Failed to add user: {str(e)}")
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
             )
 
-        return response(Status.SUCCESS, **message(f"User {user_id} added successfully"))
+        return response(Status.SUCCESS, **{"id": user_id})
     except Exception as e:
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to add user: {str(e)}")
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
 
-def get_user_by_id(user_id: str) -> APIResponse:
+def get_user_by_id(user_email: str) -> APIResponse:
     """
     Get a user from the database using the user ID.
 
     Args:
-        user_id (str): Unique identifier for the user.
+        user_email (str): Unique identifier for the user.
 
     Returns:
         Flask response: Response containing the user data
@@ -83,26 +84,30 @@ def get_user_by_id(user_id: str) -> APIResponse:
 
     users_collection_name = "users"
 
-    query = {"user_id": user_id}
+    query = {"user_email": user_email}
     projection = {"_id": False}
 
     try:
         _user = db_connector.query_data(users_collection_name, query, projection)
 
         if not _user or len(_user) == 0:
-            return response(Status.NOT_FOUND, **message(f"User {user_id} not found"))
+            return response(
+                Status.NOT_FOUND,
+                **message(f"User with email_id {user_email} not found"),
+            )
 
         try:
             user: User = User(**_user[0])
         except ValidationError as e:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
+                Status.BAD_REQUEST, **message(f"Invalid user data in DB: {str(e)}")
             )
 
         return response(Status.SUCCESS, user=user.model_dump())
     except Exception as e:
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to get user: {str(e)}")
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving user from MongoDB: {str(e)}"),
         )
 
 
@@ -133,7 +138,7 @@ def update_user_by_id(user_id: str):
             user: User = User(**user_data)
         except ValidationError as e:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
             )
 
         try:
@@ -145,13 +150,13 @@ def update_user_by_id(user_id: str):
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
-                **message(f"Failed to update user: {str(e)}"),
+                **message(f"Internal Server Error: {str(e)}"),
             )
 
         return response(Status.SUCCESS, **{"id": user_id})
     except Exception as e:
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to update user: {str(e)}")
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
 
@@ -163,7 +168,7 @@ def delete_user_by_id(user_id: str) -> APIResponse:
         user_id (str): Unique identifier for the user.
 
     Returns:
-        Flask response: JSON response containing the id of the deleted service.
+        Flask response: JSON response containing the id of the deleted user.
     """
 
     users_collection_name = "users"
@@ -185,7 +190,7 @@ def delete_user_by_id(user_id: str) -> APIResponse:
         return response(Status.SUCCESS, **{"id": user_id})
     except Exception as e:
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to delete user: {str(e)}")
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
 
@@ -232,16 +237,17 @@ def get_cart_by_id(user_id: str) -> APIResponse:
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
-            **message(f"Failed to get user's cart: {str(e)}"),
+            **message(f"Internal Server Error: {str(e)}"),
         )
 
-def update_cart_by_id(user_id:str) -> APIResponse:
+
+def update_cart_by_id(user_id: str) -> APIResponse:
     """
     Update a user's cart in the database using the user ID.
-        
+
     Args:
         user_id (str): Unique identifier for the user.
-        
+
     Returns:
         Flask response: Response containing the user's cart data
     """
@@ -262,7 +268,7 @@ def update_cart_by_id(user_id:str) -> APIResponse:
             cart: Cart = Cart(**cart_data)
         except ValidationError as e:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid service data: {str(e)}")
+                Status.BAD_REQUEST, **message(f"Invalid cart data: {str(e)}")
             )
 
         # fetch cart_id from user_id
@@ -280,18 +286,16 @@ def update_cart_by_id(user_id:str) -> APIResponse:
             db_connector.update_data(carts_collection_name, query, cart.model_dump())
         except LookupError as e:
             return response(
-                Status.NOT_FOUND, **message(f"User does not exist: {str(e)}")
+                Status.NOT_FOUND, **message(f"Cart does not exist: {str(e)}")
             )
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
-                **message(f"Failed to update user's cart: {str(e)}"),
+                **message(f"Internal Server Error: {str(e)}"),
             )
 
         return response(Status.SUCCESS, **{"id": cart})
     except Exception as e:
         return response(
-            Status.INTERNAL_SERVER_ERROR, **message(f"Failed to update user's cart: {str(e)}")
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
-    
-
