@@ -121,7 +121,7 @@ export default function Component() {
               className="border xl:text-base text-sm border-gray-300 placeholder-primary"
               name="email"
               type="email"
-              placeholder={user?.email}
+              placeholder="Email"
             />
             <Select name="gender" required>
               <SelectTrigger className="w-full">
