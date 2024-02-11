@@ -8,6 +8,7 @@ import TrendingStores from './TrendingStores';
 import DealOfTheDay from './DealOfTheDay';
 import ServiceCards from './ServiceCards';
 import { getServices } from '../api/services/services';
+import Loading from './Loading';
 import { getTrendingOffers } from '../api/offers/offers';
 
 export default function Landing() {
@@ -94,11 +95,7 @@ export default function Landing() {
   }, [trendingOffersid]);
 
   if (!(loaded1 && loaded2 && loaded3)) {
-    return (
-      <div className="h-auto my-auto mx-auto justify-center items-center">
-        <img src="/loading.gif" alt="" className="opacity-70" />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

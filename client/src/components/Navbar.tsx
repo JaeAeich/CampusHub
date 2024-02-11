@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Menu, ShoppingCart, Search, Cat, Plus, Minus } from 'lucide-react';
@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { RootState } from '@/store/store';
 import {
   Table,
   TableBody,
@@ -25,7 +26,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
-import { RootState } from '../store/store';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 import { authenticated } from '../store/auth/authSlice';
@@ -68,17 +68,19 @@ function Navbar() {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userAccountExists = useSelector((state: RootState) => state.auth.value);
-  if (user && user.email) {
-    const promise = getUserById(user.email);
-    promise.then((response) => {
-      if ('error' in response) {
-        navigate(`/create/${user.email}`);
-      } else if ('user' in response) {
-        dispatch(authenticated());
-      }
-    });
-  }
+  const userExists = useSelector((state: RootState) => state.auth.value);
+  useEffect(() => {
+    if (user && user.email) {
+      const promise = getUserById(user.email);
+      promise.then((response) => {
+        if ('error' in response) {
+          navigate(`/create/${user.email}`);
+        } else if ('user' in response) {
+          dispatch(authenticated());
+        }
+      });
+    }
+  }, [user, dispatch, navigate, userExists]);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -87,10 +89,6 @@ function Navbar() {
     navigate('/');
   };
 
-  if (isAuthenticated && user && !userAccountExists) {
-    navigate(`/create/${user.email}`);
-    window.location.reload();
-  }
   const handleSearch = () => {
     if (searchValue === '') {
       return;
