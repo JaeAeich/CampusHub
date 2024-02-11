@@ -26,6 +26,7 @@ import { getProductsByStoreId } from '@/api/stores/stores';
 import getProductsByQuery from '@/api/products/products';
 import ProductCard from './ProductCard';
 import NotFound from './NotFound';
+import Loading from './Loading';
 
 function ProductsPage() {
   const { store_id } = useParams();
@@ -63,12 +64,7 @@ function ProductsPage() {
   }, [search_query, store_id]);
 
   if (isLoading) {
-    return (
-      <div className="h-auto my-auto mx-auto justify-center items-center">
-        {/* <div className="w-12 h-12 rounded-full animate-spin border-x-4 border-solid border-accent border-t-transparent" /> */}
-        <img src="/loading.gif" alt="" className="opacity-70" />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (store_products.length === 0 || errorProducts) {

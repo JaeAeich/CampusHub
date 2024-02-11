@@ -7,6 +7,7 @@ import { Carousel, CarouselItem, CarouselContent } from './ui/carousel';
 import Stars from './Stars';
 import { Badge } from './ui/badge';
 import NotFound from './NotFound';
+import Loading from './Loading';
 
 export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -34,12 +35,7 @@ export default function ProductPage() {
   }, [store_id, product_id]);
 
   if (isLoading) {
-    return (
-      <div className="h-auto my-auto mx-auto justify-center items-center">
-        {/* <div className="w-12 h-12 rounded-full animate-spin border-x-4 border-solid border-accent border-t-transparent" /> */}
-        <img src="/loading.gif" alt="" className="opacity-70" />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!product || errorProduct) {
