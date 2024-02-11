@@ -15,6 +15,7 @@ import { RootState } from './store/store';
 function App() {
   const isVisible = !window.location.pathname.includes('/login');
   const userExists = useSelector((state: RootState) => state.auth.value);
+
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">

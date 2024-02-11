@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Select,
@@ -13,6 +14,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import User from '@/api/users/types';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { authenticated } from '../store/auth/authSlice';
 
 function CreateAccount() {
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ function CreateAccount() {
   });
   const [fieldLeft, setMandatory] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
+  const dispatch = useDispatch();
 
   const handleChange = (field: string, value: string) => {
     const details: User = userDetails;
@@ -59,8 +62,8 @@ function CreateAccount() {
       setMandatory(false);
       setTryAgain(true);
     } else {
+      dispatch(authenticated());
       navigate('/');
-      window.location.reload();
     }
   };
 
@@ -111,7 +114,6 @@ function CreateAccount() {
                   id="name"
                   className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
                   placeholder="Name"
-                  defaultValue={user?.name}
                   onChange={(e) => handleChange('user_name', e.target.value)}
                   required
                 />

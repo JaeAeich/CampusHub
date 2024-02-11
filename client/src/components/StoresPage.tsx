@@ -25,6 +25,7 @@ import { Slider } from '@/components/ui/slider';
 import StoreCard from './StoreCard';
 // import { stores } from '../../app/constants';
 import NotFound from './NotFound';
+import Loading from './Loading';
 
 function StorePage() {
   const { service_id } = useParams();
@@ -50,12 +51,7 @@ function StorePage() {
   }, [service_id]);
 
   if (isLoading) {
-    return (
-      <div className="h-auto my-auto mx-auto justify-center items-center">
-        {/* <div className="w-12 h-12 rounded-full animate-spin border-x-4 border-solid border-accent border-t-transparent" /> */}
-        <img src="/loading.gif" alt="" className="opacity-70" />
-      </div>
-    );
+    return <Loading />;
   }
   if (service_stores.length === 0 || errorStores) {
     return (
