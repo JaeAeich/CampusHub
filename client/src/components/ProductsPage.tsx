@@ -59,7 +59,6 @@ function ProductsPage() {
         }
       }
     }
-
     fetchProductsByStoreId();
   }, [search_query, store_id]);
 
