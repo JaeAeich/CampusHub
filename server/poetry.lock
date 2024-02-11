@@ -952,6 +952,20 @@ files = [
 ]
 
 [[package]]
+name = "razorpay"
+version = "1.4.1"
+description = "Razorpay Python Client"
+optional = false
+python-versions = "*"
+files = [
+    {file = "razorpay-1.4.1-py3-none-any.whl", hash = "sha256:89b01c386cc93cc5af07d613c99c24fa3ded95d7def94b89e0ac294fb49cbe7c"},
+    {file = "razorpay-1.4.1.tar.gz", hash = "sha256:236af5a6ae6512345907f4b7f42297980bb8314dbbbc684313a476b7f45179bd"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "referencing"
 version = "0.32.1"
 description = "JSON Referencing + Python"
@@ -1231,4 +1245,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "18316075983a58778e3543b89ca952eac46b426cc073a4a71e3279b454a92052"
+content-hash = "40531c9901ec2ffd915a853110476a2238eb4ea99457c202549e50b2c3488ded"
