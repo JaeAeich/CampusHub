@@ -80,9 +80,15 @@ def add_seller() -> APIResponse:
                 Status.BAD_REQUEST, **message(f"Invalid seller data: {str(ve)}")
             )
 
+        unique_fields = {
+            "seller_email": seller_data["seller_email"],
+        }
+
         # Add the seller data to the database
         try:
-            db_connector.insert_data(sellers_collection_name, seller.dict())
+            db_connector.insert_data(
+                sellers_collection_name, seller.dict(), unique_fields
+            )
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,

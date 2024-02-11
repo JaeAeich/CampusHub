@@ -34,7 +34,7 @@ export async function getSellers(): Promise<SellerList | ErrorResponse | Message
  */
 export async function addSeller(
   seller: Omit<Seller, 'seller_id'>,
-): Promise<Seller | ErrorResponse | IdResponse | MessageResponse> {
+): Promise<ErrorResponse | IdResponse | MessageResponse> {
   try {
     const response: AxiosResponse = await axios.post(sellersURL, seller);
     return response.data;

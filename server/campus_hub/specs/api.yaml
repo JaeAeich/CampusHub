@@ -867,6 +867,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+        '409':
+          description: Data Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
         '500':
           description: Server Error
           content:
