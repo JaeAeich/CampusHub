@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Menu, ShoppingCart, Search, Cat, Plus, Minus } from 'lucide-react';
@@ -24,7 +25,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
-import { useDispatch } from 'react-redux';
+import { RootState } from '../store/store';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 import { authenticated } from '../store/auth/authSlice';
@@ -67,7 +68,7 @@ function Navbar() {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const userAccountExists = useSelector((state: RootState) => state.auth.value);
   if (user && user.email) {
     const promise = getUserById(user.email);
     promise.then((response) => {
@@ -86,20 +87,10 @@ function Navbar() {
     navigate('/');
   };
 
-  useEffect(() => {
-    async function fetchServices() {
-      const response = await getServices();
-      if ('error' in response) {
-        setErrorService(true);
-      } else if ('services' in response) {
-        setServices(response.services);
-      }
-    }
-
-    fetchServices();
-  }, []);
-  if(isAuthenticated&&!userAccountExists){
-    navigate('/createAccount')
+  
+  if(isAuthenticated&&user&&!userAccountExists){
+    navigate(`/create/${user.email}`);
+    window.location.reload();
   }
   const handleSearch = () => {
     if (searchValue === '') {
@@ -134,7 +125,7 @@ function Navbar() {
                   </div>
                 </div>
                 <Separator />
-                <nav className="flex flex-col gap-4 mt-2">
+                 <nav className="flex flex-col gap-4 mt-2">
                   <Accordion type="single" collapsible>
                     {routes.map((route, index) =>
                       route.content ? (

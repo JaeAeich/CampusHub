@@ -18,7 +18,7 @@ export default function TrendingStores({
         <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Trending
         </h2>
-        {error ? (
+        {(error||trendingStores.length===0) ? (
           <NotFound item="Trending stores" />
         ) : (
           <Carousel className="w-full" plugins={[Autoplay({ delay: 3000 })]}>
