@@ -13,7 +13,7 @@ export default function ServiceCards({ services, error }: { services: Service[];
       <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-10 sm: mb-2">
         Services
       </h2>
-      {(error||services.length===0) ? (
+      {error || services.length === 0 ? (
         <NotFound item="Services" />
       ) : (
         <div className="mb-10">

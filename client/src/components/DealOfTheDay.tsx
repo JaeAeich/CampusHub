@@ -21,7 +21,7 @@ export default function DealOfTheDay({
         <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Deals of the Day
         </h2>
-        {(error||trendingOffersProducts.length===0) ? (
+        {error || trendingOffersProducts.length === 0 ? (
           <NotFound item="Trending offers" />
         ) : (
           <Carousel plugins={[Autoplay({ delay: 6000 })]}>

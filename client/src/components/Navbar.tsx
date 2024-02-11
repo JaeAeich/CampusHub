@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -87,8 +87,7 @@ function Navbar() {
     navigate('/');
   };
 
-  
-  if(isAuthenticated&&user&&!userAccountExists){
+  if (isAuthenticated && user && !userAccountExists) {
     navigate(`/create/${user.email}`);
     window.location.reload();
   }
@@ -125,7 +124,7 @@ function Navbar() {
                   </div>
                 </div>
                 <Separator />
-                 <nav className="flex flex-col gap-4 mt-2">
+                <nav className="flex flex-col gap-4 mt-2">
                   <Accordion type="single" collapsible>
                     {routes.map((route, index) =>
                       route.content ? (
