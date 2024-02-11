@@ -9,29 +9,51 @@ import {
 import { useAuth0 } from '@auth0/auth0-react';
 import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Button } from './ui/button';
+import { unauthenticated } from '../store/auth/authSlice';
 
+const user_id = 1;
 const routes = [
   {
-    to: 'profile',
+    to: `/users/${user_id}/details`,
     label: 'Profile',
   },
   {
-    to: 'Wishlist',
-    label: 'wishlist',
+    to: `/users/${user_id}/wishlist`,
+    label: 'Wishlist',
   },
   {
-    to: 'settings',
-    label: 'Setting',
+    to: `/users/${user_id}/orders`,
+    label: 'Past Orders',
+  },
+  {
+    to: '/',
+    label: 'Notifications',
   },
 ];
 
 function ProfileButton() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleClick = (link: string) => {
+    navigate(link);
+    window.location.reload();
+  };
   // TODO: add different dropdown based on if user is logged in or not
   // TODO: get user and add its
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
 
+  const handleLogout = async () => {
+    dispatch(unauthenticated());
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -57,11 +79,16 @@ function ProfileButton() {
       <DropdownMenuContent>
         {isAuthenticated ? (
           <>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {routes.map((route) => (
-              <DropdownMenuItem key={route.to} className="cursor-pointer">
-                <Link to={route.to}>{route.label}</Link>
+              <DropdownMenuItem
+                key={route.to}
+                className="cursor-pointer py-2 pr-20 text-smm font-medium"
+              >
+                <Link to={route.to} onClick={() => handleClick(route.to)}>
+                  {route.label}
+                </Link>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
@@ -76,10 +103,11 @@ function ProfileButton() {
               </>
             )}
             <Button
-              className="w-full bg-accent"
-              onKeyDown={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              className="w-full bg-accent cursor-pointer text-red-700 font-bold active:bg-accentDark"
+              onClick={handleLogout}
+              onKeyDown={handleLogout}
             >
-              Log Out
+              {isAuthenticated ? 'Log Out' : 'Please wait'}
             </Button>
           </>
         ) : (

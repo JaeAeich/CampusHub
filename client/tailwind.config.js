@@ -120,6 +120,11 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+
+      maxHeight: {
+        108: '27rem',
+        128: '32rem',
+      },
     },
   },
   // eslint-disable-next-line global-require

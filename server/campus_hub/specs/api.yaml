@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.0.4
+  version: 1.0.5
 servers:
   - url: /campus_hub/v1
 tags:
@@ -24,6 +24,8 @@ tags:
     description: 'Operations related to notifications (Get, Get by ID)'
   - name: Offers
     description: 'Operations related to offers (Get, Get by Id, Get trending)'
+  - name: Users
+    description: 'Operations related to users (Get, Update, Delete)'
 paths:
   '/services':
     get:
@@ -61,7 +63,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostService"
+              $ref: '#/components/schemas/PostService'
       responses:
         '200':
           description: Success
@@ -98,7 +100,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Service"
+              $ref: '#/components/schemas/Service'
       responses:
         '200':
           description: Success
@@ -181,7 +183,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
-  '/services/{service_id}/products': #need to check if this is supposed to be in service or products. 
+  '/services/{service_id}/products': #need to check if this is supposed to be in service or products.
     get:
       summary: Get a list of all products of a service.
       operationId: services.get_products_by_service_id
@@ -215,36 +217,36 @@ paths:
                 $ref: '#/components/schemas/Response'
   '/services/{service_id}/offers':
     get:
-        summary: Get a list of all offers of a service.
-        operationId: services.get_offers_by_service_id
-        tags:
-          - Services
-        parameters:
-          - name: service_id
-            in: path
-            description: ID of service to get
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/OfferList'
-          '404':
-            description: Not Found
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Response'
-          '500':
-            description: Server Error
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Response'
+      summary: Get a list of all offers of a service.
+      operationId: services.get_offers_by_service_id
+      tags:
+        - Services
+      parameters:
+        - name: service_id
+          in: path
+          description: ID of service to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}':
     get:
       summary: Get a specific store.
@@ -689,6 +691,7 @@ paths:
         - $ref: '#/components/parameters/store_id'
         - $ref: '#/components/parameters/max_rating'
         - $ref: '#/components/parameters/max_price'
+        - $ref: '#/components/parameters/search_query'
       responses:
         '200':
           description: Success
@@ -850,7 +853,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostSeller"
+              $ref: '#/components/schemas/PostSeller'
       responses:
         '200':
           description: Success
@@ -895,7 +898,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostStore"
+              $ref: '#/components/schemas/PostStore'
       responses:
         '200':
           description: Success
@@ -905,6 +908,206 @@ paths:
                 $ref: '#/components/schemas/Response'
         '405':
           description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/users':
+    post:
+      summary: Add a new user
+      operationId: users.add_user
+      tags:
+        - Users
+      requestBody:
+        description: User object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostUser"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '405':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/users/{user_email}':
+    get:
+      summary: Get a specific user.
+      operationId: users.get_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_email
+          in: path
+          description: email ID of user to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}':
+    put:
+      summary: Update a user
+      operationId: users.update_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+    delete:
+      summary: Delete a user
+      operationId: users.delete_user_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}/cart':
+    get:
+      summary: Get a specific cart.
+      operationId: users.get_cart_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+    put:
+      summary: Update a cart
+      operationId: users.update_cart_by_id
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to put
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
@@ -1078,7 +1281,7 @@ components:
           type: object
           additionalProperties:
             type: string
-        offer_id: 
+        offer_id:
           type: string
         rating:
           type: number
@@ -1225,7 +1428,7 @@ components:
       allOf:
         - type: object
           properties:
-            seller_id: 
+            seller_id:
               type: string
         - $ref: '#/components/schemas/PostSeller'
       required:
@@ -1233,26 +1436,26 @@ components:
     PostSeller:
       type: object
       properties:
-        seller_name: 
+        seller_name:
           type: string
-        seller_phone_number: 
+        seller_phone_number:
           type: string
-        seller_email: 
+        seller_email:
           type: string
           format: email
-        seller_gender: 
+        seller_gender:
           type: string
-          enum: 
+          enum:
             - Male
             - Female
             - Other
-        order_ids: 
+        order_ids:
           type: array
           items:
             type: string
-        seller_image: 
+        seller_image:
           type: string
-        seller_address: 
+        seller_address:
           type: string
         store_ids:
           type: array
@@ -1287,6 +1490,60 @@ components:
           description: A user-friendly message.
       required:
         - message
+    PostUser:
+      type: object
+      properties:
+        user_name:
+          type: string
+        user_email:
+          type: string
+          format: email
+        user_phone_number:
+          type: string
+        user_address:
+          type: string
+        user_gender:
+          type: string
+        user_image:
+          type: string
+      required:
+        - user_name
+        - user_email
+        - user_phone_number
+        - user_address
+        - user_gender
+    User:
+      allOf:
+        - type: object
+          properties:
+            user_id:
+              type: string
+            cart_id:
+              type: string
+            wishlist_cart_id:
+              type: string
+            order_ids:
+              type: array
+              items:
+                type: string
+        - $ref: '#/components/schemas/PostUser'
+
+      required:
+        - user_id
+    Cart:
+      type: object
+      properties:
+        cart_id:
+          type: string
+        cart_items:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+              quantity:
+                type: integer
   parameters:
     service_id:
       name: service_id
@@ -1313,6 +1570,13 @@ components:
       name: product_category
       in: query
       description: required product_category
+      required: false
+      schema:
+        type: string
+    search_query:
+      name: search_query
+      in: query
+      description: search query
       required: false
       schema:
         type: string

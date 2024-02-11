@@ -13,7 +13,7 @@ export default function ServiceCards({ services, error }: { services: Service[];
       <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-10 sm: mb-2">
         Services
       </h2>
-      {error ? (
+      {error || services.length === 0 ? (
         <NotFound item="Services" />
       ) : (
         <div className="mb-10">
@@ -33,7 +33,7 @@ export default function ServiceCards({ services, error }: { services: Service[];
                   <Link to={`/services/${service.service_id}/stores`}>
                     {/* TODO: Route to the store path onClick */}
                     <div className="relative group">
-                      <Card className="bg-gradient-to-r from-accentLighter to-accentLight">
+                      <Card className="bg-gradient-to-r from-secondaryLight to-secondary">
                         <div className="flex-row flex justify-between">
                           <h1 className="px-4 pt-4 xl:text-xl md:text-lg sm:text-md font-subheading font-semibold">
                             {service.service_name}

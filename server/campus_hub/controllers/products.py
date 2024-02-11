@@ -3,9 +3,10 @@ from campus_hub.models.review import Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
+from flask import request
 
 
-def get_products(service_id, store_id, max_rating, min_rating, category) -> APIResponse:
+def get_products() -> APIResponse:
     """
     Get all products from the MongoDB database with filters based on query parameters.
     Args:
@@ -19,6 +20,13 @@ def get_products(service_id, store_id, max_rating, min_rating, category) -> APIR
 
     products_collection_name = "products"
 
+    service_id = request.args.get("service_id")
+    store_id = request.args.get("store_id")
+    max_rating = request.args.get("max_rating")
+    min_rating = request.args.get("min_rating")
+    category = request.args.get("category")
+    search_query = request.args.get("search_query")
+
     # Query without including _id field in the result
     query: dict = {}
     if service_id:
@@ -30,7 +38,10 @@ def get_products(service_id, store_id, max_rating, min_rating, category) -> APIR
     if min_rating:
         query["rating"] = {"$gte": min_rating}
     if category:
-        query["category"] = {"$in": category}
+        query["product_categories"] = {"$in": category}
+    if search_query:
+        regex_pattern = re.compile(re.escape(search_query), re.IGNORECASE)
+        query["product_name"] = {"$regex": regex_pattern}
 
     projection = {"_id": False}
 
