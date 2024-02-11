@@ -14,10 +14,10 @@ export const authSlice = createSlice({
       state.value = false;
     },
     sellerAuthenticated: (state) => {
-      state.value = true;
+      state.sellerAuth = true;
     },
     sellerUnauthenticated: (state) => {
-      state.value = false;
+      state.sellerAuth = false;
     },
   },
 });

@@ -29,9 +29,9 @@ export default function Component() {
     const formTarget = event.currentTarget as HTMLFormElement;
 
     const formData: Omit<Seller, 'seller_id'> = {
-      seller_name: user?.name || 'unknown',
+      seller_name: (formTarget.elements.namedItem('username') as HTMLInputElement).value,
       seller_phone_number: (formTarget.elements.namedItem('phoneNumber') as HTMLInputElement).value,
-      seller_email: user?.email || 'unknown',
+      seller_email: (formTarget.elements.namedItem('email') as HTMLInputElement).value,
       seller_image: user?.picture || 'unknown',
       seller_gender: (formTarget.elements.namedItem('gender') as HTMLSelectElement).value as
         | 'Male'
@@ -105,8 +105,7 @@ export default function Component() {
               <Input
                 name="username"
                 type="text"
-                disabled
-                className="border xl:text-base text-sm border-gray-300 placeholder-primary"
+                className="border xl:text-base text-sm border-gray-300 placeholder-primary mb-2 md:mb-0"
                 placeholder={user?.name}
                 required
               />
@@ -120,8 +119,8 @@ export default function Component() {
             </div>
             <Input
               className="border xl:text-base text-sm border-gray-300 placeholder-primary"
+              name="email"
               type="email"
-              disabled
               placeholder={user?.email}
             />
             <Select name="gender" required>
