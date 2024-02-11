@@ -69,6 +69,7 @@ function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userExists = useSelector((state: RootState) => state.auth.value);
+  const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
   useEffect(() => {
     if (user && user.email) {
       const promise = getUserById(user.email);
@@ -152,6 +153,16 @@ function Navbar() {
                         </div>
                       ),
                     )}
+                    {isAuthenticated &&
+                      (sellerAuth ? (
+                        <Button className="w-full bg-accent">
+                          <Link to="/seller/dashboard">Dashboard</Link>
+                        </Button>
+                      ) : (
+                        <Button className="w-full bg-accent">
+                          <Link to="/seller/register">Become a seller</Link>
+                        </Button>
+                      ))}
                     {isAuthenticated ? (
                       <Button variant="destructive" className="w-full" onClick={handleLogout}>
                         {isLoggingOut ? 'Please Wait' : 'Logout'}

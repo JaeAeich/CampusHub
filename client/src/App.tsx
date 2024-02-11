@@ -13,11 +13,13 @@ import { Toaster } from './components/ui/toaster';
 import UserProfile from './components/UserProfile';
 import CreateAccount from './components/CreateAccount';
 import { RootState } from './store/store';
+import SellerDashboard from './components/SellerDashboard';
 
 function App() {
   const isVisible = !window.location.pathname.includes('/login');
   const { isAuthenticated } = useAuth0();
   const userExists = useSelector((state: RootState) => state.auth.value);
+  const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
 
   return (
     <BrowserRouter>
@@ -39,6 +41,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
               </>
             )}
+            {sellerAuth && <Route path="/seller/register" element={<SellerDashboard />} />}
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
             <Route path="/services/:service_id/stores" element={<StorePage />} />

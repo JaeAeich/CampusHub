@@ -9,8 +9,9 @@ import {
 import { useAuth0 } from '@auth0/auth0-react';
 import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { RootState } from '@/store/store';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { unauthenticated } from '../store/auth/authSlice';
 
@@ -37,6 +38,8 @@ const routes = [
 function ProfileButton() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
 
   const handleClick = (link: string) => {
     navigate(link);
@@ -97,7 +100,11 @@ function ProfileButton() {
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem key="/login" className="cursor-pointer">
-                  <Link to="/seller/register">Become a seller</Link>
+                  {sellerAuth ? (
+                    <Link to="/seller/dashboard">Dashboard</Link>
+                  ) : (
+                    <Link to="/seller/register">Become a seller</Link>
+                  )}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>

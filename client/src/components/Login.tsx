@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useDispatch } from 'react-redux';
 import {
   Select,
   SelectContent,
@@ -14,11 +15,14 @@ import { useToast } from '@/components/ui/use-toast';
 import { addSeller } from '@/api/sellers/sellers';
 import Seller from '@/api/sellers/types';
 import { useNavigate } from 'react-router-dom';
+import { sellerAuthenticated } from '@/store/auth/authSlice';
+import { setSellerId } from '@/store/seller/sellerSlice';
 
 export default function Component() {
   const { user } = useAuth0();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -44,6 +48,8 @@ export default function Component() {
         title: 'Seller create',
         description: response.id,
       });
+      dispatch(sellerAuthenticated());
+      dispatch(setSellerId(response.id));
       navigate('/');
     } else if ('message' in response) {
       toast({
