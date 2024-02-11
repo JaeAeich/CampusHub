@@ -5,6 +5,7 @@ export const authSlice = createSlice({
   initialState: {
     value: false,
     sellerAuth: false,
+    user_email: '',
   },
   reducers: {
     authenticated: (state) => {
