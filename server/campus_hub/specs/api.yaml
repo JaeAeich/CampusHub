@@ -1144,6 +1144,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/payments':
+    post:
+      summary: Add a new payment
+      operationId: payment.add_payment
+      tags:
+        - Payments
+      requestBody:
+        description: Payment object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
@@ -1435,8 +1467,6 @@ components:
         amount_paid:
           type: number
           format: float
-        order_id:
-          type: string
         delivery_address:
           type: string
         seller_id:
@@ -1450,9 +1480,33 @@ components:
         - store_id
         - delivery_status
         - amount_paid
-        - order_id
         - delivery_address
-        - seller_id
+    Payment:
+      allOf:
+        - type: object
+          properties:
+            payment_id:
+              type: string
+        - $ref: '#/components/schemas/PostPayment'
+    PostPayment:
+      type: object
+      properties:
+        payment_id:
+          type: string
+        order_id:
+          type: string
+        signature:
+          type: string
+        amount:
+          type: number
+          format: float
+        created_at:
+          type: string
+      required:
+        - payment_id
+        - order_id
+        - signature
+        - amount
     Seller:
       allOf:
         - type: object

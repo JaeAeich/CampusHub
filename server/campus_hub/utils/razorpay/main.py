@@ -15,3 +15,12 @@ class RazorpayClient:
             return response(
                 Status.BAD_REQUEST, **message(f"Invalid offer data: {str(ve)}")
             )
+    
+    def verify_payment(self, razorpay_order_id, razorpay_payment_id, razorpay_signature):
+        try:
+            client.utility.verify_payment_signature({'razorpay_order_id': razorpay_order_id, 'razorpay_payment_id': razorpay_payment_id, 'razorpay_signature': razorpay_signature})
+        except Exception as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid offer data: {str(e)}")
+            )
+    

@@ -7,9 +7,11 @@ from pymongo.errors import PyMongoError
 from typing import MutableMapping, Any
 from pymongo import UpdateOne
 from datetime import datetime
+from campus_hub.utils.razorpay.main import RazorpayClient
 
+rz_client = RazorpayClient()
 def get_order_history():
-    # Placeholder logic to get order history for a user
+    # Placeholder logic to  get order history for a user
     return [
         {"id": 1, "service_id": 1, "user_id": 1, "status": "Completed"},
         {"id": 2, "service_id": 2, "user_id": 1, "status": "Pending"},
@@ -38,11 +40,11 @@ def add_order():
         if request_json is not None:
             order_data: MutableMapping[Any, Any] = request_json
             store_query["store_id"] = order_data["store_id"]
-            # NOTE: Check if seller exists
+            # NOTE: Check if store exists
             _stores = db_connector.query_data(
                 stores_collection_name, store_query, projection
             )
-            # If there are no sellers, return 404 error
+            # If there are no stores, return 404 error
             if not _stores or len(_stores) == 0:
                 return response(Status.NOT_FOUND, **message("store does not exist."))
         else:
@@ -50,8 +52,7 @@ def add_order():
             order_data = {}
 
         # Add uui as order id
-        order_id: str = db_connector.generate_unique_id("orders")
-        order_data["order_id"] = order_id
+        order_data["order_id"] = db_connector.generate_unique_id("orders")
         order_data["created_at"] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
         # Validate the incoming data using Pydantic model
@@ -64,7 +65,16 @@ def add_order():
 
         # Add the order data to the database
         try:
+            order_response = rz_client.create_order(amount = order_data["amount_paid"], currency="INR")  
+            print(order_response)      
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Error while creating Razorpay order: {str(e)}")
+            ) 
+        try:
             db_connector.insert_data(orders_collection_name, order.model_dump())
+
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -73,9 +83,9 @@ def add_order():
 
         try:
             # Update user's "order_ids" field
-            user_query = {"user_id": order_data["user_id"]}
+            user_query = {"user_email": order_data["email_id"]}
             user_update = {
-                "$addToSet": {"order_ids": order_id}  # Using $addToSet to avoid duplicates
+                "$addToSet": {"order_ids": order_data["order_id"]}  # Using $addToSet to avoid duplicates
             }
             user_update_query = UpdateOne(user_query, user_update)
             db_connector.get_collection(users_collection_name).bulk_write([user_update_query])
@@ -83,7 +93,7 @@ def add_order():
             # Update store's "customer_order_ids" field
             store_query = {"store_id": order_data["store_id"]}
             store_update = {
-                "$addToSet": {"customer_order_ids": order_id}  # Using $addToSet to avoid duplicates
+                "$addToSet": {"customer_order_ids": order_data["order_id"]}  # Using $addToSet to avoid duplicates
             }
             store_update_query = UpdateOne(store_query, store_update)
             db_connector.get_collection(stores_collection_name).bulk_write([store_update_query])
@@ -94,7 +104,7 @@ def add_order():
             **message(f"Internal Server Error: {str(e)}"),
             )
         # Return a success response
-        return response(Status.SUCCESS, **{"id": order_id})
+        return response(Status.SUCCESS, **{"id": order_data["order_id"]})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

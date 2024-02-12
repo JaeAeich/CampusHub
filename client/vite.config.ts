@@ -1,17 +1,23 @@
 import path from 'path';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, '');
+
+  return {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
     },
-  },
-  preview: {
-    host: true,
-    strictPort: true,
-    port: 3000,
-  },
+    server: {
+      port: 5173,
+    },
+    define: {
+      __RAZORPAY_ID__: JSON.stringify(env.RAZORPAY_ID),
+      // Add other environment variables as needed
+    },
+  };
 });

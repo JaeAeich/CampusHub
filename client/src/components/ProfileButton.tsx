@@ -25,6 +25,10 @@ const routes = [
     label: 'Wishlist',
   },
   {
+    to: `/users/${user_id}/cart`,
+    label: 'Cart',
+  },
+  {
     to: `/users/${user_id}/orders`,
     label: 'Past Orders',
   },

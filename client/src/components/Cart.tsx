@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { Plus, Minus, X } from 'lucide-react';
+import addOrder from '@/api/orders/orders';
+import useRazorpay from "react-razorpay";
+import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 
+const razorpay_id = __RAZORPAY_ID__;
 function Cart() {
   const [quantity, setQuantity] = useState(2);
+  const navigate=useNavigate();
 
   const handleIncrement = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -14,7 +19,75 @@ function Cart() {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
+  const [Razorpay] = useRazorpay();
+  const orderData = {
+    user_id: '', 
+    email_id: 'h@h.com',
+    product_list: [{
+      product_id: 'product_id', 
+      quantity: 1,
+      wishlisted_price: 0, 
+    }],
+    store_id: 'store5', 
+    store_name: 'Store Name', 
+    delivery_status: false,
+    amount_paid: 134.98, 
+    delivery_address: 'Delivery Address', 
+    seller_id: 'seller_id',
+    created_at: ''
+  };
+  const handleBuy = async () => {
+    // Prepare order data
 
+    try {
+      // Send order to backend
+      const response = await addOrder(orderData);
+      const options = {
+        key: razorpay_id,
+        name: "Campus Hub",
+        description: "Transaction",
+        image: "/logo.png",
+        order_id: response, 
+        amount: "50000", currency: "INR",
+        handler: (res) => {
+          // alert(response)
+          navigate(`/orders/success`);
+          // alert(res.razorpay_payment_id);
+          // alert(res.razorpay_order_id);
+          // alert(res.razorpay_signature);
+        },
+        prefill: {
+          name: "Your Name",
+          email: "youremail@example.com",
+          contact: "9999999999",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+    
+      const rzp1 = new Razorpay(options);
+    
+      rzp1.on("payment.failed"
+      , (res) => {
+        navigate(`/orders/failure`);
+        // alert(res.error.code);
+        // alert(res.error.description);
+        // alert(res.error.source);
+        // alert(res.error.step);
+        // alert(res.error.reason);
+        // alert(res.error.metadata.order_id);
+        // alert(res.error.metadata.payment_id);
+      });
+    
+      rzp1.open();
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
+  };
   return (
     <div className="lg:pt-10 pt-2">
       <div className="mx-auto max-w-8xl justify-center mx-8 xl:flex xl:space-x-6 xl:px-0">
@@ -88,7 +161,7 @@ function Cart() {
               <p className="text-sm text-primary">including VAT</p>
             </div>
           </div>
-          <Button className="mt-6 w-full rounded-md bg-accent py-1.5 font-medium text-primary hover:bg-accentDark">
+          <Button className="mt-6 w-full rounded-md bg-accent py-1.5 font-medium text-primary hover:bg-accentDark" onClick={handleBuy}>
             Check out
           </Button>
         </div>

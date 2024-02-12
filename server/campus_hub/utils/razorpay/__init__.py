@@ -1,4 +1,6 @@
 import razorpay
 import os
 
-client = razorpay.Client(auth=(os.environ.get("RAZORPAY_ID"), os.environ.get("RAZORPAY_SECRET")))
+razorpay_id = os.environ.get("RAZORPAY_ID")
+razorpay_secret = os.environ.get("RAZORPAY_ID")
+client = razorpay.Client(auth=(razorpay_id, razorpay_secret))
