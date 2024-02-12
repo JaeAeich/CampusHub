@@ -23,8 +23,8 @@ class Cart(BaseModel):
 
     Attributes:
         cart_id: Identifier for the user associated with the carts.
-        carts: List of carts.
+        cart_items: List of items in cart.
     """
 
     cart_id: str
-    carts: List[str]
+    cart_items: List[str]

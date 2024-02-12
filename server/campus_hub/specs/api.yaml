@@ -1112,6 +1112,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/orders':
+    post:
+      summary: Add a new order
+      operationId: order.add_order
+      tags:
+        - Orders
+      requestBody:
+        description: Order object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostOrder'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseID'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
 components:
   schemas:
     ServiceList:
@@ -1376,10 +1408,15 @@ components:
       items:
         $ref: '#/components/schemas/Order'
     Order:
+      allOf:
+        - type: object
+          properties:
+            order_id:
+              type: string
+        - $ref: '#/components/schemas/PostOrder'
+    PostOrder:
       type: object
       properties:
-        order_id:
-          type: string
         user_id:
           type: string
         email_id:
@@ -1388,7 +1425,7 @@ components:
         product_list:
           type: array
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: '#/components/schemas/CartItems'
         store_id:
           type: string
         store_name:
@@ -1398,7 +1435,7 @@ components:
         amount_paid:
           type: number
           format: float
-        transaction_id:
+        order_id:
           type: string
         delivery_address:
           type: string
@@ -1407,15 +1444,13 @@ components:
         created_at:
           type: string
       required:
-        - order_id
         - user_id
         - email_id
         - product_list
         - store_id
-        - store_name
         - delivery_status
         - amount_paid
-        - transaction_id
+        - order_id
         - delivery_address
         - seller_id
     Seller:
@@ -1443,10 +1478,6 @@ components:
             - Male
             - Female
             - Other
-        order_ids:
-          type: array
-          items:
-            type: string
         seller_image:
           type: string
         seller_address:
@@ -1461,7 +1492,6 @@ components:
         - seller_email
         - store_ids
         - seller_gender
-        - order_ids
         - seller_address
     SellerList:
       type: object
@@ -1532,12 +1562,18 @@ components:
         cart_items:
           type: array
           items:
-            type: object
-            properties:
-              product_id:
-                type: string
-              quantity:
-                type: integer
+            $ref: '#/components/schemas/CartItems'
+    CartItems:
+      type: object
+      properties:
+        product_id:
+          type: string
+        quantity:
+          type: integer
+        wishlisted_price:
+          type: number
+          format: float
+
   parameters:
     service_id:
       name: service_id

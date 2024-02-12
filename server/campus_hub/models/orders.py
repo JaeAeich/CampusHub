@@ -16,9 +16,10 @@ class Order(BaseModel):
         store_name: Name of the store
         delivery_status: Delivery status of the order
         amount_paid: Amount paid for the order.
-        transaction_id: Identifier for the transaction related to the order.
+        order_id: Identifier for the order.
         delivery_address: Address for delivering the order.
         seller_id: Identifier for the seller fulfilling the order.
+        created_at: created_date of the order
     """
 
     order_id: str
@@ -29,7 +30,7 @@ class Order(BaseModel):
     store_name: str
     delivery_status: bool
     amount_paid: float
-    transaction_id: str
+    order_id: str
     delivery_address: str
     seller_id: str
     created_at: str

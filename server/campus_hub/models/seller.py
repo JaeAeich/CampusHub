@@ -12,7 +12,6 @@ class Seller(BaseModel):
         seller_phone_number: Phone number associated with the seller.
         seller_email: Email associated with the seller.
         seller_gender: Gender of the seller.
-        order_ids: List of order IDs associated with the seller.
         seller_image: Optional image reference representing the seller.
         seller_address: Address of the seller.
         seller_id: Unique identifier for the seller.
@@ -23,7 +22,6 @@ class Seller(BaseModel):
     seller_phone_number: str
     seller_email: str
     seller_gender: Literal["Male", "Female", "Other"]
-    order_ids: List[str]
     seller_image: Optional[str]
     seller_address: str
     seller_id: str

@@ -1,6 +1,5 @@
 export default interface Seller {
   seller_id: string;
-  order_ids: string[];
   seller_address: string;
   seller_email: string;
   seller_gender: 'Male' | 'Female' | 'Other';
