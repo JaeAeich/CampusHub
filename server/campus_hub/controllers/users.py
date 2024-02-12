@@ -208,7 +208,7 @@ def get_cart_by_id(user_id: str) -> APIResponse:
     users_collection_name = "users"
 
     query = {"user_id": user_id}
-    projection = {"_id": False, "cart_id": True}
+    projection = {"_id": False}
 
     try:
         _user = db_connector.query_data(users_collection_name, query, projection)

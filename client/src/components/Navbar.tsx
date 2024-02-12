@@ -29,6 +29,9 @@ import { getUserById } from '@/api/users/users';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 import { authenticated } from '../store/auth/authSlice';
+import { useAppDispatch } from '@/utils/hooks';
+import { setCartDataAsync } from '@/store/cart/cartSlice';
+import User from '@/api/users/types';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -67,6 +70,7 @@ function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
   const navigate = useNavigate();
   const userExists = useSelector((state: RootState) => state.auth.value);
   const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
@@ -77,6 +81,9 @@ function Navbar() {
         if ('error' in response) {
           navigate(`/create/${user.email}`);
         } else if ('user' in response) {
+          const userResponse: User = response.user as User;
+          // console.log(userResponse.user_id);
+          appDispatch(setCartDataAsync(userResponse.user_id));
           dispatch(authenticated());
         }
       });
