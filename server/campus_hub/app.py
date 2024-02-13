@@ -3,6 +3,7 @@ from pathlib import Path
 from connexion import FlaskApp
 from connexion.resolver import RelativeResolver
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 
 def create_app():
@@ -23,5 +24,6 @@ cors_origin = os.getenv("CORS_ORIGIN", "https://localhost:5173")
 CORS(app.app, origin=[cors_origin])
 
 if __name__ == "__main__":
+    load_dotenv()
     # for development only
     app.run(port=8081, debug=True)

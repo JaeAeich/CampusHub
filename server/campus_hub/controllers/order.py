@@ -7,9 +7,7 @@ from pymongo.errors import PyMongoError
 from typing import MutableMapping, Any
 from pymongo import UpdateOne
 from datetime import datetime
-from campus_hub.utils.razorpay.main import RazorpayClient
-
-rz_client = RazorpayClient()
+from campus_hub.utils.payment.main import rz_client
 
 
 def get_order_history():
@@ -69,18 +67,17 @@ def add_order() -> APIResponse:
 
         # Add the order data to the database
         try:
-            order_response = rz_client.create_order(
+            rz_client.create_order(
                 amount=order_data["amount_paid"], currency="INR"
             )
-            print(order_response)
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Error while creating Razorpay order: {str(e)}"),
             )
+
         try:
             db_connector.insert_data(orders_collection_name, order.model_dump())
-
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,

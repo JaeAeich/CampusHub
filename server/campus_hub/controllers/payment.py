@@ -1,4 +1,3 @@
-import os
 import hashlib
 import hmac
 from flask import request
@@ -8,12 +7,8 @@ from pymongo.errors import PyMongoError
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import response, message, Status, APIResponse
 from datetime import datetime
-from campus_hub.utils.razorpay.main import RazorpayClient
+from campus_hub.utils.payment.main import rz_client
 from campus_hub.models.payment import Payment
-
-rz_client = RazorpayClient()
-razorpay_id = os.environ.get("RAZORPAY_ID")
-razorpay_secret = os.environ.get("RAZORPAY_SECRET")
 
 
 def add_payment() -> APIResponse:
@@ -43,14 +38,14 @@ def add_payment() -> APIResponse:
             if not _order or len(_order) == 0:
                 return response(Status.NOT_FOUND, **message("Order does not exist."))
 
-            assert razorpay_secret is not None, "RAZORPAY_SECRET is not set"
+            assert rz_client.razorpay_secret is not None, "RAZORPAY_SECRET is not set"
 
-            secret_key = razorpay_secret.encode("utf-8")
+            secret_key = rz_client.razorpay_secret.encode("utf-8")
 
             # Assuming payment_data["order_id"] and os.environ["RAZORPAY_ID"] are strings, you need to encode them to bytes
             order_id_bytes = str(payment_data["order_id"]).encode("utf-8")
-            assert razorpay_id is not None, "RAZORPAY_ID is not set"
-            razorpay_id_bytes = razorpay_id.encode("utf-8")
+            assert rz_client.razorpay_id is not None, "RAZORPAY_ID is not set"
+            razorpay_id_bytes = rz_client.razorpay_id.encode("utf-8")
 
             # Concatenate the bytes and then calculate the HMAC
             _message = order_id_bytes + b"|" + razorpay_id_bytes
@@ -76,7 +71,7 @@ def add_payment() -> APIResponse:
         try:
             rz_client.verify_payment(
                 razorpay_order_id=payment_data["order_id"],
-                razorpay_payment_id=razorpay_id,
+                razorpay_payment_id=rz_client.razorpay_id,
                 razorpay_signature=payment_data["signature"],
             )
 

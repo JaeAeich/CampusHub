@@ -1,27 +1,38 @@
-from . import client
+import razorpay
+import os
+import logging
 from pydantic import ValidationError
 from campus_hub.utils.response import response, message, Status
 
 
 class RazorpayClient:
-    def create_order(self, amount, currency):
+    def __init__(self) -> None:
+        self.razorpay_id: str = os.environ.get("RAZORPAY_ID", "rzp_test_w2v4fpnqqM6VS8")
+        self.razorpay_secret: str = os.environ.get(
+            "RAZORPAY_SECRET", "PGQvUDTt9HEdpHzNWLgacGYX"
+        )
+        self.client = razorpay.Client(
+            auth=(str(self.razorpay_id), str(self.razorpay_secret))
+        )
+
+    def create_order(self, amount, currency) -> None:
         data = {
             "amount": 100,
             "currency": "INR",
         }
         try:
-            order_data = client.order.create(data=data)
+            order_data = self.client.order.create(data=data)
             return order_data
         except ValidationError as ve:
-            return response(
+            logging.error(response(
                 Status.BAD_REQUEST, **message(f"Invalid offer data: {str(ve)}")
-            )
+            ))
 
     def verify_payment(
         self, razorpay_order_id, razorpay_payment_id, razorpay_signature
     ):
         try:
-            client.utility.verify_payment_signature(
+            self.client.utility.verify_payment_signature(
                 {
                     "razorpay_order_id": razorpay_order_id,
                     "razorpay_payment_id": razorpay_payment_id,
@@ -32,3 +43,6 @@ class RazorpayClient:
             return response(
                 Status.BAD_REQUEST, **message(f"Invalid offer data: {str(e)}")
             )
+
+
+rz_client = RazorpayClient()
