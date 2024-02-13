@@ -2,6 +2,7 @@ from . import client
 from pydantic import ValidationError
 from campus_hub.utils.response import response, message, Status, APIResponse
 
+
 class RazorpayClient:
     def create_order(self, amount, currency):
         data = {

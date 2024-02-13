@@ -48,64 +48,64 @@ function Cart() {
     try {
       // Send order to backend
       const response = await addOrder(orderData);
-      if ("id" in response) {  
-      const options = {
-        key: razorpay_id,
-        name: 'Campus Hub',
-        description: 'Transaction',
-        image: '/logo.png',
-        order_id: response.id,
-        amount: '50000',
-        currency: 'INR',
-        handler: () => {
+      if ('id' in response) {
+        const options = {
+          key: razorpay_id,
+          name: 'Campus Hub',
+          description: 'Transaction',
+          image: '/logo.png',
+          order_id: response.id,
+          amount: '50000',
+          currency: 'INR',
+          handler: () => {
+            toast({
+              title: 'Order created successfully',
+              action: <ToastAction altText="View My Order">My Orders</ToastAction>,
+            });
+            setTimeout(() => {
+              navigate(`/`);
+            }, 3000);
+            // alert(res.razorpay_payment_id);
+            // alert(res.razorpay_order_id);
+            // alert(res.razorpay_signature);
+          },
+          prefill: {
+            name: 'Your Name',
+            email: 'youremail@example.com',
+            contact: '9999999999',
+          },
+          notes: {
+            address: 'Razorpay Corporate Office',
+          },
+          theme: {
+            color: '#3399cc',
+          },
+        };
+
+        const rzp1 = new Razorpay(options);
+
+        rzp1.on('payment.failed', () => {
+          // TODO: Cart values are reset to zero always. Order is created regardless of payment status. Pay again option must be available in orders in case of failure.
           toast({
-            title: 'Order created successfully',
-            action: <ToastAction altText="View My Order">My Orders</ToastAction>,
+            title: 'Payment Failed, Please try again',
+            action: <ToastAction altText="Try Again">View Cart</ToastAction>,
           });
           setTimeout(() => {
             navigate(`/`);
           }, 3000);
-          // alert(res.razorpay_payment_id);
-          // alert(res.razorpay_order_id);
-          // alert(res.razorpay_signature);
-        },
-        prefill: {
-          name: 'Your Name',
-          email: 'youremail@example.com',
-          contact: '9999999999',
-        },
-        notes: {
-          address: 'Razorpay Corporate Office',
-        },
-        theme: {
-          color: '#3399cc',
-        },
-      };
-
-      const rzp1 = new Razorpay(options);
-
-      rzp1.on('payment.failed', () => {
-        // TODO: Cart values are reset to zero always. Order is created regardless of payment status. Pay again option must be available in orders in case of failure.
-        toast({
-          title: 'Payment Failed, Please try again',
-          action: <ToastAction altText="Try Again">View Cart</ToastAction>,
+          // alert(res.error.code);
+          // alert(res.error.description);
+          // alert(res.error.source);
+          // alert(res.error.step);
+          // alert(res.error.reason);
+          // alert(res.error.metadata.order_id);
+          // alert(res.error.metadata.payment_id);
         });
-        setTimeout(() => {
-          navigate(`/`);
-        }, 3000);
-        // alert(res.error.code);
-        // alert(res.error.description);
-        // alert(res.error.source);
-        // alert(res.error.step);
-        // alert(res.error.reason);
-        // alert(res.error.metadata.order_id);
-        // alert(res.error.metadata.payment_id);
-      });
 
-      rzp1.open();
-    }else{
-      throw new Error("Order creation failed: No order ID in the response");
-    }
+        rzp1.open();
+      } else {
+        throw new Error('Order creation failed: No order ID in the response');
+      }
     } catch (error) {
       toast({
         title: 'Payment Failed, Please try again',

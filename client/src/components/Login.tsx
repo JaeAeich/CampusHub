@@ -39,7 +39,6 @@ export default function Component() {
         | 'Other',
       seller_address: (formTarget.elements.namedItem('address') as HTMLInputElement).value,
       store_ids: [],
-      order_ids: [],
     };
 
     const response = await addSeller(formData);
