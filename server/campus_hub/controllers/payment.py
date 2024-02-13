@@ -1,3 +1,6 @@
+import os
+import hashlib
+import hmac
 from flask import request
 from typing import MutableMapping, Any
 from pydantic import ValidationError
@@ -7,15 +10,13 @@ from campus_hub.utils.response import response, message, Status, APIResponse
 from datetime import datetime
 from campus_hub.utils.razorpay.main import RazorpayClient
 from campus_hub.models.payment import Payment
-import os
-import hashlib, hmac
 
 rz_client = RazorpayClient()
 razorpay_id = os.environ.get("RAZORPAY_ID")
 razorpay_secret = os.environ.get("RAZORPAY_SECRET")
 
 
-def add_payment():
+def add_payment() -> APIResponse:
     """
     Adds a new payment to the MongoDB database.
 
@@ -48,9 +49,9 @@ def add_payment():
             razorpay_id_bytes = razorpay_id.encode("utf-8")
 
             # Concatenate the bytes and then calculate the HMAC
-            message = order_id_bytes + b"|" + razorpay_id_bytes
+            _message = order_id_bytes + b"|" + razorpay_id_bytes
             payment_data["signature"] = hmac.new(
-                secret_key, message, hashlib.sha256
+                secret_key, _message, hashlib.sha256
             ).hexdigest()
         else:
             payment_data = {}

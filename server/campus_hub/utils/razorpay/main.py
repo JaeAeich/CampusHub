@@ -19,7 +19,7 @@ class RazorpayClient:
 
     def verify_payment(
         self, razorpay_order_id, razorpay_payment_id, razorpay_signature
-    ):
+    ) -> APIResponse:
         try:
             client.utility.verify_payment_signature(
                 {

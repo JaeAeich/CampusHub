@@ -20,7 +20,7 @@ def get_order_history():
     ]
 
 
-def add_order():
+def add_order() -> APIResponse:
     """
     Adds a new order to the MongoDB database.
 
