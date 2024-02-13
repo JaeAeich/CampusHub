@@ -45,6 +45,7 @@
     "lucide-react": "^0.303.0",
     "next-themes": "^0.2.1",
     "react-hook-form": "^7.50.1",
+    "react-razorpay": "^2.0.1",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.21.3",
     "regenerator-runtime": "^0.14.1",
