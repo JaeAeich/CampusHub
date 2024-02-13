@@ -1,6 +1,6 @@
 from . import client
 from pydantic import ValidationError
-from campus_hub.utils.response import response, message, Status, APIResponse
+from campus_hub.utils.response import response, message, Status
 
 
 class RazorpayClient:
@@ -19,7 +19,7 @@ class RazorpayClient:
 
     def verify_payment(
         self, razorpay_order_id, razorpay_payment_id, razorpay_signature
-    ) -> APIResponse:
+    ):
         try:
             client.utility.verify_payment_signature(
                 {

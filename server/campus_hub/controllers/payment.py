@@ -42,10 +42,14 @@ def add_payment() -> APIResponse:
             # If there are no orders, return 404 error
             if not _order or len(_order) == 0:
                 return response(Status.NOT_FOUND, **message("Order does not exist."))
+
+            assert razorpay_secret is not None, "RAZORPAY_SECRET is not set"
+
             secret_key = razorpay_secret.encode("utf-8")
 
             # Assuming payment_data["order_id"] and os.environ["RAZORPAY_ID"] are strings, you need to encode them to bytes
             order_id_bytes = str(payment_data["order_id"]).encode("utf-8")
+            assert razorpay_id is not None, "RAZORPAY_ID is not set"
             razorpay_id_bytes = razorpay_id.encode("utf-8")
 
             # Concatenate the bytes and then calculate the HMAC
