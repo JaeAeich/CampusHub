@@ -1,8 +1,9 @@
 import Cart from '@/api/cart/types';
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit';
-import { AppDispatch } from '../store';
-import { getUserCart } from '@/api/users/users';
-import { omit } from 'lodash';
+import { AppDispatch, RootState } from '../store';
+import { getUserCart, updateUserCart } from '@/api/users/users';
+import { omit, update } from 'lodash';
+import { useSelector } from 'react-redux';
 
 const initialState: Cart = {
   cart_id: '',
@@ -17,6 +18,14 @@ export const cartSlice: Slice = createSlice({
       return action.payload;
     },
     add: (state, action) => {
+      const user_id = useSelector((state: RootState) => state.auth.user_email);
+      updateUserCart(user_id, {
+        ...state,
+        carts: {
+          ...state.cart_items,
+          [action.payload.product_id]: action.payload.quantity,
+        },
+      });
       return {
         ...state,
         carts: {
@@ -26,6 +35,14 @@ export const cartSlice: Slice = createSlice({
       };
     },
     remove: (state, action) => {
+      const user_id = useSelector((state: RootState) => state.auth.user_email);
+      updateUserCart(user_id, {
+        ...state,
+        carts: {
+          ...state.cart_items,
+          [action.payload.product_id]: action.payload.quantity,
+        },
+      });
       return {
         ...state,
         carts: omit(state.cart_items, action.payload.product_id),
@@ -66,3 +83,12 @@ export const setCartDataAsync = (user_id: string) => async (dispatch: AppDispatc
     console.error('Error fetching cart data:', error);
   }
 };
+
+/**
+ * Adds a product to the cart.
+ *
+ * @param product_id The ID of the product to add to the cart.
+ * @param quantity The quantity of the product to add to the cart.
+ * @returns A thunk that dispatches the add action with the product data.
+ */
+

@@ -34,7 +34,7 @@ import { setCartDataAsync } from '@/store/cart/cartSlice';
 import User from '@/api/users/types';
 
 // TODO: ADD ID AFTER AUTH
-const user_id = 1;
+const user_id = useSelector((state: RootState) => state.auth.user_email) as string;
 const routes = [
   {
     to: '/',
@@ -81,10 +81,9 @@ function Navbar() {
         if ('error' in response) {
           navigate(`/create/${user.email}`);
         } else if ('user' in response) {
-          const userResponse: User = response.user as User;
-          // console.log(userResponse.user_id);
-          appDispatch(setCartDataAsync(userResponse.user_id));
-          dispatch(authenticated());
+          const userResponse = response.user as User;
+          appDispatch(setCartDataAsync(userResponse.user_id as string));
+          dispatch(authenticated(user.email));
         }
       });
     }
