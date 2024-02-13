@@ -17,7 +17,7 @@ const ordersURL = `${baseURL}/orders`;
  */
 export default async function addOrder(
   order: Omit<Order, 'order_id'>,
-): Promise< ErrorResponse | IdResponse > {
+): Promise<ErrorResponse | IdResponse> {
   try {
     const response: AxiosResponse = await axios.post(ordersURL, order);
     return response.data;

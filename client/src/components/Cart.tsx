@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Plus, Minus, X } from 'lucide-react';
 import addOrder from '@/api/orders/orders';
-import useRazorpay from "react-razorpay";
+import { Toaster } from '@/components/ui/toaster';
+import useRazorpay from 'react-razorpay';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
+import { useToast } from './ui/use-toast';
+import { ToastAction } from './ui/toast';
 
-const razorpay_id = __RAZORPAY_ID__;
+const razorpay_id = import.meta.env.VITE_RAZORPAY_ID;
 function Cart() {
   const [quantity, setQuantity] = useState(2);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleIncrement = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -19,22 +22,25 @@ function Cart() {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
+  const { toast } = useToast();
   const [Razorpay] = useRazorpay();
   const orderData = {
-    user_id: '', 
+    user_id: '',
     email_id: 'h@h.com',
-    product_list: [{
-      product_id: 'product_id', 
-      quantity: 1,
-      wishlisted_price: 0, 
-    }],
-    store_id: 'store5', 
-    store_name: 'Store Name', 
+    product_list: [
+      {
+        product_id: 'product_id',
+        quantity: 1,
+        wishlisted_price: 0,
+      },
+    ],
+    store_id: 'store5',
+    store_name: 'Store Name',
     delivery_status: false,
-    amount_paid: 134.98, 
-    delivery_address: 'Delivery Address', 
+    amount_paid: 134.98,
+    delivery_address: 'Delivery Address',
     seller_id: 'seller_id',
-    created_at: ''
+    created_at: '',
   };
   const handleBuy = async () => {
     // Prepare order data
@@ -42,38 +48,51 @@ function Cart() {
     try {
       // Send order to backend
       const response = await addOrder(orderData);
+      if ("id" in response) {  
       const options = {
         key: razorpay_id,
-        name: "Campus Hub",
-        description: "Transaction",
-        image: "/logo.png",
-        order_id: response, 
-        amount: "50000", currency: "INR",
-        handler: (res) => {
-          // alert(response)
-          navigate(`/orders/success`);
+        name: 'Campus Hub',
+        description: 'Transaction',
+        image: '/logo.png',
+        order_id: response.id,
+        amount: '50000',
+        currency: 'INR',
+        handler: () => {
+          toast({
+            title: 'Order created successfully',
+            action: <ToastAction altText="View My Order">My Orders</ToastAction>,
+          });
+          setTimeout(() => {
+            navigate(`/`);
+          }, 3000);
           // alert(res.razorpay_payment_id);
           // alert(res.razorpay_order_id);
           // alert(res.razorpay_signature);
         },
         prefill: {
-          name: "Your Name",
-          email: "youremail@example.com",
-          contact: "9999999999",
+          name: 'Your Name',
+          email: 'youremail@example.com',
+          contact: '9999999999',
         },
         notes: {
-          address: "Razorpay Corporate Office",
+          address: 'Razorpay Corporate Office',
         },
         theme: {
-          color: "#3399cc",
+          color: '#3399cc',
         },
       };
-    
+
       const rzp1 = new Razorpay(options);
-    
-      rzp1.on("payment.failed"
-      , (res) => {
-        navigate(`/orders/failure`);
+
+      rzp1.on('payment.failed', () => {
+        // TODO: Cart values are reset to zero always. Order is created regardless of payment status. Pay again option must be available in orders in case of failure.
+        toast({
+          title: 'Payment Failed, Please try again',
+          action: <ToastAction altText="Try Again">View Cart</ToastAction>,
+        });
+        setTimeout(() => {
+          navigate(`/`);
+        }, 3000);
         // alert(res.error.code);
         // alert(res.error.description);
         // alert(res.error.source);
@@ -82,10 +101,19 @@ function Cart() {
         // alert(res.error.metadata.order_id);
         // alert(res.error.metadata.payment_id);
       });
-    
+
       rzp1.open();
+    }else{
+      throw new Error("Order creation failed: No order ID in the response");
+    }
     } catch (error) {
-      console.error('Error creating order:', error);
+      toast({
+        title: 'Payment Failed, Please try again',
+        action: <ToastAction altText="Try Again">View Cart</ToastAction>,
+      });
+      setTimeout(() => {
+        navigate(`/`);
+      }, 2000);
     }
   };
   return (
@@ -161,7 +189,11 @@ function Cart() {
               <p className="text-sm text-primary">including VAT</p>
             </div>
           </div>
-          <Button className="mt-6 w-full rounded-md bg-accent py-1.5 font-medium text-primary hover:bg-accentDark" onClick={handleBuy}>
+          <Toaster />
+          <Button
+            className="mt-6 w-full rounded-md bg-accent py-1.5 font-medium text-primary hover:bg-accentDark"
+            onClick={handleBuy}
+          >
             Check out
           </Button>
         </div>

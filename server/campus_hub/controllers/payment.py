@@ -14,6 +14,7 @@ rz_client = RazorpayClient()
 razorpay_id = os.environ.get("RAZORPAY_ID")
 razorpay_secret = os.environ.get("RAZORPAY_SECRET")
 
+
 def add_payment():
     """
     Adds a new payment to the MongoDB database.
@@ -26,7 +27,7 @@ def add_payment():
     payments_collection_name = "payments"
     request_json = request.json
     orders_collection_name = "orders"
-    order_query:dict = {}
+    order_query: dict = {}
     projection = {"_id": False}
 
     try:
@@ -49,15 +50,15 @@ def add_payment():
             # Concatenate the bytes and then calculate the HMAC
             message = order_id_bytes + b"|" + razorpay_id_bytes
             payment_data["signature"] = hmac.new(
-                secret_key,
-                message,
-                hashlib.sha256
-            ).hexdigest()       
+                secret_key, message, hashlib.sha256
+            ).hexdigest()
         else:
             payment_data = {}
-        
+
         payment_data["payment_id"] = db_connector.generate_unique_id("payments")
-        payment_data["created_at"] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        payment_data["created_at"] = (
+            datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+        )
         # Validate the incoming data using Pydantic model
         try:
             payment: Payment = Payment(**payment_data)
@@ -68,13 +69,17 @@ def add_payment():
 
         # Add the order data to the database
         try:
-            rz_client.verify_payment(razorpay_order_id=payment_data["order_id"], razorpay_payment_id=razorpay_id, razorpay_signature=payment_data["signature"])
+            rz_client.verify_payment(
+                razorpay_order_id=payment_data["order_id"],
+                razorpay_payment_id=razorpay_id,
+                razorpay_signature=payment_data["signature"],
+            )
 
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
-                **message(f"Error while creating Razorpay payment: {str(e)}")
-            ) 
+                **message(f"Error while creating Razorpay payment: {str(e)}"),
+            )
         try:
             db_connector.insert_data(payments_collection_name, payment.model_dump())
 
@@ -88,7 +93,8 @@ def add_payment():
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
-        )   
+        )
+
 
 def verify_payment(request_data):
     # Placeholder logic to verify payment status

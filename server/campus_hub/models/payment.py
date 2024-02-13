@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+
+
 class Payment(BaseModel):
     """
     Pydantic model representing a payment.
@@ -13,8 +15,9 @@ class Payment(BaseModel):
         upi_id: UPI ID associated with the payment.
         payment_status: Status of the payment.
     """
-    payment_id : str
-    order_id : str
+
+    payment_id: str
+    order_id: str
     signature: str
     amount: float
     created_at: str

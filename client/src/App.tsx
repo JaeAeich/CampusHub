@@ -10,8 +10,6 @@ import StorePage from './components/StoresPage';
 import Login from './components/Login';
 import UserProfile from './components/UserProfile';
 import CreateAccount from './components/CreateAccount';
-import Success from './components/Success';
-import Failure from './components/Failure';
 import { RootState } from './store/store';
 
 function App() {
@@ -35,8 +33,6 @@ function App() {
                 <Route path="/users/:user_id/cart" element={<UserProfile active="cart" />} />
                 <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/orders/success" element={<Success />} />
-                <Route path="/orders/failure" element={<Failure />} />
               </>
             )}
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
