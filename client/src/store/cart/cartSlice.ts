@@ -1,4 +1,4 @@
-import Cart from '@/api/cart/types';
+import Cart, { CartItem } from '@/api/cart/types';
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '../store';
 import { getUserCart, updateUserCart } from '@/api/users/users';
@@ -10,15 +10,24 @@ const initialState: Cart = {
   carts: [],
 };
 
+type addPayload = {
+  product_id: string;
+  quantity: number;
+  user_id: string;
+};
+
 export const cartSlice: Slice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     set: (_state, action: PayloadAction<Cart>) => {
+      console.log(action.payload);
       return action.payload;
     },
-    add: (state, action) => {
-      const user_id = useSelector((state: RootState) => state.auth.user_email);
+    add: (state, action: PayloadAction<addPayload>) => {
+      const { user_id } = action.payload;
+      console.log(user_id);
+      console.log(action.payload);
       updateUserCart(user_id, {
         ...state,
         carts: {
@@ -91,4 +100,3 @@ export const setCartDataAsync = (user_id: string) => async (dispatch: AppDispatc
  * @param quantity The quantity of the product to add to the cart.
  * @returns A thunk that dispatches the add action with the product data.
  */
-

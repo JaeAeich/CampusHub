@@ -34,7 +34,7 @@ import { setCartDataAsync } from '@/store/cart/cartSlice';
 import User from '@/api/users/types';
 
 // TODO: ADD ID AFTER AUTH
-const user_id = useSelector((state: RootState) => state.auth.user_email) as string;
+const user_id = '1';
 const routes = [
   {
     to: '/',
@@ -236,7 +236,7 @@ function Navbar() {
                         </TableCell>
                         <TableCell>Nike Air MX Super 2500 - Red</TableCell>
                         <TableCell className="flex flex-row items-center mt-4">
-                          <Plus className="m-1" />1<Minus className="m-1" />
+                          <Minus className="m-1" />1<Plus className="m-1" />
                         </TableCell>
                         <TableCell className="font-bold font-heading sm:text-lgg text-base">
                           &#8377;449

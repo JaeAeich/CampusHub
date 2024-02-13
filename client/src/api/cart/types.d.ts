@@ -9,3 +9,4 @@ interface CartItem {
 }
 
 export default Cart;
+export type { CartItem };
