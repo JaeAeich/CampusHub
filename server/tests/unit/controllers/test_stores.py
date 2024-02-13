@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 def test_get_store_by_id(client):
     with patch("campus_hub.utils.db.db_connector.query_data") as mock_query_data:
-        # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
                 "store_id": "store_123",
@@ -22,7 +21,6 @@ def test_get_store_by_id(client):
 
 def test_get_trending_stores(client):
     with patch("campus_hub.utils.db.db_connector.query_data") as mock_query_data:
-        # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
                 "store_id": "store_123",
@@ -48,7 +46,6 @@ def test_get_trending_stores(client):
 
 def test_get_offers_by_store_id(client):
     with patch("campus_hub.utils.db.db_connector.query_data") as mock_query_data:
-        # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
                 "offer_id": "offer_123",
@@ -67,7 +64,6 @@ def test_get_offers_by_store_id(client):
     mock_query_data.assert_called_once_with("offers", {"store_id": "store_123"}, {"_id": False})
 def test_get_reviews_by_store_id(client):
     with patch("campus_hub.utils.db.db_connector.query_data") as mock_query_data:
-        # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
                 "review_id": "review_123",
@@ -90,7 +86,6 @@ def test_get_reviews_by_store_id(client):
 
 def test_get_orders_by_store_id(client):
     with patch("campus_hub.utils.db.db_connector.query_data") as mock_query_data:
-        # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
                 "order_id": "order_123",
@@ -101,11 +96,7 @@ def test_get_orders_by_store_id(client):
 
             }
         ]
-
-        # Make the API call
         response = client.get("campus_hub/v1/stores/store_123/orders")
-
-    # Assertions
     assert response.status_code == 200
     data = json.loads(response.data)
     assert "orders" in data
@@ -115,7 +106,6 @@ def test_get_orders_by_store_id(client):
 
 def test_get_products_by_store_id(client):
     with patch("campus_hub.utils.db.db_connector.query_data") as mock_query_data:
-        # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
                 "product_id": "product_123",
