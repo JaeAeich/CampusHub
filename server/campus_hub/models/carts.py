@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
 
@@ -14,7 +14,6 @@ class CartItem(BaseModel):
 
     product_id: str
     quantity: int
-    wishlisted_price: Optional[float]
 
 
 class Cart(BaseModel):
@@ -27,4 +26,4 @@ class Cart(BaseModel):
     """
 
     cart_id: str
-    carts: List[str]
+    carts: List[CartItem]

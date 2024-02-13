@@ -255,7 +255,6 @@ def update_cart_by_id(user_id: str) -> APIResponse:
     carts_collection_name = "carts"
     request_json = request.json
     query: dict = {"user_id": user_id}
-    projection = {"_id": False, "cart_id": True}
 
     try:
         if request_json is not None:
@@ -268,20 +267,21 @@ def update_cart_by_id(user_id: str) -> APIResponse:
             cart: Cart = Cart(**cart_data)
         except ValidationError as e:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid cart data: {str(e)}")
+                Status.BAD_REQUEST, **message(f"Invalid cart data in request: {str(e)}")
             )
 
         # fetch cart_id from user_id
-        try:
-            _user = db_connector.query_data("users", query, projection)
-            user: User = User(**_user[0])
-        except ValidationError as e:
+        projection = {"_id": False, "cart_id": True}
+        cart_id = db_connector.query_data("users", query, projection)
+        if not cart_id or len(cart_id) == 0:
             return response(
-                Status.BAD_REQUEST, **message(f"Invalid user data: {str(e)}")
+                Status.NOT_FOUND, **message(f"User {user_id} not found")
             )
 
-        query = {"cart_id": user.cart_id}
+        query = {"cart_id": cart_id[0]['cart_id']}
 
+        print(cart.model_dump())
+        print(query)
         try:
             db_connector.update_data(carts_collection_name, query, cart.model_dump())
         except LookupError as e:
@@ -294,7 +294,7 @@ def update_cart_by_id(user_id: str) -> APIResponse:
                 **message(f"Internal Server Error: {str(e)}"),
             )
 
-        return response(Status.SUCCESS, **{"id": cart})
+        return response(Status.SUCCESS, **{"id": query["cart_id"]})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
