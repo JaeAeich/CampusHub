@@ -8,7 +8,7 @@ from typing import MutableMapping, Any
 from pymongo import UpdateOne
 from datetime import datetime
 from campus_hub.utils.payment.main import rz_client
-
+from typing import Optional
 
 def get_order_history():
     # Placeholder logic to  get order history for a user
@@ -51,11 +51,21 @@ def add_order() -> APIResponse:
             # Handle the case when request.json is None
             order_data = {}
 
-        # Add uui as order id
-        order_data["order_id"] = db_connector.generate_unique_id("orders")
+        # Add razorpay order
+        try:
+            order_id: Optional[str] = rz_client.create_order(
+                amount=int(order_data["amount_paid"] * 100), currency="INR"
+            )
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Error while creating Razorpay order: {str(e)}"),
+            )
+
         order_data["created_at"] = (
             datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
         )
+        order_data["order_id"] = order_id
 
         # Validate the incoming data using Pydantic model
         try:
@@ -66,16 +76,6 @@ def add_order() -> APIResponse:
             )
 
         # Add the order data to the database
-        try:
-            rz_client.create_order(
-                amount=order_data["amount_paid"], currency="INR"
-            )
-        except Exception as e:
-            return response(
-                Status.INTERNAL_SERVER_ERROR,
-                **message(f"Error while creating Razorpay order: {str(e)}"),
-            )
-
         try:
             db_connector.insert_data(orders_collection_name, order.model_dump())
         except PyMongoError as e:
@@ -89,7 +89,7 @@ def add_order() -> APIResponse:
             user_query = {"user_email": order_data["email_id"]}
             user_update = {
                 "$addToSet": {
-                    "order_ids": order_data["order_id"]
+                    "order_ids": order_id
                 }  # Using $addToSet to avoid duplicates
             }
             user_update_query = UpdateOne(user_query, user_update)
@@ -101,7 +101,7 @@ def add_order() -> APIResponse:
             store_query = {"store_id": order_data["store_id"]}
             store_update = {
                 "$addToSet": {
-                    "customer_order_ids": order_data["order_id"]
+                    "customer_order_ids": order_id
                 }  # Using $addToSet to avoid duplicates
             }
             store_update_query = UpdateOne(store_query, store_update)
@@ -115,7 +115,7 @@ def add_order() -> APIResponse:
                 **message(f"Internal Server Error: {str(e)}"),
             )
         # Return a success response
-        return response(Status.SUCCESS, **{"id": order_data["order_id"]})
+        return response(Status.SUCCESS, **{"id": order_id})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

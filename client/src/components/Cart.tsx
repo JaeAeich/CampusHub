@@ -55,7 +55,7 @@ function Cart() {
           description: 'Transaction',
           image: '/logo.png',
           order_id: response.id,
-          amount: '50000',
+          amount: Math.ceil(orderData.amount_paid * 100).toString(),
           currency: 'INR',
           handler: () => {
             toast({
@@ -65,9 +65,6 @@ function Cart() {
             setTimeout(() => {
               navigate(`/`);
             }, 3000);
-            // alert(res.razorpay_payment_id);
-            // alert(res.razorpay_order_id);
-            // alert(res.razorpay_signature);
           },
           prefill: {
             name: 'Your Name',
@@ -93,13 +90,6 @@ function Cart() {
           setTimeout(() => {
             navigate(`/`);
           }, 3000);
-          // alert(res.error.code);
-          // alert(res.error.description);
-          // alert(res.error.source);
-          // alert(res.error.step);
-          // alert(res.error.reason);
-          // alert(res.error.metadata.order_id);
-          // alert(res.error.metadata.payment_id);
         });
 
         rzp1.open();
