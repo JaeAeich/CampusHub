@@ -85,13 +85,16 @@ class DBConnector:
         """
         return self.client[self.db_name][collection_name]
 
-    def insert_data(self, collection_name: str, data: dict) -> None:
+    def insert_data(
+        self, collection_name: str, data: dict, unique_fields: dict = {}
+    ) -> None:
         """
         Inserts data into the specified MongoDB collection.
 
         Args:
             collection_name (str): Name of the collection.
             data (dict): Data to be inserted.
+            unique_fields (dict): Fields that must be unique for the record.
         """
         try:
             collection = self.db[collection_name]
@@ -101,6 +104,12 @@ class DBConnector:
                 self.logger.info(
                     f"Collection '{collection_name}' created successfully."
                 )
+
+            # Check if a record with the specified unique fields already exists
+            if unique_fields:
+                existing_record = collection.find_one(unique_fields)
+                if existing_record:
+                    raise PyMongoError()
 
             collection.insert_one(data)
             self.logger.info("Data inserted successfully.")
