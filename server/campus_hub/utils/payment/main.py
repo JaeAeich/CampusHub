@@ -29,6 +29,7 @@ class RazorpayClient:
                     Status.BAD_REQUEST, **message(f"Invalid offer data: {str(ve)}")
                 )
             )
+            return None
 
     def verify_payment(
         self, razorpay_order_id, razorpay_payment_id, razorpay_signature
