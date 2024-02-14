@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Product from '@/api/products/types';
 import { getProductById } from '@/api/stores/stores';
+import { RootState } from '../store/store';
 import { Button } from './ui/button';
 import { Carousel, CarouselItem, CarouselContent } from './ui/carousel';
 import Stars from './Stars';
 import { Badge } from './ui/badge';
 import NotFound from './NotFound';
 import Loading from './Loading';
+import { useToast } from './ui/use-toast';
+import { ToastAction } from './ui/toast';
 
 export default function ProductPage() {
+  const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [errorProduct, setErrorProduct] = useState(false);
   const { store_id, product_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [current, setCurrent] = useState('/noImage.png');
-
+  const userExists = useSelector((state: RootState) => state.auth.value);
   useEffect(() => {
     async function fetchProductById() {
       if (store_id !== undefined && product_id !== undefined) {
@@ -125,7 +130,22 @@ export default function ProductPage() {
           <div className="only-button flex mx-auto">
             <div className="flex sm:flex-row flex-col sm:my-7 my-3">
               <div className="w-32 px-2 m-2">
-                <Button className="w-full bg-accent text-white py-2 px-4 rounded-full font-bold hover:bg-accentDark">
+                <Button
+                  onClick={() => {
+                    if (userExists) {
+                      toast({
+                        title: 'Product Added to Cart Successfully',
+                        action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
+                      });
+                    } else {
+                      toast({
+                        title: 'Please Log in!',
+                        action: <ToastAction altText="Add to cart">Login</ToastAction>,
+                      });
+                    }
+                  }}
+                  className="w-full bg-accent text-white py-2 px-4 rounded-full font-bold hover:bg-accentDark"
+                >
                   Add to Cart
                 </Button>
               </div>
