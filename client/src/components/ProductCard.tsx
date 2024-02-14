@@ -1,7 +1,9 @@
 import { ShoppingCartIcon, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Product from '@/api/products/types';
+import { RootState } from '../store/store';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
@@ -11,6 +13,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
   const { product_id, product_images, product_name, rating, product_cost, store_id } = product;
   const [fillColor, setFillColor] = useState('#fff');
   const [strokeColor, setStrokeColor] = useState('#000');
+  const userExists = useSelector((state: RootState) => state.auth.value);
 
   const mouseIn = () => {
     if (!wishlisted) {
@@ -70,14 +73,19 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
             </div>
           </div>
         </Link>
-        {/* <Toaster />
-        {/* //TODO: Add onClick functionality */}
         <Button
           onClick={() => {
-            toast({
-              title: 'Product Added Successfully',
-              action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
-            });
+            if (userExists) {
+              toast({
+                title: 'Product Added to Cart Successfully',
+                action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
+              });
+            } else {
+              toast({
+                title: 'Please Log in!',
+                action: <ToastAction altText="Add to cart">Login</ToastAction>,
+              });
+            }
           }}
           className="w-full flex items-center justify-center rounded-md bg-accentLight md:px-5 px-2 md:py-2.5 py-2 md:mb-0 mb-2 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300"
         >

@@ -99,7 +99,7 @@ export default function Landing() {
   }
 
   return (
-    <div className="mx-auto w-full sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out">
+    <div className="mx-auto w-full px-3 sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out mb-7">
       <TrendingStores trendingStores={trendingStores} error={errorTrendingStore} />
       <DealOfTheDay trendingOffersProducts={trendingOffersProducts} error={errorTrendingOffer} />
       <ServiceCards services={services} error={errorService} />
