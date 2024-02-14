@@ -56,10 +56,10 @@ export default function DealOfTheDay({
                       <div className="lg:flex-col flex-row lg:justify-left">
                         <Link
                           to={`stores/${deal.store_id}/products/${deal.product_id}/`}
-                          flex
+                          className="flex
                           flex-row
                           items-center
-                          py-2
+                          py-2"
                         >
                           <p className="font-helvetica flex xl:text-2xl text-xl font-bold text-accent pr-2">
                             &#8377;
