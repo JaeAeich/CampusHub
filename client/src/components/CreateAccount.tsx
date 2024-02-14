@@ -62,7 +62,7 @@ function CreateAccount() {
       setMandatory(false);
       setTryAgain(true);
     } else {
-      dispatch(authenticated());
+      dispatch(authenticated(userDetails.user_email));
       navigate('/');
     }
   };

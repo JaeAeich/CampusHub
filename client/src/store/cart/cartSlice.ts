@@ -1,18 +1,16 @@
 import Cart, { CartItem } from '@/api/cart/types';
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit';
-import { AppDispatch, RootState } from '../store';
 import { getUserCart, updateUserCart } from '@/api/users/users';
-import { omit, update } from 'lodash';
-import { useSelector } from 'react-redux';
+import errorResponse from '@/utils/response';
+import { AppDispatch } from '../store';
 
 const initialState: Cart = {
   cart_id: '',
   carts: [],
 };
 
-type addPayload = {
+type thePayload = {
   product_id: string;
-  quantity: number;
   user_id: string;
 };
 
@@ -20,49 +18,59 @@ export const cartSlice: Slice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    set: (_state, action: PayloadAction<Cart>) => {
-      console.log(action.payload);
-      return action.payload;
-    },
-    add: (state, action: PayloadAction<addPayload>) => {
+    set: (_state, action: PayloadAction<Cart>) => action.payload,
+    add: (state, action: PayloadAction<thePayload>) => {
       const { user_id } = action.payload;
-      console.log(user_id);
-      console.log(action.payload);
-      updateUserCart(user_id, {
+      const foundProduct = state.carts.find(
+        (item: CartItem) => item.product_id === action.payload.product_id,
+      );
+      const quantity = foundProduct ? foundProduct.quantity + 1 : 1;
+      const updatedCart: Cart = {
         ...state,
-        carts: {
-          ...state.cart_items,
-          [action.payload.product_id]: action.payload.quantity,
-        },
-      });
-      return {
-        ...state,
-        carts: {
-          ...state.cart_items,
-          [action.payload.product_id]: action.payload.quantity,
-        },
+        carts: [
+          ...state.carts,
+          {
+            product_id: action.payload.product_id,
+            quantity,
+          },
+        ],
       };
+      updateUserCart(user_id, updatedCart);
+      return updatedCart;
     },
-    remove: (state, action) => {
-      const user_id = useSelector((state: RootState) => state.auth.user_email);
-      updateUserCart(user_id, {
-        ...state,
-        carts: {
-          ...state.cart_items,
-          [action.payload.product_id]: action.payload.quantity,
-        },
-      });
-      return {
-        ...state,
-        carts: omit(state.cart_items, action.payload.product_id),
-      };
+    remove: (state, action: PayloadAction<thePayload>) => {
+      const { user_id } = action.payload;
+      const foundProduct = state.carts.find(
+        (item: CartItem) => item.product_id === action.payload.product_id,
+      );
+      const quantity = foundProduct ? foundProduct.quantity - 1 : 0;
+      let updatedCart: Cart;
+      if (quantity === 0) {
+        updatedCart = {
+          ...state,
+          carts: state.carts.filter(
+            (item: CartItem) => item.product_id !== action.payload.product_id,
+          ),
+        };
+      } else {
+        updatedCart = {
+          ...state,
+          carts: [
+            ...state.carts,
+            {
+              product_id: action.payload.product_id,
+              quantity,
+            },
+          ],
+        };
+      }
+      updateUserCart(user_id, updatedCart);
+      return updatedCart;
     },
-    clear: (state) => {
-      return {
-        ...state,
-        carts: {},
-      };
-    },
+    clear: (state) => ({
+      ...state,
+      carts: {},
+    }),
   },
 });
 
@@ -77,7 +85,6 @@ export default cartSlice.reducer;
  * @returns A thunk that dispatches the set action with the cart data.
  */
 export const setCartDataAsync = (user_id: string) => async (dispatch: AppDispatch) => {
-  console.log(user_id);
   try {
     const cart = await getUserCart(user_id);
     if ('cart' in cart) {
@@ -85,18 +92,10 @@ export const setCartDataAsync = (user_id: string) => async (dispatch: AppDispatc
       if (cartData) {
         dispatch(set(cartData as Cart));
       } else {
-        console.error('Invalid cart data received:', cartData);
+        errorResponse('Invalid cart data received', 'store.cart.setCartDataAsync');
       }
     }
   } catch (error) {
-    console.error('Error fetching cart data:', error);
+    errorResponse(Error.toString(), 'store.cart.setCartDataAsync');
   }
 };
-
-/**
- * Adds a product to the cart.
- *
- * @param product_id The ID of the product to add to the cart.
- * @param quantity The quantity of the product to add to the cart.
- * @returns A thunk that dispatches the add action with the product data.
- */

@@ -47,7 +47,7 @@ export async function getUserById(
 
 /**
  * gets user Cart.
- * 
+ *
  * @param {string} user_email - The email of the user.
  * @returns {Promise<Cart | ErrorResponse | MessageResponse>} A promise
  * that resolves to the user data or an error response.
@@ -65,7 +65,7 @@ export async function getUserCart(
 
 /**
  * Updates the user cart.
- * 
+ *
  * @param {string} user_id - The ID of the user.
  * @param {Cart} cart - The cart data to update.
  * @returns {Promise<Cart | ErrorResponse | MessageResponse>} A promise

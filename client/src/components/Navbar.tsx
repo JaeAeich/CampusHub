@@ -26,12 +26,12 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
+import { setCartDataAsync } from '@/store/cart/cartSlice';
+import User from '@/api/users/types';
+import { useAppDispatch } from '@/utils/hooks';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 import { authenticated } from '../store/auth/authSlice';
-import { useAppDispatch } from '@/utils/hooks';
-import { setCartDataAsync } from '@/store/cart/cartSlice';
-import User from '@/api/users/types';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = '1';
@@ -87,7 +87,7 @@ function Navbar() {
         }
       });
     }
-  }, [user, dispatch, navigate, userExists]);
+  }, [user, dispatch, navigate, userExists, appDispatch]);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
