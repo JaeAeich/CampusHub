@@ -8,7 +8,7 @@ def test_get_sellers(client):
         # Mock the response from the query_data function
         mock_query_data.return_value = [
             {
-                "order_ids": ["string"],
+                # "order_ids": ["string"],
                 "seller_address": "string",
                 "seller_email": "user@example.com",
                 "seller_gender": "Male",
@@ -19,7 +19,7 @@ def test_get_sellers(client):
                 "store_ids": ["string"],
             },
             {
-                "order_ids": ["string"],
+                # "order_ids": ["string"],
                 "seller_address": "string",
                 "seller_email": "user@example.com",
                 "seller_gender": "Male",
@@ -46,7 +46,7 @@ def test_get_sellers(client):
         # Mock the response from the query_data function with invalid data
         mock_query_data.return_value = [
             {
-                "order_ids": ["string"],
+                # "order_ids": ["string"],
                 "seller_gender": "Male",
                 "seller_id": "sellers_eN9i3GWWsm6R7nNNWnpdm3",
                 "seller_name": "string",

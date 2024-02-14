@@ -1,16 +1,19 @@
 import { ShoppingCartIcon, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { Toaster } from '@/components/ui/toaster';
+import { useSelector } from 'react-redux';
 import Product from '@/api/products/types';
-// import { useToast } from './ui/use-toast';
-// import { ToastAction } from './ui/toast';
+import { RootState } from '../store/store';
+import { Button } from './ui/button';
+import { useToast } from './ui/use-toast';
+import { ToastAction } from './ui/toast';
 import Stars from './Stars';
 
 function ProductCard({ product, wishlisted }: { product: Product; wishlisted: boolean }) {
   const { product_id, product_images, product_name, rating, product_cost, store_id } = product;
   const [fillColor, setFillColor] = useState('#fff');
   const [strokeColor, setStrokeColor] = useState('#000');
+  const userExists = useSelector((state: RootState) => state.auth.value);
 
   const mouseIn = () => {
     if (!wishlisted) {
@@ -25,7 +28,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
     }
   };
 
-  // const { toast } = useToast();
+  const { toast } = useToast();
   return (
     <div className="relative max-h-108 inline-block m-4 w-full max-w-xs overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
@@ -70,26 +73,25 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
             </div>
           </div>
         </Link>
-        {/* <Toaster />
-        {/* //TODO: Add onClick functionality */}
-        <div
-          // onMouseOver={() => {
-          //   toast({
-          //     title: 'Product Added Successfully',
-          //     action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
-          //   });
-          // }}
-          // onFocus={() => {
-          //   toast({
-          //     title: 'Product Added Successfully',
-          //     action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
-          //   });
-          // }}
+        <Button
+          onClick={() => {
+            if (userExists) {
+              toast({
+                title: 'Product Added to Cart Successfully',
+                action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
+              });
+            } else {
+              toast({
+                title: 'Please Log in!',
+                action: <ToastAction altText="Add to cart">Login</ToastAction>,
+              });
+            }
+          }}
           className="w-full flex items-center justify-center rounded-md bg-accentLight md:px-5 px-2 md:py-2.5 py-2 md:mb-0 mb-2 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           <ShoppingCartIcon className="mb-1 md:mr-2 mr-1 md:h-7 h-4" />
           Add to cart
-        </div>
+        </Button>
       </div>
     </div>
   );

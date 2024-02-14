@@ -34,14 +34,14 @@ def add_user() -> APIResponse:
         cart_id = db_connector.generate_unique_id(carts_collection_name)
         user_data["cart_id"] = cart_id
         db_connector.insert_data(
-            carts_collection_name, {"cart_id": cart_id, "carts": []}
+            carts_collection_name, {"cart_id": cart_id, "cart_items": []}
         )
 
         # create a wishlist for the user
         wishlist_cart_id = db_connector.generate_unique_id(carts_collection_name)
         user_data["wishlist_cart_id"] = wishlist_cart_id
         db_connector.insert_data(
-            carts_collection_name, {"cart_id": cart_id, "carts": []}
+            carts_collection_name, {"cart_id": cart_id, "cart_items": []}
         )
 
         # add order_ids as an empty list
