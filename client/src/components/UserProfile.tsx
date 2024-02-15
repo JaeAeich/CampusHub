@@ -13,11 +13,11 @@ function UserProfile({ active }: { active: string }) {
   const [activeTab, setActiveTab] = useState(active);
 
   const handleTabClick = (tab: string) => {
-    setActiveTab(tab);
+    const state = tab.split('/')[-1];
+    setActiveTab(state);
     navigate(tab); // Navigate to the selected tab route
     // window.location.reload();
   };
-
   return (
     <div className="bg-background w-full :gap-5 px-3 lg:pr-10 lg:flex-row text-primary">
       <div className="flex flex-col gap-2 w-full p-4 text-sm border-secondary top-12">

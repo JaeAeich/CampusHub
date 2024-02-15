@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -47,6 +47,28 @@ function CreateAccount() {
     details[`${field}`] = value;
     setUserDetails(details);
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const addedUser = await addUser(userDetails as User);
+
+        if ('id' in addedUser) {
+          toast({
+            title: 'User created successfully',
+            description: `Your id is ${addedUser.id}`,
+          });
+          dispatch(authenticated());
+          dispatch(setUserEmail(addedUser.id));
+          navigate('/');
+        }
+      } catch (error) {
+        console.log('Error while creating user.', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const handleSubmit = async () => {
     setMandatory(false);

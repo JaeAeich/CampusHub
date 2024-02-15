@@ -17,7 +17,7 @@ import EnterDetails from './components/EnterDetails';
 import CreateAccount from './components/CreateAccount';
 
 function App() {
-  const isVisible = !window.location.pathname.includes('/login');
+  // const isVisible = !window.location.pathname.includes('/login');
   const { isAuthenticated } = useAuth0();
   const userExists = useSelector((state: RootState) => state.auth.value);
   const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
@@ -25,7 +25,8 @@ function App() {
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
-        {isVisible && <Navbar />}
+        <Navbar />
+        {/* {isVisible && <Navbar />} */}
         <div className="flex grow">
           <Toaster />
           <Routes>
@@ -69,7 +70,8 @@ function App() {
             {/* Routes that should be behind auth0 login wall */}
           </Routes>
         </div>
-        {isVisible && <Footer />}
+        <Footer />
+        {/* {isVisible && <Footer />} */}
       </div>
     </BrowserRouter>
   );

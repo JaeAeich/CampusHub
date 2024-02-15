@@ -49,7 +49,7 @@ function ProfileButton() {
 
   const handleClick = (link: string) => {
     navigate(link);
-    window.location.reload();
+    // window.location.reload();
   };
   // TODO: add different dropdown based on if user is logged in or not
   // TODO: get user and add its
@@ -133,7 +133,7 @@ function ProfileButton() {
             )}
 
             <Button
-              className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
+              className="bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
               onClick={handleLogout}
               onKeyDown={handleLogout}
             >
@@ -142,7 +142,7 @@ function ProfileButton() {
           </>
         ) : (
           <Button
-            className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
+            className="bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
             onClick={() => loginWithRedirect()}
           >
             Log in
