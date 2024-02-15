@@ -14,7 +14,7 @@ import NotFound from './NotFound';
 import Loading from './Loading';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
-import {addProductToCartAsync} from '../store/cart/cartSlice';
+import { addProductToCartAsync } from '../store/cart/cartSlice';
 
 export default function ProductPage() {
   const { toast } = useToast();

@@ -34,7 +34,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
   };
 
   const { toast } = useToast();
-  
+
   function handleAddToCart() {
     appDispatch(addProductToCartAsync(product_id as string));
   }

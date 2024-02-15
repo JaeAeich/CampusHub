@@ -1,8 +1,12 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import iCart from '@/api/cart/types';
-import { useAppDispatch } from '@/utils/hooks'
-import { addProductToCartAsync, removeProductAsync, removeProductFromCartAsync } from '@/store/cart/cartSlice';
+import { useAppDispatch } from '@/utils/hooks';
+import {
+  addProductToCartAsync,
+  removeProductAsync,
+  removeProductFromCartAsync,
+} from '@/store/cart/cartSlice';
 import { Plus, Minus, X } from 'lucide-react';
 import addOrder from '@/api/orders/orders';
 import { Toaster } from '@/components/ui/toaster';
@@ -125,12 +129,12 @@ function Cart() {
         const response = await getProductByProductId(item.product_id);
         return { [item.product_id]: response };
       });
-  
+
       const productDetailsArray = await Promise.all(promises);
       const details = productDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
       setProductDetails(details as { [key: string]: Product });
     };
-  
+
     fetchProductDetails();
   }, [cart]);
 
@@ -138,54 +142,61 @@ function Cart() {
     <div className="lg:pt-10 pt-2">
       <div className="mx-auto max-w-8xl justify-center mx-8 xl:flex xl:space-x-6 xl:px-0">
         <div className="rounded-lg xl:w-2/3">
-          {cart.carts && cart.carts.map((item) => (
-            <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
-              <img
-                src={product_details[item.product_id] && product_details[item.product_id].product_images[0]}
-                alt={item.product_id}
-                className="w-full rounded-lg sm:w-40"
-              />
-              <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                <div className="mt-5 sm:mt-0">
-                  <h2 className="text-lg font-bold text-primary text-subheading">
-                    {product_details[item.product_id] && product_details[item.product_id].product_name}
-                  </h2>
-                  <p className="mt-1 text-xs text-darkgray text-subheading">Store Name</p>
-                </div>
-                <div className="mt-4 flex sm:flex-row flex-col justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                  <div className="flex sm:justify-start justify-center items-center border-secondary">
-                    <Button
-                      onClick={() => handleIncrement(item.product_id)}
-                      className="cursor-pointer rounded-l bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
-                    >
-                      <Plus className="md:h-6 h-4" />
-                    </Button>
-                    <input
-                      className="md:h-8 h-7 w-12 border bg-background text-center text-xs outline-none"
-                      type="number"
-                      value={item.quantity}
-                      min="1"
-                      readOnly
-                    />
-                    <Button
-                      onClick={() => handleDecrement(item.product_id)}
-                      className="cursor-pointer rounded-r bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
-                    >
-                      <Minus className="md:h-6 h-4" />
-                    </Button>
-                      <X
-                      className="sm:block hidden lg:ml-3 font-bold hover:text-accentDark cursor-pointer"
-                      onClick={() => handleRemove(item.product_id)}/>
-                    
+          {cart.carts &&
+            cart.carts.map((item) => (
+              <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
+                <img
+                  src={
+                    product_details[item.product_id] &&
+                    product_details[item.product_id].product_images[0]
+                  }
+                  alt={item.product_id}
+                  className="w-full rounded-lg sm:w-40"
+                />
+                <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+                  <div className="mt-5 sm:mt-0">
+                    <h2 className="text-lg font-bold text-primary text-subheading">
+                      {product_details[item.product_id] &&
+                        product_details[item.product_id].product_name}
+                    </h2>
+                    <p className="mt-1 text-xs text-darkgray text-subheading">Store Name</p>
                   </div>
-                  <div className="flex sm:justify-end justify-center sm:mt-0 mt-2">
-                    <p className="text-lgg font-bold">
-                    {product_details[item.product_id] && product_details[item.product_id].product_cost * item.quantity}</p>
+                  <div className="mt-4 flex sm:flex-row flex-col justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                    <div className="flex sm:justify-start justify-center items-center border-secondary">
+                      <Button
+                        onClick={() => handleIncrement(item.product_id)}
+                        className="cursor-pointer rounded-l bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
+                      >
+                        <Plus className="md:h-6 h-4" />
+                      </Button>
+                      <input
+                        className="md:h-8 h-7 w-12 border bg-background text-center text-xs outline-none"
+                        type="number"
+                        value={item.quantity}
+                        min="1"
+                        readOnly
+                      />
+                      <Button
+                        onClick={() => handleDecrement(item.product_id)}
+                        className="cursor-pointer rounded-r bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
+                      >
+                        <Minus className="md:h-6 h-4" />
+                      </Button>
+                      <X
+                        className="sm:block hidden lg:ml-3 font-bold hover:text-accentDark cursor-pointer"
+                        onClick={() => handleRemove(item.product_id)}
+                      />
+                    </div>
+                    <div className="flex sm:justify-end justify-center sm:mt-0 mt-2">
+                      <p className="text-lgg font-bold">
+                        {product_details[item.product_id] &&
+                          product_details[item.product_id].product_cost * item.quantity}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
         <div className="mt-6 h-full rounded-lg border bg-background p-6 shadow-md xl:mt-0 xl:w-1/3">
           <div className="mb-2 flex justify-between">

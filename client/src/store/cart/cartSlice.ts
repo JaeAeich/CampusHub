@@ -53,7 +53,7 @@ export const cartSlice: Slice = createSlice({
       }
       return updatedCart;
     },
-    removeProduct:(state, action: PayloadAction<thePayload>) => {
+    removeProduct: (state, action: PayloadAction<thePayload>) => {
       const updatedCart: Cart = {
         ...state,
         carts: state.carts.filter(
@@ -126,7 +126,7 @@ export const removeProductFromCartAsync =
     }
   };
 
-export const removeProductAsync = 
+export const removeProductAsync =
   (product_id: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       dispatch(removeProduct({ product_id }));

@@ -28,7 +28,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
-import { addProductToCartAsync, removeProductFromCartAsync, setCartDataAsync } from '@/store/cart/cartSlice';
+import {
+  addProductToCartAsync,
+  removeProductFromCartAsync,
+  setCartDataAsync,
+} from '@/store/cart/cartSlice';
 import { useAppDispatch } from '@/utils/hooks';
 import { getSellerById } from '@/api/sellers/sellers';
 import Cart from '@/api/cart/types';
@@ -159,12 +163,12 @@ function Navbar() {
         const response = await getProductByProductId(item.product_id);
         return { [item.product_id]: response };
       });
-  
+
       const productDetailsArray = await Promise.all(promises);
       const details = productDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
       setProductDetails(details as { [key: string]: Product });
     };
-  
+
     fetchProductDetails();
   }, [cart]);
 
@@ -301,30 +305,43 @@ function Navbar() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {cart.carts && cart.carts.map((item) => (
-                      <TableRow className="font-body sm:text-base text-smm">
-                        <TableCell>
-                          <img
-                            className="object-cover"
-                            src={product_details[item.product_id] && product_details[item.product_id].product_images[0]}
-                            alt= {item.product_id}
-                            width={100}
-                            height={100}
-                          />
-                        </TableCell>
-                        <TableCell>{product_details[item.product_id] && product_details[item.product_id].product_name}</TableCell>
-                        <TableCell className="flex flex-row items-center mt-4">
-                          <Minus className="m-1"
-                          onClick={() => handleDecrement(item.product_id)} />
-                          {item.quantity}
-                          <Plus className="m-1" 
-                          onClick={() => handleIncrement(item.product_id)}/>
-                        </TableCell>
-                        <TableCell className="font-bold font-heading sm:text-lgg text-base">
-                          &#8377; {product_details[item.product_id] && product_details[item.product_id].product_cost * item.quantity}
-                        </TableCell>
-                      </TableRow>
-                      ))}
+                      {cart.carts &&
+                        cart.carts.map((item) => (
+                          <TableRow className="font-body sm:text-base text-smm">
+                            <TableCell>
+                              <img
+                                className="object-cover"
+                                src={
+                                  product_details[item.product_id] &&
+                                  product_details[item.product_id].product_images[0]
+                                }
+                                alt={item.product_id}
+                                width={100}
+                                height={100}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              {product_details[item.product_id] &&
+                                product_details[item.product_id].product_name}
+                            </TableCell>
+                            <TableCell className="flex flex-row items-center mt-4">
+                              <Minus
+                                className="m-1"
+                                onClick={() => handleDecrement(item.product_id)}
+                              />
+                              {item.quantity}
+                              <Plus
+                                className="m-1"
+                                onClick={() => handleIncrement(item.product_id)}
+                              />
+                            </TableCell>
+                            <TableCell className="font-bold font-heading sm:text-lgg text-base">
+                              &#8377;{' '}
+                              {product_details[item.product_id] &&
+                                product_details[item.product_id].product_cost * item.quantity}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </div>
