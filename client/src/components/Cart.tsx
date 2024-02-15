@@ -31,9 +31,7 @@ function Cart() {
   const cart = useSelector((state: RootState) => state.cart) as iCart;
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({
-    '1': { store_id: '1' },
-  });
+  const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({});
   const user_Email = useSelector((state: RootState) => state.auth.userEmail);
   const [SubTotal, setSubTotal] = useState<number>(0);
   // const [Shipping, _setShipping] = useState<number>(4.99);
