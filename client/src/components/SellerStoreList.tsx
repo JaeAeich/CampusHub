@@ -2,7 +2,7 @@ import { getStoresBySellerId } from "@/api/sellers/sellers";
 import Store from "@/api/stores/types";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import NotFound from "./NotFound";
+import { Button } from "./ui/button";
 import StoreCard from "./StoreCard";
 
 function SellerStoreListPage() {
@@ -36,9 +36,12 @@ function SellerStoreListPage() {
   }
   if (sellerStores.length === 0 || errorStores) {
     return (
-      <div className="mx-auto items-center my-auto">
-        <NotFound item="Stores" />
-      </div>
+      <div className="flex flex-col items-center mx-auto justify-center m-10 mb-20">
+      <img src="/noresult.gif" alt="noResults" className="h-24 sm:h-32 w-96 md:h-108 lg:w-128" />
+      <h2 className="align-center text-darkgray text-smm md:text-lg">
+        No stores! <Link to={`/sellers/${seller_id}/createstore`}><Button className="text-sm font-bold ml-3 bg-secondary hover:bg-accent text-primary">Add a store</Button></Link>
+      </h2>
+    </div>
     );
   }
 

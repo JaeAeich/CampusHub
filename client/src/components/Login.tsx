@@ -50,7 +50,7 @@ export default function Component() {
       });
       dispatch(sellerAuthenticated());
       dispatch(setSellerId(response.id));
-      navigate(`/sellers/${response.id}/dashboard`);
+      navigate(`/sellers/${response.id}/stores`);
     } else if ('message' in response) {
       toast({
         variant: 'destructive',
