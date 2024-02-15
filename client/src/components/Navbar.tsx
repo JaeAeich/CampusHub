@@ -28,7 +28,16 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
+import {
+  addProductToCartAsync,
+  removeProductFromCartAsync,
+  setCartDataAsync,
+} from '@/store/cart/cartSlice';
+import { useAppDispatch } from '@/utils/hooks';
 import { getSellerById } from '@/api/sellers/sellers';
+import Cart from '@/api/cart/types';
+import Product from '@/api/products/types';
+import { getProductByProductId } from '@/api/products/products';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
 import {
@@ -39,7 +48,7 @@ import {
 import { unauthenticated, authenticated, setUserEmail } from '../store/auth/authSlice';
 
 // TODO: ADD ID AFTER AUTH
-const user_id = 1;
+const user_id = '1';
 const routes = [
   {
     to: '/',
@@ -75,6 +84,7 @@ function Navbar() {
   const [searchValue, setSearchValue] = useState('');
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
   const navigate = useNavigate();
   const userExists = useSelector((state: RootState) => state.auth.value);
   const sellerId = useSelector((state: RootState) => state.seller.sellerId);
@@ -90,13 +100,15 @@ function Navbar() {
         if ('error' in userResponse && 'error' in sellerResponse) {
           navigate(`/createuser/${user.email}`);
         } else if ('user' in userResponse && 'seller' in sellerResponse) {
-          dispatch(authenticated());
+          appDispatch(setCartDataAsync(userResponse.user.user_id as string));
+          dispatch(authenticated(userResponse.user.user_id));
 
           dispatch(setUserEmail(userResponse.user.user_email));
           dispatch(sellerAuthenticated());
           dispatch(setSellerId(sellerResponse.seller.seller_id));
         } else if ('user' in userResponse) {
-          dispatch(authenticated());
+          appDispatch(setCartDataAsync(userResponse.user.user_id as string));
+          dispatch(authenticated(userResponse.user.user_id));
           dispatch(setUserEmail(userResponse.user.user_email));
           navigate('/');
         } else if ('seller' in sellerResponse) {
@@ -105,7 +117,7 @@ function Navbar() {
         }
       });
     }
-  }, [user, dispatch, navigate, sellerAuth, userExists]);
+  }, [user, dispatch, navigate, sellerAuth, userExists, appDispatch]);
 
   const handleLogout = async () => {
     dispatch(unauthenticated());
@@ -132,6 +144,33 @@ function Navbar() {
       handleSearch();
     }
   };
+
+  // cart stuff
+  const cart = useSelector((state: RootState) => state.cart) as Cart;
+  const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({});
+
+  const handleIncrement = (p_id: string) => {
+    appDispatch(addProductToCartAsync(p_id));
+  };
+
+  const handleDecrement = (p_id: string) => {
+    appDispatch(removeProductFromCartAsync(p_id));
+  };
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      const promises = cart.carts.map(async (item) => {
+        const response = await getProductByProductId(item.product_id);
+        return { [item.product_id]: response };
+      });
+
+      const productDetailsArray = await Promise.all(promises);
+      const details = productDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      setProductDetails(details as { [key: string]: Product });
+    };
+
+    fetchProductDetails();
+  }, [cart]);
 
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">
@@ -266,24 +305,43 @@ function Navbar() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      <TableRow className="font-body sm:text-base text-smm">
-                        <TableCell>
-                          <img
-                            className="object-cover"
-                            src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                            alt="product"
-                            width={100}
-                            height={100}
-                          />
-                        </TableCell>
-                        <TableCell>Nike Air MX Super 2500 - Red</TableCell>
-                        <TableCell className="flex flex-row items-center mt-4">
-                          <Plus className="m-1" />1<Minus className="m-1" />
-                        </TableCell>
-                        <TableCell className="font-bold font-heading sm:text-lgg text-base">
-                          &#8377;449
-                        </TableCell>
-                      </TableRow>
+                      {cart.carts &&
+                        cart.carts.map((item) => (
+                          <TableRow className="font-body sm:text-base text-smm">
+                            <TableCell>
+                              <img
+                                className="object-cover"
+                                src={
+                                  product_details[item.product_id] &&
+                                  product_details[item.product_id].product_images[0]
+                                }
+                                alt={item.product_id}
+                                width={100}
+                                height={100}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              {product_details[item.product_id] &&
+                                product_details[item.product_id].product_name}
+                            </TableCell>
+                            <TableCell className="flex flex-row items-center mt-4">
+                              <Minus
+                                className="m-1"
+                                onClick={() => handleDecrement(item.product_id)}
+                              />
+                              {item.quantity}
+                              <Plus
+                                className="m-1"
+                                onClick={() => handleIncrement(item.product_id)}
+                              />
+                            </TableCell>
+                            <TableCell className="font-bold font-heading sm:text-lgg text-base">
+                              &#8377;{' '}
+                              {product_details[item.product_id] &&
+                                product_details[item.product_id].product_cost * item.quantity}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </div>

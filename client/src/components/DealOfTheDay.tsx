@@ -4,6 +4,8 @@ import Product from '@/api/products/types';
 import { useAuth0 } from '@auth0/auth0-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Link } from 'react-router-dom';
+import { addProductToCartAsync } from '@/store/cart/cartSlice';
+import { useAppDispatch } from '@/utils/hooks';
 import NotFound from './NotFound';
 import Container from './ui/container';
 import { Button } from './ui/button';
@@ -24,6 +26,11 @@ export default function DealOfTheDay({
 
   const { toast } = useToast();
   const userExists = useSelector((state: RootState) => state.auth.value);
+  const appDispatch = useAppDispatch();
+
+  function handleAddToCart(product_id: string) {
+    appDispatch(addProductToCartAsync(product_id as string));
+  }
 
   return (
     <div>
@@ -83,6 +90,7 @@ export default function DealOfTheDay({
                                 title: 'Product Added to Cart Successfully',
                                 action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
                               });
+                              handleAddToCart(deal.product_id);
                             } else {
                               toast({
                                 title: 'Please Log in!',

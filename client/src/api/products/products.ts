@@ -47,3 +47,23 @@ export async function getProductsBySearchQuery(
     return errorResponse(error, 'api.products') as MessageResponse | ErrorResponse;
   }
 }
+
+/**
+ * Fetches a product by its ID.
+ *
+ * @param {string} product_id - The ID of the product.
+ * @returns {Promise<Product | ErrorResponse | MessageResponse>} A promise
+ * that resolves to the product data or an error response.
+ */
+export async function getProductByProductId(
+  product_id: string,
+): Promise<Product | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(`${productsURL}`, {
+      params: { product_id },
+    });
+    return response.data.products[0] as Product;
+  } catch (error: unknown) {
+    return errorResponse(error, 'api.products.getProductById') as MessageResponse | ErrorResponse;
+  }
+}

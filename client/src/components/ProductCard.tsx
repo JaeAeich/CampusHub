@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
 import Product from '@/api/products/types';
+import { addProductToCartAsync } from '@/store/cart/cartSlice';
+import { useAppDispatch } from '@/utils/hooks';
 import { RootState } from '../store/store';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
@@ -15,6 +17,8 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
   const [fillColor, setFillColor] = useState('#fff');
   const [strokeColor, setStrokeColor] = useState('#000');
   const userExists = useSelector((state: RootState) => state.auth.value);
+  const appDispatch = useAppDispatch();
+
   const { loginWithRedirect } = useAuth0();
   const mouseIn = () => {
     if (!wishlisted) {
@@ -30,6 +34,11 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
   };
 
   const { toast } = useToast();
+
+  function handleAddToCart() {
+    appDispatch(addProductToCartAsync(product_id as string));
+  }
+
   return (
     <div className="relative max-h-108 inline-block m-4 w-full max-w-xs overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
@@ -81,6 +90,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
                 title: 'Product Added to Cart Successfully',
                 action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
               });
+              handleAddToCart();
             } else {
               toast({
                 title: 'Please Log in!',

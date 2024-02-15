@@ -58,17 +58,22 @@ function CreateAccount() {
             title: 'User created successfully',
             description: `Your id is ${addedUser.id}`,
           });
-          dispatch(authenticated());
+          dispatch(authenticated(addedUser.id));
           dispatch(setUserEmail(addedUser.id));
           navigate('/');
         }
       } catch (error) {
-        console.log('Error while creating user.', error);
+        toast({
+          variant: 'destructive',
+          title: 'Error while creating user.',
+        });
+        setMandatory(false);
+        setTryAgain(true);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [dispatch, navigate, toast, userDetails]);
 
   const handleSubmit = async () => {
     setMandatory(false);
@@ -89,7 +94,7 @@ function CreateAccount() {
         title: 'User created successfully',
         description: `Your id is ${addedUser.id}`,
       });
-      dispatch(authenticated());
+      dispatch(authenticated(addedUser.id));
       dispatch(setUserEmail(addedUser.id));
       navigate('/');
     } else {
