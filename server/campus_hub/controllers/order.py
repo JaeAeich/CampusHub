@@ -23,7 +23,7 @@ def add_order() -> APIResponse:
     """
     Adds a new order to the MongoDB database.
 
-    Arguements: Order details.
+    Arguments: Order details.
 
     Returns:
         Flask response: JSON response containing the id of the new order.
@@ -123,9 +123,57 @@ def add_order() -> APIResponse:
         )
 
 
+def get_all_orders():
+    """
+    fetches all orders
+    
+    Returns:
+        Flask response: JSON response containing the list of orders.
+    """
+    orders_collection_name = "orders"
+    projection = {"_id": False}
+    try:
+        orders = db_connector.query_data(orders_collection_name, {}, projection)
+        if not orders or len(orders) == 0:
+            return response(Status.NOT_FOUND, **message("No orders found."))
+        
+        return response(Status.SUCCESS, orders=orders)
+    except PyMongoError as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
+
 def get_order_by_id(order_id):
-    # Placeholder logic to get details of a specific order by ID
-    return {"id": order_id, "service_id": 1, "user_id": 1, "status": "Completed"}
+    """
+    fetches order details by order_id
+    
+    Arguments:
+        order_id: str
+        
+    Returns:
+        Flask response: JSON response containing the order details.
+    """
+    orders_collection_name = "orders"
+    query = {"order_id": order_id}
+    projection = {"_id": False}
+    try:
+        order = db_connector.query_data(orders_collection_name, query, projection)
+        if not order or len(order) == 0:
+            return response(Status.NOT_FOUND, **message("Order not found."))
+        
+        # validate the incoming data using Pydantic model
+        try:
+            order: Order = Order(**order[0])
+        except ValidationError as ve:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid order data: {str(ve)}")
+            )
+        
+        return response(Status.SUCCESS, order.model_dump())
+    except PyMongoError as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
 
 
 def cancel_order(order_id):

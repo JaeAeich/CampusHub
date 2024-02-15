@@ -137,3 +137,14 @@ export const removeProductAsync =
       errorResponse(Error.toString(), 'store.cart.removeProductAsync');
     }
   };
+
+export const clearCartAsync = () => async (dispatch: AppDispatch, getState: () => RootState) => {
+  try {
+    dispatch(clear({}));
+    const { user_id } = getState().auth;
+    const { cart } = getState();
+    await updateUserCart(user_id, cart);
+  } catch (error) {
+    errorResponse(Error.toString(), 'store.cart.clearCartAsync');
+  }
+};
