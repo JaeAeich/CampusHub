@@ -269,3 +269,24 @@ export async function deleteProduct(
     return errorResponse(Error.toString(), 'api.store.deleteProduct');
   }
 }
+
+/**
+ * Gets store by Seller ID.
+ *
+ * @param {string} seller_id - The ID of the seller.
+ * @returns {Promise<{ stores: Store[] } | ErrorResponse | MessageResponse>} A promise
+ * that resolves to the store data or an error response.
+ */
+export async function getStoresBySellerId(
+  service_id: string,
+  seller_id: string,
+): Promise<{ stores: Store[] } | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(`${storeURL}/service/${service_id}`, {
+      params: { seller_id },
+    });
+    return response.data;
+  } catch (error) {
+    return errorResponse(Error.toString(), 'api.store.getStoresBySellerId');
+  }
+}
