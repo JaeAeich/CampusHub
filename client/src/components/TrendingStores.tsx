@@ -13,7 +13,7 @@ export default function TrendingStores({
   error: boolean;
 }) {
   return (
-    <div className="my-2 max-h-128 md:my-4 md:mb-15 overflow-hidden object-fit">
+    <div className="my-2 max-h-128 lg:my-4 overflow-hidden object-fit">
       <Container>
         <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold my-4">
           Trending

@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Product from '@/api/products/types';
+import { useAuth0 } from '@auth0/auth0-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Link } from 'react-router-dom';
 import { addProductToCartAsync } from '@/store/cart/cartSlice';
@@ -21,6 +22,8 @@ export default function DealOfTheDay({
   trendingOffersProducts: (Product & { discount?: number })[];
   error: boolean;
 }) {
+  const { loginWithRedirect } = useAuth0();
+
   const { toast } = useToast();
   const userExists = useSelector((state: RootState) => state.auth.value);
   const appDispatch = useAppDispatch();
@@ -91,7 +94,11 @@ export default function DealOfTheDay({
                             } else {
                               toast({
                                 title: 'Please Log in!',
-                                action: <ToastAction altText="Add to cart">Login</ToastAction>,
+                                action: (
+                                  <Button className="w-15" onClick={() => loginWithRedirect()}>
+                                    Login
+                                  </Button>
+                                ),
                               });
                             }
                           }}

@@ -11,7 +11,7 @@ export default function Error404() {
           <Alert variant="destructive" className="w-1/2">
             <MapPin className="h-4 w-4" />
             <AlertTitle>Error 404!</AlertTitle>
-            <AlertDescription>Are you lost, baby gurl?</AlertDescription>
+            <AlertDescription>Are you lost?</AlertDescription>
           </Alert>
         </div>
       </Container>

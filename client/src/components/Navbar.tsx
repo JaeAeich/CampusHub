@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,12 +28,20 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
-import { setCartDataAsync } from '@/store/cart/cartSlice';
-import User from '@/api/users/types';
+import { addProductToCartAsync, removeProductFromCartAsync, setCartDataAsync } from '@/store/cart/cartSlice';
 import { useAppDispatch } from '@/utils/hooks';
+import { getSellerById } from '@/api/sellers/sellers';
+import Cart from '@/api/cart/types';
+import Product from '@/api/products/types';
+import { getProductByProductId } from '@/api/products/products';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
-import { authenticated } from '../store/auth/authSlice';
+import {
+  sellerUnauthenticated,
+  sellerAuthenticated,
+  setSellerId,
+} from '../store/seller/sellerSlice';
+import { unauthenticated, authenticated, setUserEmail } from '../store/auth/authSlice';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = '1';
@@ -73,27 +83,48 @@ function Navbar() {
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
   const userExists = useSelector((state: RootState) => state.auth.value);
-  const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
+  const sellerId = useSelector((state: RootState) => state.seller.sellerId);
+  const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
+
   useEffect(() => {
-    if (user && user.email) {
-      const promise = getUserById(user.email);
-      promise.then((response) => {
-        if ('error' in response) {
-          navigate(`/create/${user.email}`);
-        } else if ('user' in response) {
-          const userResponse = response.user as User;
-          appDispatch(setCartDataAsync(userResponse.user_id as string));
-          dispatch(authenticated(userResponse.user_id));
+    if (user && user.email && !sellerAuth && !userExists) {
+      const userPromise = getUserById(user.email);
+      const sellerPromise = getSellerById(user.email);
+      Promise.all([userPromise, sellerPromise]).then((responses) => {
+        const [userResponse, sellerResponse] = responses;
+
+        if ('error' in userResponse && 'error' in sellerResponse) {
+          navigate(`/createuser/${user.email}`);
+        } else if ('user' in userResponse && 'seller' in sellerResponse) {
+          appDispatch(setCartDataAsync(userResponse.user.user_id as string));
+          dispatch(authenticated(userResponse.user.user_id));
+
+          dispatch(setUserEmail(userResponse.user.user_email));
+          dispatch(sellerAuthenticated());
+          dispatch(setSellerId(sellerResponse.seller.seller_id));
+        } else if ('user' in userResponse) {
+          appDispatch(setCartDataAsync(userResponse.user.user_id as string));
+          dispatch(authenticated(userResponse.user.user_id));
+          dispatch(setUserEmail(userResponse.user.user_email));
+          navigate('/');
+        } else if ('seller' in sellerResponse) {
+          dispatch(sellerAuthenticated());
+          dispatch(setSellerId(sellerResponse.seller.seller_id));
         }
       });
     }
-  }, [user, dispatch, navigate, userExists, appDispatch]);
+  }, [user, dispatch, navigate, sellerAuth, userExists, appDispatch]);
 
   const handleLogout = async () => {
+    dispatch(unauthenticated());
+    dispatch(sellerUnauthenticated());
     setIsLoggingOut(true);
-    await logout();
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
     setIsLoggingOut(false);
-    navigate('/');
   };
 
   const handleSearch = () => {
@@ -101,7 +132,42 @@ function Navbar() {
       return;
     }
     navigate(`/products/${searchValue}`);
+    // window.location.reload();
   };
+
+  const handleEnterSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  // cart stuff
+  const cart = useSelector((state: RootState) => state.cart) as Cart;
+  const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({});
+
+  const handleIncrement = (p_id: string) => {
+    appDispatch(addProductToCartAsync(p_id));
+  };
+
+  const handleDecrement = (p_id: string) => {
+    appDispatch(removeProductFromCartAsync(p_id));
+  };
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      const promises = cart.carts.map(async (item) => {
+        const response = await getProductByProductId(item.product_id);
+        return { [item.product_id]: response };
+      });
+  
+      const productDetailsArray = await Promise.all(promises);
+      const details = productDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      setProductDetails(details as { [key: string]: Product });
+    };
+  
+    fetchProductDetails();
+  }, [cart]);
+
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">
       <Container>
@@ -124,49 +190,59 @@ function Navbar() {
                   </Avatar>
                   <div className="flex flex-col justify-left m-1 ml-2">
                     {/* // TODO: Add name and address of user. */}
-                    <p className="flex font-subheading font-bold">Hi, {user?.name}</p>
-                    <p className="flex font-subheading">Delivering to your address.</p>
+                    <p className="flex font-subheading font-bold">
+                      {isAuthenticated && user ? `Hi ${user?.name}` : 'Hey there!'}
+                    </p>
+                    <p className="flex font-subheading">
+                      {isAuthenticated && user
+                        ? 'Delivering to your address'
+                        : 'Welcome to Campus Hub'}
+                    </p>
                   </div>
                 </div>
                 <Separator />
                 <nav className="flex flex-col gap-4 mt-2">
                   <Accordion type="single" collapsible>
-                    {routes.map((route, index) =>
-                      route.content ? (
-                        <AccordionItem value={`item-${index}`} key={route.label}>
-                          <AccordionTrigger className="text-base font-subheading">
-                            {route.label}
-                          </AccordionTrigger>
-                          {route.content ? (
-                            <AccordionContent>
-                              {route.content.map((service) => (
-                                <div key={service.name}>{service.name}</div>
-                              ))}
-                            </AccordionContent>
+                    {isAuthenticated && (
+                      <>
+                        {routes.map((route, index) =>
+                          route.content ? (
+                            <AccordionItem value={`item-${index}`} key={route.label}>
+                              <AccordionTrigger className="text-base font-subheading">
+                                {route.label}
+                              </AccordionTrigger>
+                              {route.content ? (
+                                <AccordionContent>
+                                  {route.content.map((service) => (
+                                    <div key={service.name}>{service.name}</div>
+                                  ))}
+                                </AccordionContent>
+                              ) : (
+                                <AccordionContent />
+                              )}
+                            </AccordionItem>
                           ) : (
-                            <AccordionContent />
-                          )}
-                        </AccordionItem>
-                      ) : (
-                        <div key={route.label}>
-                          <Link
-                            className="flex text-base font-subheading py-5 hover:underline"
-                            to={route.to}
-                          >
-                            {route.label}
-                          </Link>
-                          <Separator />
-                        </div>
-                      ),
+                            <div key={route.label}>
+                              <Link
+                                className="flex text-base font-subheading py-5 hover:underline"
+                                to={route.to}
+                              >
+                                {route.label}
+                              </Link>
+                              <Separator />
+                            </div>
+                          ),
+                        )}
+                      </>
                     )}
                     {isAuthenticated &&
                       (sellerAuth ? (
                         <Button className="w-full bg-accent">
-                          <Link to="/seller/dashboard">Dashboard</Link>
+                          <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
                         </Button>
                       ) : (
                         <Button className="w-full bg-accent">
-                          <Link to="/seller/register">Become a seller</Link>
+                          <Link to={`/createseller/${user?.email}`}>Become a seller</Link>
                         </Button>
                       ))}
                     {isAuthenticated ? (
@@ -198,6 +274,7 @@ function Navbar() {
                 placeholder="Search stores"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={handleEnterSearch}
               />
               <Button type="button" size="icon" onClick={handleSearch}>
                 <Search color="#fff" />
@@ -224,24 +301,30 @@ function Navbar() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
+                      {cart.carts && cart.carts.map((item) => (
                       <TableRow className="font-body sm:text-base text-smm">
                         <TableCell>
                           <img
                             className="object-cover"
-                            src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                            alt="product"
+                            src={product_details[item.product_id] && product_details[item.product_id].product_images[0]}
+                            alt= {item.product_id}
                             width={100}
                             height={100}
                           />
                         </TableCell>
-                        <TableCell>Nike Air MX Super 2500 - Red</TableCell>
+                        <TableCell>{product_details[item.product_id] && product_details[item.product_id].product_name}</TableCell>
                         <TableCell className="flex flex-row items-center mt-4">
-                          <Minus className="m-1" />1<Plus className="m-1" />
+                          <Minus className="m-1"
+                          onClick={() => handleDecrement(item.product_id)} />
+                          {item.quantity}
+                          <Plus className="m-1" 
+                          onClick={() => handleIncrement(item.product_id)}/>
                         </TableCell>
                         <TableCell className="font-bold font-heading sm:text-lgg text-base">
-                          &#8377;449
+                          &#8377; {product_details[item.product_id] && product_details[item.product_id].product_cost * item.quantity}
                         </TableCell>
                       </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </div>

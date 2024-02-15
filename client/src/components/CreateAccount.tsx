@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -12,19 +12,21 @@ import {
 import addUser from '@/api/users/users';
 import { useAuth0 } from '@auth0/auth0-react';
 import User from '@/api/users/types';
+import { useToast } from '@/components/ui/use-toast';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { authenticated } from '../store/auth/authSlice';
+import { authenticated, setUserEmail } from '../store/auth/authSlice';
+import { RootState } from '../store/store';
 
 function CreateAccount() {
   const navigate = useNavigate();
-  const { user_email } = useParams();
+  const { toast } = useToast();
   const { user } = useAuth0();
   const [userDetails, setUserDetails] = useState<User>({
     user_id: '',
     user_name: '',
     user_phone_number: '',
-    user_email: user_email || '',
+    user_email: user?.email || '',
     user_gender: '',
     order_ids: [],
     user_image:
@@ -34,6 +36,7 @@ function CreateAccount() {
     cart_id: '',
     wishlist_cart_id: '',
   });
+  const userExists = useSelector((state: RootState) => state.auth.value);
   const [fieldLeft, setMandatory] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
   const dispatch = useDispatch();
@@ -44,6 +47,28 @@ function CreateAccount() {
     details[`${field}`] = value;
     setUserDetails(details);
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const addedUser = await addUser(userDetails as User);
+
+        if ('id' in addedUser) {
+          toast({
+            title: 'User created successfully',
+            description: `Your id is ${addedUser.id}`,
+          });
+          dispatch(authenticated());
+          dispatch(setUserEmail(addedUser.id));
+          navigate('/');
+        }
+      } catch (error) {
+        console.log('Error while creating user.', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const handleSubmit = async () => {
     setMandatory(false);
@@ -58,21 +83,32 @@ function CreateAccount() {
       return;
     }
     const addedUser = await addUser(userDetails as User);
-    if ('error' in addedUser) {
+
+    if ('id' in addedUser) {
+      toast({
+        title: 'User created successfully',
+        description: `Your id is ${addedUser.id}`,
+      });
+      dispatch(authenticated());
+      dispatch(setUserEmail(addedUser.id));
+      navigate('/');
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error while creating user.',
+      });
       setMandatory(false);
       setTryAgain(true);
-    } else {
-      dispatch(authenticated(userDetails.user_email));
-      navigate('/');
     }
   };
 
+  if (userExists) {
+    return <div className="items-center my-auto mx-auto justify-center">User Exists!</div>;
+  }
+
   return (
-    <div className="w-full justify-center mx-auto px-2 md:px-4 py-16">
+    <div className="w-full justify-center mx-auto px-2 md:px-4 py-5">
       <div className="w-4/5 sm:max-w-3xl sm:rounded-lg justify-center mx-auto ">
-        <h2 className="text-center mx-auto md:text-2xl font-semibold text-xl">
-          Create your account
-        </h2>
         <div className="grid max-w-2xl mx-auto mt-8">
           <div className="justify-center flex flex-col items-center sm:flex-row sm:space-y-0 space-y-5">
             <img
@@ -131,7 +167,8 @@ function CreateAccount() {
                 type="email"
                 id="email"
                 className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-                value={user_email}
+                placeholder={user?.email}
+                value={user?.email}
                 disabled
               />
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Select,
   SelectContent,
@@ -13,16 +13,17 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { addSeller } from '@/api/sellers/sellers';
+import { sellerAuthenticated, setSellerId } from '@/store/seller/sellerSlice';
 import Seller from '@/api/sellers/types';
 import { useNavigate } from 'react-router-dom';
-import { sellerAuthenticated } from '@/store/auth/authSlice';
-import { setSellerId } from '@/store/seller/sellerSlice';
+import { RootState } from '../store/store';
 
 export default function Component() {
   const { user } = useAuth0();
   const { toast } = useToast();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -44,12 +45,12 @@ export default function Component() {
     const response = await addSeller(formData);
     if ('id' in response) {
       toast({
-        title: 'Seller create',
-        description: response.id,
+        title: 'Seller created',
+        description: `Your id is ${response.id}`,
       });
       dispatch(sellerAuthenticated());
       dispatch(setSellerId(response.id));
-      navigate('/');
+      navigate(`/sellers/${response.id}/dashboard`);
     } else if ('message' in response) {
       toast({
         variant: 'destructive',
@@ -64,64 +65,92 @@ export default function Component() {
       });
     }
   };
-
+  if (sellerAuth) {
+    return <div className="items-center my-auto mx-auto justify-center">Seller Exists!</div>;
+  }
   return (
     <form onSubmit={handleSubmit} className="flex lg:flex-row flex-col w-full">
-      <div className="flex lg:h-full lg:w-1/2 h-1/3 w-full bg-black text-white relative">
-        <div className="flex-grow flex sm:flex-row flex-col items-center h-full justify-center relative">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url('/campus.jpeg')`,
-              filter: 'opacity(0.4)',
-            }}
-          />
-          <img
-            src="/logo.png"
-            className="xl:h-1/6 sm:h-[90px] h-[60px] z-10"
-            alt="CampusHub Logo"
-          />
-          <div className="flex flex-col z-10">
-            <h1 className="font-heading xl:text-4xll text-3xl font-bold xl:leading-8 leading-5">
-              CampusHub
-            </h1>
-            <h3 className="xl:ml-7 xl:text-base text-smm italic xl:leading-10 leading-8">
-              Connecting campus, connecting ventures
-            </h3>
-          </div>
-        </div>
-      </div>
-      <div className="lg:h-full lg:w-1/2 h-2/3 w-full bg-white p-12 flex flex-col justify-center">
-        <div className="mt-12">
-          <h2 className="xl:text-3xl md:text-2xl text-xl font-bold xl:mb-1 xl:leading-10 text-subheading">
-            Start you Business with us!
-          </h2>
-          <p className="xl:text-lg text-xs text-gray-600 xl:mb-4 mb-2">
-            Enter your email below to create your account
-          </p>
-          <div className="flex flex-col justify-center items-center gap-2">
-            <div className="flex w-full md:flex-row flex-col justify-center items-center md:gap-2">
-              <Input
-                name="username"
-                type="text"
-                className="border xl:text-base text-sm border-gray-300 placeholder-primary mb-2 md:mb-0"
-                placeholder={user?.name}
-                required
-              />
-              <Input
-                name="phoneNumber"
-                type="number"
-                className="border xl:text-base text-sm border-gray-300 placeholder-primary"
-                placeholder="Phone Number"
-                required
-              />
+      <div className="mx-auto justify-center lg:h-full lg:w-1/2 h-2/3 w-full bg-white p-5 flex flex-col justify-center">
+        <div className="flex flex-col justify-center items-center gap-5">
+          <div className="justify-center flex flex-col items-center sm:flex-row sm:space-y-0 space-y-5 mt-5 mb-8">
+            <img
+              className="object-cover w-32 h-32 p-1 rounded-full ring-2 ring-secondary dark:ring-background"
+              src={
+                user
+                  ? user.picture
+                  : 'https://www.nicepng.com/png/full/933-9332131_profile-picture-default-png.png'
+              }
+              alt="Bordered avatar"
+            />
+            <div className="flex flex-col space-y-5 sm:ml-8">
+              <Button
+                type="button"
+                className="py-1.5 px-3 sm:text-smm text-basefont-medium text-primary focus:outline-none bg-accent rounded-lg border border-accent hover:bg-accentDark focus:z-10 focus:ring-4 focus:ring-accent "
+              >
+                Change picture
+              </Button>
+              <Button
+                type="button"
+                className="py-1.5 px-3 sm:text-smm text-basefont-medium text-primary focus:outline-none bg-secondary rounded-lg border border-secondary hover:bg-darkgray hover:text-primary focus:z-10 focus:ring-4 focus:ring-darkgray "
+              >
+                Delete picture
+              </Button>
             </div>
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="name"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Name
+            </label>
+            <Input
+              name="username"
+              type="text"
+              id="name"
+              className="border xl:text-base text-sm border-gray-300 placeholder-primary mb-2 md:mb-0"
+              required
+            />
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="phone"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Phone Number
+            </label>
+            <Input
+              id="phone"
+              name="phoneNumber"
+              type="number"
+              className="border xl:text-base text-sm border-gray-300 placeholder-primary"
+              placeholder="Phone Number"
+              required
+            />
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="email"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Email
+            </label>
             <Input
               className="border xl:text-base text-sm border-gray-300 placeholder-primary"
               name="email"
               type="email"
+              value={user?.email}
+              disabled
               placeholder="Email"
             />
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="gender"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Gender
+            </label>
             <Select name="gender" required>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Gender" />
@@ -134,6 +163,14 @@ export default function Component() {
                 </SelectGroup>
               </SelectContent>
             </Select>
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="address"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Address
+            </label>
             <Input
               type="text"
               name="address"
@@ -142,13 +179,13 @@ export default function Component() {
               placeholder="Address"
             />
           </div>
-          <Button
-            type="submit"
-            className="my-4 bg-accent h-10 text-background hover:bg-darkgray shadow font-bold py-3 px-4 rounded flex justify-start items-center cursor-pointer w-full"
-          >
-            <span className="mx-auto xl:text-base text-sm">Register as Seller</span>
-          </Button>
         </div>
+        <Button
+          type="submit"
+          className="my-4 bg-accent h-10 text-background hover:bg-darkgray shadow font-bold py-3 px-4 rounded flex items-center cursor-pointer"
+        >
+          Register as Seller
+        </Button>
       </div>
     </form>
   );
