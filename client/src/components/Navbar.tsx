@@ -125,7 +125,7 @@ function Navbar() {
       return;
     }
     navigate(`/products/${searchValue}`);
-    window.location.reload();
+    // window.location.reload();
   };
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">

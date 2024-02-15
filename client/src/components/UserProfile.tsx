@@ -15,7 +15,7 @@ function UserProfile({ active }: { active: string }) {
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
     navigate(tab); // Navigate to the selected tab route
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
