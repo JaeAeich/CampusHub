@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -36,7 +36,7 @@ function CreateAccount() {
     cart_id: '',
     wishlist_cart_id: '',
   });
-  const userExists =  useSelector((state: RootState) => state.auth.value); 
+  const userExists = useSelector((state: RootState) => state.auth.value);
   const [fieldLeft, setMandatory] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
   const dispatch = useDispatch();
@@ -61,11 +61,11 @@ function CreateAccount() {
       return;
     }
     const addedUser = await addUser(userDetails as User);
-    
+
     if ('id' in addedUser) {
       toast({
         title: 'User created successfully',
-        description:`Your id is ${addedUser.id}`,
+        description: `Your id is ${addedUser.id}`,
       });
       dispatch(authenticated());
       dispatch(setUserEmail(addedUser.id));
@@ -73,19 +73,15 @@ function CreateAccount() {
     } else {
       toast({
         variant: 'destructive',
-        title: 'Error while creating user.'
+        title: 'Error while creating user.',
       });
       setMandatory(false);
       setTryAgain(true);
     }
   };
 
-  if(userExists){
-    return (
-      <div className='items-center my-auto mx-auto justify-center'>
-        User Exists! 
-      </div>
-    )
+  if (userExists) {
+    return <div className="items-center my-auto mx-auto justify-center">User Exists!</div>;
   }
 
   return (
@@ -149,7 +145,9 @@ function CreateAccount() {
                 type="email"
                 id="email"
                 className="bg-background border darkgray text-primary text-smm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-                placeholder={user?.email} value={user?.email} disabled
+                placeholder={user?.email}
+                value={user?.email}
+                disabled
               />
             </div>
             <div className="mb-2 sm:mb-6">

@@ -85,5 +85,6 @@ export async function getSellerById(
 export default {
   getSellers,
   addSeller,
-  add_store, getSellerById
+  add_store,
+  getSellerById,
 };

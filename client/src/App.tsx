@@ -29,11 +29,15 @@ function App() {
         <div className="flex grow">
           <Toaster />
           <Routes>
-            {isAuthenticated && !userExists &&!sellerAuth && (<><Route path="/createuser/:email_id" element={<EnterDetails active="user" />} /><Route path="/createseller/:email_id" element={<EnterDetails active="seller" />} /></>
+            {isAuthenticated && !userExists && !sellerAuth && (
+              <>
+                <Route path="/createuser/:email_id" element={<EnterDetails active="user" />} />
+                <Route path="/createseller/:email_id" element={<EnterDetails active="seller" />} />
+              </>
             )}
             {isAuthenticated && userExists && (
               <>
-                <Route path="/seller/register" element={<Login/>} />
+                <Route path="/seller/register" element={<Login />} />
                 <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
                 <Route
                   path="/users/:user_id/wishlist"
@@ -43,15 +47,25 @@ function App() {
                 <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
               </>
             )}
-            {isAuthenticated && sellerAuth && (<><Route path="/sellers/:seller_id/dashboard" element={<SellerDashboard />} />
-            <Route path="/user/register" element={<CreateAccount/>} />
-            </>)}
+            {isAuthenticated && sellerAuth && (
+              <>
+                <Route path="/sellers/:seller_id/dashboard" element={<SellerDashboard />} />
+                <Route path="/user/register" element={<CreateAccount />} />
+              </>
+            )}
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />
             <Route path="/stores/:store_id/products/:product_id" element={<ProductPage />} />
             <Route path="/services/:service_id/stores" element={<StorePage />} />
             <Route path="/products/:search_query" element={<ProductsPage />} />
             <Route path="/" element={<Landing />} />
-            <Route path="*" element={<div className='my-auto item-center mx-auto text-center'><NotFound item="Page"/></div>} />
+            <Route
+              path="*"
+              element={
+                <div className="my-auto item-center mx-auto text-center">
+                  <NotFound item="Page" />
+                </div>
+              }
+            />
             {/* Routes that should be behind auth0 login wall */}
           </Routes>
         </div>

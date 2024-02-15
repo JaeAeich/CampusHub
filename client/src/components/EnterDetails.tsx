@@ -12,14 +12,14 @@ function EnterDetails({ active }: { active: string }) {
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    navigate(`/create${tab}/${user?.email}`); 
+    navigate(`/create${tab}/${user?.email}`);
     window.location.reload();
   };
 
   return (
     <div className="bg-background w-full :gap-5 px-3 lg:pr-10 lg:flex-row text-primary py-5 pb-10">
       <div className="flex flex-col gap-2 w-full p-4 text-sm border-secondary top-12">
-      <h2 className="text-center mx-auto md:text-2xl font-semibold text-xl">
+        <h2 className="text-center mx-auto md:text-2xl font-semibold text-xl">
           Create your account
         </h2>
         <div className="flex flex-row justify-center">

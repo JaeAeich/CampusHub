@@ -86,7 +86,11 @@ export default function DealOfTheDay({
                             } else {
                               toast({
                                 title: 'Please Log in!',
-                                action: <Button className='w-15' onClick={() => loginWithRedirect()}>Login</Button>,
+                                action: (
+                                  <Button className="w-15" onClick={() => loginWithRedirect()}>
+                                    Login
+                                  </Button>
+                                ),
                               });
                             }
                           }}

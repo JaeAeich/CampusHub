@@ -65,19 +65,14 @@ export default function Component() {
       });
     }
   };
-  if(sellerAuth){
-    return (
-      <div className='items-center my-auto mx-auto justify-center'>
-        Seller Exists! 
-      </div>
-    )
+  if (sellerAuth) {
+    return <div className="items-center my-auto mx-auto justify-center">Seller Exists!</div>;
   }
   return (
     <form onSubmit={handleSubmit} className="flex lg:flex-row flex-col w-full">
       <div className="mx-auto justify-center lg:h-full lg:w-1/2 h-2/3 w-full bg-white p-5 flex flex-col justify-center">
-          
-          <div className="flex flex-col justify-center items-center gap-5">
-          <div className="justify-center flex flex-col items-center sm:flex-row sm:space-y-0 space-y-5 mt-5 mb-8" >
+        <div className="flex flex-col justify-center items-center gap-5">
+          <div className="justify-center flex flex-col items-center sm:flex-row sm:space-y-0 space-y-5 mt-5 mb-8">
             <img
               className="object-cover w-32 h-32 p-1 rounded-full ring-2 ring-secondary dark:ring-background"
               src={
@@ -102,56 +97,60 @@ export default function Component() {
               </Button>
             </div>
           </div>
-          <div className='w-full justify-start'>
+          <div className="w-full justify-start">
             <label
-                  htmlFor="name"
-                  className="block mb-2 text-smm font-medium text-primary dark:text-background"
-                >
-                  Name
-                </label>
-              <Input
-                name="username"
-                type="text" id="name"
-                className="border xl:text-base text-sm border-gray-300 placeholder-primary mb-2 md:mb-0"
-                required
-              />
-              </div>
-              <div className='w-full justify-start'>
-              <label
-                htmlFor="phone"
-                className="block mb-2 text-smm font-medium text-primary dark:text-background"
-              >
-                Phone Number
-              </label>
-              <Input id="phone"
-                name="phoneNumber"
-                type="number"
-                className="border xl:text-base text-sm border-gray-300 placeholder-primary"
-                placeholder="Phone Number"
-                required
-              />
-              </div>
-              <div className='w-full justify-start'>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-smm font-medium text-primary dark:text-background"
-              >
-                Email
-              </label>
-            <Input 
+              htmlFor="name"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Name
+            </label>
+            <Input
+              name="username"
+              type="text"
+              id="name"
+              className="border xl:text-base text-sm border-gray-300 placeholder-primary mb-2 md:mb-0"
+              required
+            />
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="phone"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Phone Number
+            </label>
+            <Input
+              id="phone"
+              name="phoneNumber"
+              type="number"
+              className="border xl:text-base text-sm border-gray-300 placeholder-primary"
+              placeholder="Phone Number"
+              required
+            />
+          </div>
+          <div className="w-full justify-start">
+            <label
+              htmlFor="email"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Email
+            </label>
+            <Input
               className="border xl:text-base text-sm border-gray-300 placeholder-primary"
               name="email"
-              type="email" value={user?.email} disabled
+              type="email"
+              value={user?.email}
+              disabled
               placeholder="Email"
             />
-            </div>
-            <div className='w-full justify-start'>
+          </div>
+          <div className="w-full justify-start">
             <label
-                htmlFor="gender"
-                className="block mb-2 text-smm font-medium text-primary dark:text-background"
-              >
-                Gender
-              </label>
+              htmlFor="gender"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Gender
+            </label>
             <Select name="gender" required>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Gender" />
@@ -164,14 +163,14 @@ export default function Component() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            </div>
-            <div className='w-full justify-start'>
+          </div>
+          <div className="w-full justify-start">
             <label
-                htmlFor="address"
-                className="block mb-2 text-smm font-medium text-primary dark:text-background"
-              >
-                Address
-              </label>
+              htmlFor="address"
+              className="block mb-2 text-smm font-medium text-primary dark:text-background"
+            >
+              Address
+            </label>
             <Input
               type="text"
               name="address"
@@ -179,15 +178,15 @@ export default function Component() {
               required
               placeholder="Address"
             />
-            </div>
           </div>
-          <Button
-            type="submit"
-            className="my-4 bg-accent h-10 text-background hover:bg-darkgray shadow font-bold py-3 px-4 rounded flex items-center cursor-pointer"
-          >
-            Register as Seller
-          </Button>
         </div>
+        <Button
+          type="submit"
+          className="my-4 bg-accent h-10 text-background hover:bg-darkgray shadow font-bold py-3 px-4 rounded flex items-center cursor-pointer"
+        >
+          Register as Seller
+        </Button>
+      </div>
     </form>
   );
 }

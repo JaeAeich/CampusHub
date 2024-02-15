@@ -10,14 +10,18 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getUserById } from '@/api/users/users';
-import {getSellerById} from '@/api/sellers/sellers';
+import { getSellerById } from '@/api/sellers/sellers';
 import { RootState } from '@/store/store';
-import { Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Button } from './ui/button';
 import { unauthenticated, authenticated, setUserEmail } from '../store/auth/authSlice';
-import { sellerAuthenticated, sellerUnauthenticated, setSellerId } from '../store/seller/sellerSlice';
+import {
+  sellerAuthenticated,
+  sellerUnauthenticated,
+  setSellerId,
+} from '../store/seller/sellerSlice';
 
 const user_id = 1;
 const routes = [
@@ -58,33 +62,31 @@ function ProfileButton() {
   // TODO: get user and add its
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
   useEffect(() => {
-    if (user && user.email&&!sellerAuth&&!userExists) {
-  const userPromise = getUserById(user.email);
-  const sellerPromise = getSellerById(user.email);
+    if (user && user.email && !sellerAuth && !userExists) {
+      const userPromise = getUserById(user.email);
+      const sellerPromise = getSellerById(user.email);
 
-  Promise.all([userPromise, sellerPromise])
-  .then((responses) => {
-    const [userResponse, sellerResponse] = responses;
+      Promise.all([userPromise, sellerPromise]).then((responses) => {
+        const [userResponse, sellerResponse] = responses;
 
-    if ('error' in userResponse && 'error' in sellerResponse) {
-      navigate(`/createuser/${user.email}`);
-    } else if ('user' in userResponse && 'seller' in sellerResponse) {
-      dispatch(authenticated());
-      dispatch(setUserEmail(userResponse.user.user_email));
-      dispatch(sellerAuthenticated());
-      dispatch(setSellerId(sellerResponse.seller.seller_id));
-
-    } else if ('user' in userResponse) {
-      dispatch(authenticated());
-      dispatch(setUserEmail(userResponse.user.user_email));
-      navigate('/')
-    } else if ('seller' in sellerResponse) {
-      dispatch(sellerAuthenticated());
-      dispatch(setSellerId(sellerResponse.seller.seller_id));
+        if ('error' in userResponse && 'error' in sellerResponse) {
+          navigate(`/createuser/${user.email}`);
+        } else if ('user' in userResponse && 'seller' in sellerResponse) {
+          dispatch(authenticated());
+          dispatch(setUserEmail(userResponse.user.user_email));
+          dispatch(sellerAuthenticated());
+          dispatch(setSellerId(sellerResponse.seller.seller_id));
+        } else if ('user' in userResponse) {
+          dispatch(authenticated());
+          dispatch(setUserEmail(userResponse.user.user_email));
+          navigate('/');
+        } else if ('seller' in sellerResponse) {
+          dispatch(sellerAuthenticated());
+          dispatch(setSellerId(sellerResponse.seller.seller_id));
+        }
+      });
     }
-    
-  })
-}}, [user, dispatch, navigate, sellerAuth, userExists]);
+  }, [user, dispatch, navigate, sellerAuth, userExists]);
 
   const handleLogout = async () => {
     await logout({
@@ -120,44 +122,49 @@ function ProfileButton() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {(isAuthenticated)? (
+        {isAuthenticated ? (
           <>
-          {userExists?<>
-            <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {routes.map((route) => (
-              <Link to={route.to} onClick={() => handleClick(route.to)}><DropdownMenuItem
-                key={route.to}
-                className="cursor-pointer w-48 text-smm font-medium"
-              >
-                
-                  {route.label}
-                
-              </DropdownMenuItem></Link>
-            ))}</>:null}
+            {userExists ? (
+              <>
+                <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {routes.map((route) => (
+                  <Link to={route.to} onClick={() => handleClick(route.to)}>
+                    <DropdownMenuItem
+                      key={route.to}
+                      className="cursor-pointer w-48 text-smm font-medium"
+                    >
+                      {route.label}
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
+              </>
+            ) : null}
             {/* TODO: add func to clear user form cache and redirect to '/' */}
-            {sellerAuth ? (<>
+            {sellerAuth ? (
+              <>
                 <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
-                  
-                    <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
-                  
+                  <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
                 </DropdownMenuItem>
-                {!userExists&& <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
-                  
+                {!userExists && (
+                  <DropdownMenuItem
+                    key="/login"
+                    className="cursor-pointer w-48 text-smm font-medium"
+                  >
                     <Link to="/user/register">Become a user</Link>
-                  
-                </DropdownMenuItem>}
-                <DropdownMenuSeparator /></>):
-                (<>
-                  <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
-                  
-                    <Link to="/seller/register" >Become a seller</Link>
-                  
-                </DropdownMenuItem>
-                <DropdownMenuSeparator /></>
+                  </DropdownMenuItem>
                 )}
-              
-            
+                <DropdownMenuSeparator />
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
+                  <Link to="/seller/register">Become a seller</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
+
             <Button
               className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
               onClick={handleLogout}
@@ -167,7 +174,10 @@ function ProfileButton() {
             </Button>
           </>
         ) : (
-          <Button className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48" onClick={() => loginWithRedirect()}>
+          <Button
+            className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
+            onClick={() => loginWithRedirect()}
+          >
             Log in
           </Button>
         )}

@@ -19,6 +19,6 @@ export const sellerSlice = createSlice({
   },
 });
 
-export const { setSellerId ,sellerAuthenticated, sellerUnauthenticated} = sellerSlice.actions;
+export const { setSellerId, sellerAuthenticated, sellerUnauthenticated } = sellerSlice.actions;
 
 export default sellerSlice.reducer;

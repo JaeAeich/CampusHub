@@ -84,14 +84,18 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
             } else {
               toast({
                 title: 'Please Log in!',
-                action: <Button className='w-15'  onClick={()=>loginWithRedirect()}>Login</Button>,
+                action: (
+                  <Button className="w-15" onClick={() => loginWithRedirect()}>
+                    Login
+                  </Button>
+                ),
               });
             }
           }}
           className="w-full flex items-center justify-center rounded-md bg-accentLight md:px-5 px-2 md:py-2.5 py-2 md:mb-0 mb-2 text-center text-smm font-medium text-primary hover:bg-accent hover:text-background focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           <ShoppingCartIcon className="mb-1 md:mr-2 mr-1 md:h-7 h-4" />
-          Add to cart 
+          Add to cart
         </Button>
       </div>
     </div>

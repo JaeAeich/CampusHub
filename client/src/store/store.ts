@@ -5,7 +5,7 @@ import sellerReducer from './seller/sellerSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    seller: sellerReducer
+    seller: sellerReducer,
   },
 });
 
