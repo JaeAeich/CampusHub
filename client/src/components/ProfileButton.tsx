@@ -10,7 +10,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Cat } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { RootState } from '@/store/store';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { unauthenticated } from '../store/auth/authSlice';
@@ -41,16 +41,11 @@ const routes = [
 ];
 
 function ProfileButton() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const sellerId = useSelector((state: RootState) => state.seller.sellerId);
   const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
   const userExists = useSelector((state: RootState) => state.auth.value);
 
-  const handleClick = (link: string) => {
-    navigate(link);
-    // window.location.reload();
-  };
   // TODO: add different dropdown based on if user is logged in or not
   // TODO: get user and add its
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
@@ -96,11 +91,8 @@ function ProfileButton() {
                 <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {routes.map((route) => (
-                  <Link to={route.to} onClick={() => handleClick(route.to)}>
-                    <DropdownMenuItem
-                      key={route.to}
-                      className="cursor-pointer w-48 text-smm font-medium"
-                    >
+                  <Link key={route.to} to={route.to}>
+                    <DropdownMenuItem className="cursor-pointer w-48 text-smm font-medium">
                       {route.label}
                     </DropdownMenuItem>
                   </Link>
