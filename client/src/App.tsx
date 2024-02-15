@@ -8,8 +8,11 @@ import ProductPage from './components/ProductPage';
 import StorePage from './components/StoresPage';
 import Login from './components/Login';
 import UserProfile from './components/UserProfile';
+import SellerDashboard from './components/SellerDashboard';
 // import SellerProfile from './components/SellerProfile';
 import StoreDetails from './components/StoreDetails';
+import SellerStoreListPage from './components/SellerStoreList';
+import SellerOrderList from './components/SellerListOrders';
 
 function App() {
   const isVisible = !window.location.pathname.includes('/login');
@@ -29,6 +32,9 @@ function App() {
             <Route path="/services/:service_id/stores" element={<StorePage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/stores" element={<StoreDetails />} />
+            <Route path="/stores/:store_id/dashboard" element={<SellerDashboard/>} />
+            <Route path="/stores/:store_id/orders" element={<SellerOrderList/>} />
+            <Route path="/sellers/:seller_id/stores" element={<SellerStoreListPage />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </div>

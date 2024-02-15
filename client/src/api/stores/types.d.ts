@@ -17,3 +17,7 @@ export default interface Store {
   stripe_public_key: string;
   timings: [number, number];
 }
+
+export interface StoreList{
+  sellers: Store[];
+}

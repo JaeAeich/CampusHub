@@ -1,6 +1,7 @@
 from campus_hub.models.store import Store
 from campus_hub.utils.db import db_connector
 from campus_hub.models.seller import Seller, SellerList
+from campus_hub.models.store import Store, StoreList
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from typing import MutableMapping, Any
@@ -166,4 +167,55 @@ def add_store(seller_id) -> APIResponse:
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
+
+def get_stores_by_seller_id(seller_id: str) -> APIResponse:
+    """
+    Get stores by seller id from the MongoDB database.
+
+    Args:
+        seller_id (str): The seller id of the stores to be fetched.
+
+    Returns:
+        Flask response: JSON response containing the list of stores.
+    """
+
+    sellers_collection_name = "sellers"
+    stores_collection_name = "stores"
+    query: dict = {"seller_id": seller_id}
+    projection = {"_id": False} 
+
+    try:
+        _sellers = db_connector.query_data(sellers_collection_name, query, projection)
+
+        # If there are no sellers, return an error response
+        if not _sellers or len(_sellers) == 0:
+            return response(Status.NOT_FOUND, **message("Seller does not exist."))
+
+        _stores = db_connector.query_data(stores_collection_name, query, projection)
+
+        # If there are no stores, return an error response
+        if not _stores or len(_stores) == 0:
+            return response(
+                Status.NOT_FOUND,
+                **message(f"Stores with seller_id {seller_id} does not exist."),
+            )
+
+        try:
+            stores: List[Store] = [Store(**s) for s in _stores]
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid store data in DB: {str(e)}"),
+            )
+
+        store_list: StoreList = StoreList(stores=stores)
+
+        # If stores are found, return a JSON response
+        return response(Status.SUCCESS, **store_list.model_dump())
+
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving stores from MongoDB: {e}"),
         )

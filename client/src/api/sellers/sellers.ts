@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import baseURL from '../config';
 import Seller, { SellerList } from './types';
+import  Store, {StoreList} from '../stores/types'
 import errorResponse, { ErrorResponse } from '../../utils/response';
 import { IdResponse, MessageResponse } from '../types';
-import Store from '../stores/types';
 
 /**
  * Represents the base URL for the sellers API.
@@ -62,7 +62,21 @@ export async function add_store(
     return errorResponse(error, 'api.sellers.updateSeller');
   }
 }
-
+/**
+ * Fetches a list of stores.
+ *
+ * @param {string} seller_id - The ID of the seller.
+ * @returns {Promise<StoreList | ErrorResponse | MessageResponse>} A promise
+ * that resolves to a list of stores or an error response.
+ */
+export async function getStoresBySellerId(seller_id: string): Promise<StoreList | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(`${sellersURL}/${seller_id}/stores`);
+    return response.data;
+  } catch (error: unknown) {
+    return errorResponse(error, 'api.sellers.getStoresBySellerId');
+  }
+}
 /**
  * Exports the sellers API functions.
  */

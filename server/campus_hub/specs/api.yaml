@@ -369,6 +369,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/sellers/{seller_id}/stores':
+    get:
+      summary: Get a list of all stores of a seller.
+      operationId: sellers.get_stores_by_seller_id
+      tags:
+        - Sellers
+      parameters:
+        - name: seller_id
+          in: path
+          description: ID of seller to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/stores/{store_id}/offers':
     get:
       summary: Get a list of all offers from a store.

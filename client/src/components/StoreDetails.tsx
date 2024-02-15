@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 function AccountDetails() {
   const { storeName, setStoreName } = useState('');
   const { storeDescription, setStoreDescription } = useState('');
@@ -13,7 +12,7 @@ function AccountDetails() {
   const { storeTimings, setStoreTimings } = useState('');
 
   function handleSubmit(): void {
-    throw new Error('Function not implemented.');
+    
   }
 
   return (
