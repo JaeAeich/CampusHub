@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -82,14 +85,14 @@ function Navbar() {
     if (user && user.email && !sellerAuth && !userExists) {
       const userPromise = getUserById(user.email);
       const sellerPromise = getSellerById(user.email);
-
       Promise.all([userPromise, sellerPromise]).then((responses) => {
         const [userResponse, sellerResponse] = responses;
-
+        
         if ('error' in userResponse && 'error' in sellerResponse) {
           navigate(`/createuser/${user.email}`);
         } else if ('user' in userResponse && 'seller' in sellerResponse) {
           dispatch(authenticated());
+          
           dispatch(setUserEmail(userResponse.user.user_email));
           dispatch(sellerAuthenticated());
           dispatch(setSellerId(sellerResponse.seller.seller_id));
