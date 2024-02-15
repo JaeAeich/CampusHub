@@ -64,7 +64,7 @@ def add_user() -> APIResponse:
                 **message(f"Internal Server Error: {str(e)}"),
             )
 
-        return response(Status.SUCCESS, **{"id": user_id})
+        return response(Status.SUCCESS, **{"id": user_data["user_email"]})
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

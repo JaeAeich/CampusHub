@@ -62,12 +62,28 @@ export async function add_store(
     return errorResponse(error, 'api.sellers.updateSeller');
   }
 }
-
+/**
+ * Fetches a seller by its email ID.
+ *
+ * @param {string} seller_email - The ID of the seller.
+ * @returns {Promise<Seller | ErrorResponse | MessageResponse>} A promise
+ * that resolves to the seller data or an error response.
+ */
+export async function getSellerById(
+  seller_email: string,
+): Promise<Seller | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(`${sellersURL}/${seller_email}`);
+    return response.data;
+  } catch (error) {
+    return errorResponse(Error.toString(), 'api.sellers.getSellerById');
+  }
+}
 /**
  * Exports the sellers API functions.
  */
 export default {
   getSellers,
   addSeller,
-  add_store,
+  add_store, getSellerById
 };

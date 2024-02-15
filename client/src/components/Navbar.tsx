@@ -26,9 +26,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getUserById } from '@/api/users/users';
+import {getSellerById} from '@/api/sellers/sellers';
 import ProfileButton from './ProfileButton';
 import { services } from '../../app/constants';
-import { authenticated } from '../store/auth/authSlice';
+import { sellerUnauthenticated, sellerAuthenticated, setSellerId } from '../store/seller/sellerSlice';
+import { unauthenticated,authenticated, setUserEmail } from '../store/auth/authSlice';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = 1;
@@ -69,25 +71,49 @@ function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userExists = useSelector((state: RootState) => state.auth.value);
-  const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
+const sellerId = useSelector((state: RootState) => state.seller.sellerId);
+  const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
+
   useEffect(() => {
-    if (user && user.email) {
-      const promise = getUserById(user.email);
-      promise.then((response) => {
-        if ('error' in response) {
-          navigate(`/create/${user.email}`);
-        } else if ('user' in response) {
-          dispatch(authenticated());
-        }
-      });
+    if (user && user.email&&!sellerAuth&&!userExists) {
+  const userPromise = getUserById(user.email);
+  const sellerPromise = getSellerById(user.email);
+
+  Promise.all([userPromise, sellerPromise])
+  .then((responses) => {
+    const [userResponse, sellerResponse] = responses;
+
+    if ('error' in userResponse && 'error' in sellerResponse) {
+      navigate(`/createuser/${user.email}`);
+    } else if ('user' in userResponse && 'seller' in sellerResponse) {
+      dispatch(authenticated());
+      dispatch(setUserEmail(userResponse.user.user_email));
+      dispatch(sellerAuthenticated());
+      dispatch(setSellerId(sellerResponse.seller.seller_id));
+
+    } else if ('user' in userResponse) {
+      dispatch(authenticated());
+      dispatch(setUserEmail(userResponse.user.user_email));
+      navigate('/')
+    } else if ('seller' in sellerResponse) {
+      dispatch(sellerAuthenticated());
+      dispatch(setSellerId(sellerResponse.seller.seller_id));
     }
-  }, [user, dispatch, navigate, userExists]);
+    
+  })
+}}, [user, dispatch, navigate, sellerAuth, userExists]);
+
 
   const handleLogout = async () => {
+    dispatch(unauthenticated());
+    dispatch(sellerUnauthenticated());
     setIsLoggingOut(true);
-    await logout();
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
     setIsLoggingOut(false);
-    navigate('/');
   };
 
   const handleSearch = () => {
@@ -95,6 +121,7 @@ function Navbar() {
       return;
     }
     navigate(`/products/${searchValue}`);
+    window.location.reload();
   };
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">
@@ -118,13 +145,14 @@ function Navbar() {
                   </Avatar>
                   <div className="flex flex-col justify-left m-1 ml-2">
                     {/* // TODO: Add name and address of user. */}
-                    <p className="flex font-subheading font-bold">Hi, {user?.name}</p>
-                    <p className="flex font-subheading">Delivering to your address.</p>
+                    <p className="flex font-subheading font-bold">{isAuthenticated&&user ? `Hi ${user?.name}`: "Hey there!"}</p>
+                    <p className="flex font-subheading">{isAuthenticated&&user? "Delivering to your address":"Welcome to Campus Hub"}</p>
                   </div>
                 </div>
                 <Separator />
                 <nav className="flex flex-col gap-4 mt-2">
                   <Accordion type="single" collapsible>
+                  {isAuthenticated &&<>
                     {routes.map((route, index) =>
                       route.content ? (
                         <AccordionItem value={`item-${index}`} key={route.label}>
@@ -152,15 +180,15 @@ function Navbar() {
                           <Separator />
                         </div>
                       ),
-                    )}
+                    )}</>}
                     {isAuthenticated &&
                       (sellerAuth ? (
                         <Button className="w-full bg-accent">
-                          <Link to="/seller/dashboard">Dashboard</Link>
+                          <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
                         </Button>
                       ) : (
                         <Button className="w-full bg-accent">
-                          <Link to="/seller/register">Become a seller</Link>
+                          <Link to={`/createseller/${user?.email}`}>Become a seller</Link>
                         </Button>
                       ))}
                     {isAuthenticated ? (
