@@ -87,12 +87,12 @@ function Navbar() {
       const sellerPromise = getSellerById(user.email);
       Promise.all([userPromise, sellerPromise]).then((responses) => {
         const [userResponse, sellerResponse] = responses;
-        
+
         if ('error' in userResponse && 'error' in sellerResponse) {
           navigate(`/createuser/${user.email}`);
         } else if ('user' in userResponse && 'seller' in sellerResponse) {
           dispatch(authenticated());
-          
+
           dispatch(setUserEmail(userResponse.user.user_email));
           dispatch(sellerAuthenticated());
           dispatch(setSellerId(sellerResponse.seller.seller_id));

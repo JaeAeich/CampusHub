@@ -13,10 +13,8 @@ import { RootState } from '@/store/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
-import { unauthenticated} from '../store/auth/authSlice';
-import {
-  sellerUnauthenticated,
-} from '../store/seller/sellerSlice';
+import { unauthenticated } from '../store/auth/authSlice';
+import { sellerUnauthenticated } from '../store/seller/sellerSlice';
 
 const user_id = 1;
 const routes = [
