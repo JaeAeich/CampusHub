@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AccountDetails from './AccountDetails';
 import Wishlist from './Wishlist';
@@ -12,10 +12,14 @@ function UserProfile({ active }: { active: string }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(active);
 
+  useEffect(() => {
+    setActiveTab(active);
+  }, [active]);
+
   const handleTabClick = (tab: string) => {
-    setActiveTab(tab);
-    navigate(tab); // Navigate to the selected tab route
-    window.location.reload();
+    const state = tab.split('/')[3];
+    setActiveTab(state);
+    navigate(tab);
   };
 
   return (

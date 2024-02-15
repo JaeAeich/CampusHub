@@ -13,7 +13,7 @@ function EnterDetails({ active }: { active: string }) {
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
     navigate(`/create${tab}/${user?.email}`);
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

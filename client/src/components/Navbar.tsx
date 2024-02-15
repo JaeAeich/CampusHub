@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -125,8 +124,15 @@ function Navbar() {
       return;
     }
     navigate(`/products/${searchValue}`);
-    window.location.reload();
+    // window.location.reload();
   };
+
+  const handleEnterSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <header className="sm:flex bg-black  sm:justify-between py-3 border-b">
       <Container>
@@ -233,6 +239,7 @@ function Navbar() {
                 placeholder="Search stores"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={handleEnterSearch}
               />
               <Button type="button" size="icon" onClick={handleSearch}>
                 <Search color="#fff" />
