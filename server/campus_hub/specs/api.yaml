@@ -1369,7 +1369,6 @@ components:
         - store_categories
         - coordinates
         - store_address
-        - stripe_public_key
         - customer_order_ids
         - product_ids
     Product:
