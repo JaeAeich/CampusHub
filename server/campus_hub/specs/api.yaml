@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.1.0
+  version: 1.1.1
 servers:
   - url: /campus_hub/v1
 tags:
@@ -687,6 +687,7 @@ paths:
       tags:
         - Products
       parameters:
+        - $ref: '#/components/parameters/product_id'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/store_id'
         - $ref: '#/components/parameters/max_rating'

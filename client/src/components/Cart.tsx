@@ -1,14 +1,16 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import iCart from '@/api/cart/types';
-import { useAppDispatch } from '@/utils/hooks';
-import { useState } from 'react';
-import { add } from '@/store/cart/cartSlice';
+import { useAppDispatch } from '@/utils/hooks'
+import { addProductToCartAsync, removeProductAsync, removeProductFromCartAsync } from '@/store/cart/cartSlice';
 import { Plus, Minus, X } from 'lucide-react';
 import addOrder from '@/api/orders/orders';
 import { Toaster } from '@/components/ui/toaster';
 import useRazorpay from 'react-razorpay';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getProductByProductId } from '@/api/products/products';
+import Product from '@/api/products/types';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
@@ -16,31 +18,22 @@ import { ToastAction } from './ui/toast';
 const razorpay_id = import.meta.env.VITE_RAZORPAY_ID;
 function Cart() {
   const cart = useSelector((state: RootState) => state.cart) as iCart;
-  const [quantity] = useState(2);
   const appDispatch = useAppDispatch();
-  const user_id = useSelector((state: RootState) => state.auth.user_email);
   const navigate = useNavigate();
+  const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({});
 
-  const handleIncrement = (p_id: string, qty: number) => {
-    const payload = {
-      user_id,
-      product_id: p_id,
-      quantity: qty + 1,
-    };
-    appDispatch(add(payload));
+  const handleIncrement = (p_id: string) => {
+    appDispatch(addProductToCartAsync(p_id));
   };
 
-  const handleDecrement = (p_id: string, qty: number) => {
-    if (quantity > 1) {
-      const payload = {
-        product_id: p_id,
-        quantity: qty - 1,
-      };
-      appDispatch(add(payload));
-    } else if (quantity === 1) {
-      // TODO: Handle remove.
-    }
+  const handleDecrement = (p_id: string) => {
+    appDispatch(removeProductFromCartAsync(p_id));
   };
+
+  function handleRemove(p_id: string) {
+    appDispatch(removeProductAsync(p_id));
+  }
+
   const { toast } = useToast();
   const [Razorpay] = useRazorpay();
   const orderData = {
@@ -125,28 +118,44 @@ function Cart() {
       }, 2000);
     }
   };
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      const promises = cart.carts.map(async (item) => {
+        const response = await getProductByProductId(item.product_id);
+        return { [item.product_id]: response };
+      });
+  
+      const productDetailsArray = await Promise.all(promises);
+      const details = productDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      setProductDetails(details as { [key: string]: Product });
+    };
+  
+    fetchProductDetails();
+  }, [cart]);
+
   return (
     <div className="lg:pt-10 pt-2">
       <div className="mx-auto max-w-8xl justify-center mx-8 xl:flex xl:space-x-6 xl:px-0">
         <div className="rounded-lg xl:w-2/3">
-          {cart.carts.map((item: { product_id: string; quantity: number }) => (
+          {cart.carts && cart.carts.map((item) => (
             <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
               <img
-                src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                alt="product"
+                src={product_details[item.product_id] && product_details[item.product_id].product_images[0]}
+                alt={item.product_id}
                 className="w-full rounded-lg sm:w-40"
               />
               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                 <div className="mt-5 sm:mt-0">
                   <h2 className="text-lg font-bold text-primary text-subheading">
-                    {item.product_id}
+                    {product_details[item.product_id] && product_details[item.product_id].product_name}
                   </h2>
                   <p className="mt-1 text-xs text-darkgray text-subheading">Store Name</p>
                 </div>
                 <div className="mt-4 flex sm:flex-row flex-col justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
                   <div className="flex sm:justify-start justify-center items-center border-secondary">
                     <Button
-                      onClick={() => handleIncrement(item.product_id, item.quantity)}
+                      onClick={() => handleIncrement(item.product_id)}
                       className="cursor-pointer rounded-l bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
                     >
                       <Plus className="md:h-6 h-4" />
@@ -159,24 +168,19 @@ function Cart() {
                       readOnly
                     />
                     <Button
-                      onClick={() => handleDecrement(item.product_id, item.quantity)}
+                      onClick={() => handleDecrement(item.product_id)}
                       className="cursor-pointer rounded-r bg-secondary md:py-1 py-1.5 md:px-3.5 px-2 duration-100 hover:bg-accentDark"
                     >
                       <Minus className="md:h-6 h-4" />
                     </Button>
-                    <X
-                      // TODO: Handle remove.
-                      // onClick={handleRemove}
+                      <X
                       className="sm:block hidden lg:ml-3 font-bold hover:text-accentDark cursor-pointer"
-                    />
+                      onClick={() => handleRemove(item.product_id)}/>
+                    
                   </div>
                   <div className="flex sm:justify-end justify-center sm:mt-0 mt-2">
-                    <p className="text-lgg font-bold">&#8377; 259.000</p>
-                    <X
-                      // TODO: Handle remove.
-                      // onClick={handleRemove}
-                      className="sm:hidden block ml-1 font-bold hover:text-accentDark cursor-pointer"
-                    />
+                    <p className="text-lgg font-bold">
+                    {product_details[item.product_id] && product_details[item.product_id].product_cost * item.quantity}</p>
                   </div>
                 </div>
               </div>

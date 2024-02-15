@@ -83,7 +83,7 @@ function Navbar() {
         } else if ('user' in response) {
           const userResponse = response.user as User;
           appDispatch(setCartDataAsync(userResponse.user_id as string));
-          dispatch(authenticated(user.email));
+          dispatch(authenticated(userResponse.user_id));
         }
       });
     }
