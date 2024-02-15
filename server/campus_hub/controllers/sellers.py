@@ -103,6 +103,46 @@ def add_seller() -> APIResponse:
         )
 
 
+def get_seller_by_id(seller_email: str) -> APIResponse:
+    """
+    Get a seller from the database using the seller ID.
+
+    Args:
+        seller_email (str): Unique identifier for the seller.
+
+    Returns:
+        Flask response: Response containing the seller data
+    """
+
+    sellers_collection_name = "sellers"
+
+    query = {"seller_email": seller_email}
+    projection = {"_id": False}
+
+    try:
+        _seller = db_connector.query_data(sellers_collection_name, query, projection)
+
+        if not _seller or len(_seller) == 0:
+            return response(
+                Status.NOT_FOUND,
+                **message(f"Seller with email_id {seller_email} not found"),
+            )
+
+        try:
+            seller: Seller = Seller(**_seller[0])
+        except ValidationError as e:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid seller data in DB: {str(e)}")
+            )
+
+        return response(Status.SUCCESS, seller=seller.model_dump())
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving seller from MongoDB: {str(e)}"),
+        )
+
+
 def add_store(seller_id) -> APIResponse:
     """
     Adds a new store to the MongoDB database.

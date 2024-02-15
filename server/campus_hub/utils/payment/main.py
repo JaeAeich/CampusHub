@@ -5,6 +5,7 @@ from pydantic import ValidationError
 from campus_hub.utils.response import response, message, Status
 from typing import Optional
 
+
 class RazorpayClient:
     def __init__(self) -> None:
         self.razorpay_id: str = os.environ.get("RAZORPAY_ID", "rzp_test_w2v4fpnqqM6VS8")

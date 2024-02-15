@@ -2,6 +2,7 @@ import { ShoppingCartIcon, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useAuth0 } from '@auth0/auth0-react';
 import Product from '@/api/products/types';
 import { RootState } from '../store/store';
 import { Button } from './ui/button';
@@ -14,7 +15,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
   const [fillColor, setFillColor] = useState('#fff');
   const [strokeColor, setStrokeColor] = useState('#000');
   const userExists = useSelector((state: RootState) => state.auth.value);
-
+  const { loginWithRedirect } = useAuth0();
   const mouseIn = () => {
     if (!wishlisted) {
       setFillColor('#e89ba1');
@@ -83,7 +84,11 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
             } else {
               toast({
                 title: 'Please Log in!',
-                action: <ToastAction altText="Add to cart">Login</ToastAction>,
+                action: (
+                  <Button className="w-15" onClick={() => loginWithRedirect()}>
+                    Login
+                  </Button>
+                ),
               });
             }
           }}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Product from '@/api/products/types';
+import { useAuth0 } from '@auth0/auth0-react';
 import { getProductById } from '@/api/stores/stores';
 import { RootState } from '../store/store';
 import { Button } from './ui/button';
@@ -19,6 +20,7 @@ export default function ProductPage() {
   const [errorProduct, setErrorProduct] = useState(false);
   const { store_id, product_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const { loginWithRedirect } = useAuth0();
   const [current, setCurrent] = useState('/noImage.png');
   const userExists = useSelector((state: RootState) => state.auth.value);
   useEffect(() => {
@@ -140,7 +142,11 @@ export default function ProductPage() {
                     } else {
                       toast({
                         title: 'Please Log in!',
-                        action: <ToastAction altText="Add to cart">Login</ToastAction>,
+                        action: (
+                          <Button className="w-15" onClick={() => loginWithRedirect()}>
+                            Login
+                          </Button>
+                        ),
                       });
                     }
                   }}
@@ -150,7 +156,22 @@ export default function ProductPage() {
                 </Button>
               </div>
               <div className="w-32 px-2 m-2">
-                <Button className="w-full bg-secondary py-2 px-4 rounded-full hover:bg-primary hover:text-background font-bold">
+                <Button
+                  className="w-full bg-secondary py-2 px-4 rounded-full hover:bg-primary hover:text-background font-bold"
+                  onClick={() => {
+                    if (userExists) {
+                      toast({
+                        title: 'Product Added to Cart Successfully',
+                        action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
+                      });
+                    } else {
+                      toast({
+                        title: 'Please Log in!',
+                        action: <Button onClick={() => loginWithRedirect()}>Login</Button>,
+                      });
+                    }
+                  }}
+                >
                   Add to Wishlist
                 </Button>
               </div>

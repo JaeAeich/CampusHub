@@ -14,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { unauthenticated } from '../store/auth/authSlice';
+import { sellerUnauthenticated } from '../store/seller/sellerSlice';
 
 const user_id = 1;
 const routes = [
@@ -42,8 +43,9 @@ const routes = [
 function ProfileButton() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const sellerAuth = useSelector((state: RootState) => state.auth.sellerAuth);
+  const sellerId = useSelector((state: RootState) => state.seller.sellerId);
+  const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
+  const userExists = useSelector((state: RootState) => state.auth.value);
 
   const handleClick = (link: string) => {
     navigate(link);
@@ -54,19 +56,22 @@ function ProfileButton() {
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
 
   const handleLogout = async () => {
-    dispatch(unauthenticated());
     await logout({
       logoutParams: {
         returnTo: window.location.origin,
       },
     });
+    setTimeout(() => {
+      dispatch(unauthenticated());
+      dispatch(sellerUnauthenticated());
+    }, 2000);
   };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
           {isAuthenticated ? (
-            <AvatarImage src={user?.picture} />
+            <AvatarImage src={user && user.picture} />
           ) : (
             <AvatarFallback>
               <Cat
@@ -86,35 +91,49 @@ function ProfileButton() {
       <DropdownMenuContent>
         {isAuthenticated ? (
           <>
-            <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {routes.map((route) => (
-              <DropdownMenuItem
-                key={route.to}
-                className="cursor-pointer py-2 pr-20 text-smm font-medium"
-              >
-                <Link to={route.to} onClick={() => handleClick(route.to)}>
-                  {route.label}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            {/* TODO: add func to clear user form cache and redirect to '/' */}
-            {isAuthenticated && (
+            {userExists ? (
               <>
+                <DropdownMenuLabel className="text-smm">My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem key="/login" className="cursor-pointer">
-                  {sellerAuth ? (
-                    <Link to="/seller/dashboard">Dashboard</Link>
-                  ) : (
-                    <Link to="/seller/register">Become a seller</Link>
-                  )}
+                {routes.map((route) => (
+                  <Link to={route.to} onClick={() => handleClick(route.to)}>
+                    <DropdownMenuItem
+                      key={route.to}
+                      className="cursor-pointer w-48 text-smm font-medium"
+                    >
+                      {route.label}
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
+              </>
+            ) : null}
+            {/* TODO: add func to clear user form cache and redirect to '/' */}
+            {sellerAuth ? (
+              <>
+                <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
+                  <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
+                </DropdownMenuItem>
+                {!userExists && (
+                  <DropdownMenuItem
+                    key="/login"
+                    className="cursor-pointer w-48 text-smm font-medium"
+                  >
+                    <Link to="/user/register">Become a user</Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
+                  <Link to="/seller/register">Become a seller</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>
             )}
+
             <Button
-              className="w-full bg-accent cursor-pointer text-red-700 font-bold active:bg-accentDark"
+              className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
               onClick={handleLogout}
               onKeyDown={handleLogout}
             >
@@ -122,7 +141,10 @@ function ProfileButton() {
             </Button>
           </>
         ) : (
-          <Button className="w-full bg-accent" onClick={() => loginWithRedirect()}>
+          <Button
+            className="w-full bg-accent cursor-pointer text-red-700 font-bold hover:bg-accentDark w-48"
+            onClick={() => loginWithRedirect()}
+          >
             Log in
           </Button>
         )}

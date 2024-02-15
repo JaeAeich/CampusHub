@@ -879,6 +879,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response'
+  '/sellers/{seller_email}':
+    get:
+      summary: Get a specific seller.
+      operationId: sellers.get_seller_by_id
+      tags:
+        - Sellers
+      parameters:
+        - name: seller_email
+          in: path
+          description: email ID of seller to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seller'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
   '/seller/{seller_id}/store':
     post:
       summary: Add a new store
