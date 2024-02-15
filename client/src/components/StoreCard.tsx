@@ -5,8 +5,8 @@ import Stars from './Stars';
 function StoreCard({ store }: { store: Store }) {
   const { store_name, store_address, store_description, store_images, timings } = store;
   return (
-    <Card id="app" className="w-full mb-10 md:h-60 h-50 rounded shadow-md flex card">
-      <div className="lg:w-72 md:w-48 w-32 h-full object-cover">
+    <Card id="app" className="w-full mb-10 h-60 rounded shadow-md flex card">
+      <div className="lg:w-72 w-48 h-full object-cover">
         <img
           className="w-full h-full rounded-l-sm object-cover"
           src={store_images[0]}
