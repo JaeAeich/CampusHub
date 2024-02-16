@@ -1,6 +1,6 @@
 import Orders from './Orders';
 
-function SellerOrderList() {
+function StoreOrderList() {
   return (
     <div className="bg-background pt-6 w-full px-3 lg:pr-10 lg:flex-row text-primary">
       <div className="flex flex-col w-full text-sm border-secondary">
@@ -16,4 +16,4 @@ function SellerOrderList() {
     )
 };
 
-export default SellerOrderList;
+export default StoreOrderList;

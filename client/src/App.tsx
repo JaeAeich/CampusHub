@@ -18,7 +18,9 @@ import SellerDashboard from './components/SellerDashboard';
 // import SellerProfile from './components/SellerProfile';
 import StoreDetails from './components/StoreDetails';
 import SellerStoreListPage from './components/SellerStoreList';
-import SellerOrderList from './components/SellerListOrders';
+import StoreOrderList from './components/StoreOrderList';
+import StoreReviews from './components/StoreReviews';
+import StoreInventory from './components/StoreInventory';
 
 function App() {
   // const isVisible = !window.location.pathname.includes('/login');
@@ -58,7 +60,9 @@ function App() {
                 <Route path="/user/register" element={<CreateAccount />} />
                 <Route path="/sellers/:seller_id/createstore" element={<StoreDetails />} />
             <Route path="/stores/:store_id/dashboard" element={<SellerDashboard/>} />
-            <Route path="/stores/:store_id/orders" element={<SellerOrderList/>} />
+            <Route path="/stores/:store_id/orders" element={<StoreOrderList/>} />
+            <Route path="/stores/:store_id/reviews" element={<StoreReviews/>} />
+            <Route path="/stores/:store_id/inventory" element={<StoreInventory/>} />
             <Route path="/sellers/:seller_id/stores" element={<SellerStoreListPage />} />
               </>
             )}

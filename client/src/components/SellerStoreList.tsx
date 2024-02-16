@@ -53,6 +53,7 @@ function SellerStoreListPage() {
             <StoreCard store={store} />
           </Link>
         ))}
+        <Link to={`/sellers/${seller_id}/createstore`} className="w-full"><Button className="text-base font-bold p-5 ml-3 bg-secondary hover:bg-accent text-primary">Add a store</Button></Link>
       </div>
     </div>
   );

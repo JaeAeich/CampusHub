@@ -52,14 +52,13 @@ export async function addSeller(
  * that resolves to the added store or an error response.
  */
 export async function add_store(
-  seller_id: string,
-  store: Store,
+  seller_id: string, store: Store
 ): Promise<ErrorResponse | MessageResponse> {
   try {
-    const response: AxiosResponse = await axios.put(`${baseURL}/seller/${seller_id}/store`, store);
+    const response: AxiosResponse = await axios.post(`${baseURL}/seller/${seller_id}/store`, store);
     return response.data;
   } catch (error: unknown) {
-    return errorResponse(error, 'api.sellers.updateSeller');
+    return errorResponse(error, 'api.sellers.add_store');
   }
 }
 /**
