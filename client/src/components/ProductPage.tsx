@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Product from '@/api/products/types';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getProductById } from '@/api/stores/stores';
+import { useAppDispatch } from '@/utils/hooks';
 import { RootState } from '../store/store';
 import { Button } from './ui/button';
 import { Carousel, CarouselItem, CarouselContent } from './ui/carousel';
@@ -13,6 +14,7 @@ import NotFound from './NotFound';
 import Loading from './Loading';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
+import { addProductToCartAsync } from '../store/cart/cartSlice';
 
 export default function ProductPage() {
   const { toast } = useToast();
@@ -23,6 +25,7 @@ export default function ProductPage() {
   const { loginWithRedirect } = useAuth0();
   const [current, setCurrent] = useState('/noImage.png');
   const userExists = useSelector((state: RootState) => state.auth.value);
+  const appDispatch = useAppDispatch();
   useEffect(() => {
     async function fetchProductById() {
       if (store_id !== undefined && product_id !== undefined) {
@@ -51,6 +54,10 @@ export default function ProductPage() {
         <NotFound item="Product" />
       </div>
     );
+  }
+
+  function handleAddToCart() {
+    appDispatch(addProductToCartAsync(product_id as string));
   }
 
   return (
@@ -139,6 +146,7 @@ export default function ProductPage() {
                         title: 'Product Added to Cart Successfully',
                         action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
                       });
+                      handleAddToCart();
                     } else {
                       toast({
                         title: 'Please Log in!',

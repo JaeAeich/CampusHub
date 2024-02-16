@@ -19,7 +19,8 @@ def get_products() -> APIResponse:
     """
 
     products_collection_name = "products"
-
+    
+    product_id = request.args.get("product_id")
     service_id = request.args.get("service_id")
     store_id = request.args.get("store_id")
     max_rating = request.args.get("max_rating")
@@ -29,6 +30,8 @@ def get_products() -> APIResponse:
 
     # Query without including _id field in the result
     query: dict = {}
+    if product_id:
+        query["product_id"] = product_id
     if service_id:
         query["service_id"] = service_id
     if store_id:
