@@ -1416,7 +1416,6 @@ components:
         - product_name
         - product_description
         - store_id
-        - service_id
         - product_cost
         - stock
     ProductList:

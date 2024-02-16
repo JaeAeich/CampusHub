@@ -215,7 +215,7 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
     services_collection_name = "services"
     stores_collection_name = "stores"
     query: dict = {"service_id": service_id}
-    projection = {"_id": False} 
+    projection = {"_id": False}
 
     try:
         _services = db_connector.query_data(services_collection_name, query, projection)
@@ -251,6 +251,7 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving stores from MongoDB: {e}"),
         )
+
 
 def update_store_by_service_id(service_id, request_data):
     # Placeholder logic to update a service by ID

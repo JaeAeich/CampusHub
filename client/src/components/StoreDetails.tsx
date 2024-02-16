@@ -26,7 +26,7 @@ function AccountDetails() {
   const [storeDetails, setStoreDetails] = useState<Store>({
     store_id: '',
     store_name: '',
-    store_images: ['/noImage.png'],
+    store_images: [],
     store_description: '',
     store_categories: [],
     store_phone_number: '',
@@ -69,8 +69,8 @@ function AccountDetails() {
     }
   };
   
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-      const imageUrl:string = await handleFile(event)
+  const handleFileChange = async (event) => {
+      const imageUrl:string|undefined = await handleFile(event);
       setStoreDetails((prevDetails: Store[]) => ({
         ...prevDetails,
         store_images: [imageUrl],
@@ -97,7 +97,7 @@ function AccountDetails() {
     if ('id' in response) {
       toast({
         title: 'Store created',
-        description: `Your id is ${response.id}`,
+        description: `Your store id is ${response.id}`,
       });
       navigate(`/sellers/${seller_id}/stores`);
     } else if ('message' in response) {

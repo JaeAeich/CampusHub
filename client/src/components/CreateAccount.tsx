@@ -63,12 +63,15 @@ function CreateAccount() {
           navigate('/');
         }
       } catch (error) {
-        console.log('Error while creating user.', error);
+        toast({
+          variant: 'destructive',
+          title: 'Error while creating user'
+        });
       }
     };
 
     fetchUser();
-  }, []);
+  }, [dispatch, navigate, toast, userDetails]);
 
   const handleSubmit = async () => {
     setMandatory(false);

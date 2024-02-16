@@ -1,4 +1,3 @@
-from campus_hub.models.store import Store
 from campus_hub.utils.db import db_connector
 from campus_hub.models.seller import Seller, SellerList
 from campus_hub.models.store import Store, StoreList
@@ -179,8 +178,8 @@ def add_store(seller_id) -> APIResponse:
         # Add uui as seller id
         store_id: str = db_connector.generate_unique_id("stores")
         store_data["store_id"] = store_id
-        store_data["customer_order_ids"]=[]
-        store_data["product_ids"]=[]
+        store_data["customer_order_ids"] = []
+        store_data["product_ids"] = []
 
         # Validate the incoming data using Pydantic model
         try:
@@ -218,6 +217,7 @@ def add_store(seller_id) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
+
 def get_stores_by_seller_id(seller_id: str) -> APIResponse:
     """
     Get stores by seller id from the MongoDB database.
@@ -232,7 +232,7 @@ def get_stores_by_seller_id(seller_id: str) -> APIResponse:
     sellers_collection_name = "sellers"
     stores_collection_name = "stores"
     query: dict = {"seller_id": seller_id}
-    projection = {"_id": False} 
+    projection = {"_id": False}
 
     try:
         _sellers = db_connector.query_data(sellers_collection_name, query, projection)
