@@ -180,6 +180,7 @@ def add_store(seller_id) -> APIResponse:
         store_id: str = db_connector.generate_unique_id("stores")
         store_data["store_id"] = store_id
         store_data["customer_order_ids"]=[]
+        store_data["product_ids"]=[]
 
         # Validate the incoming data using Pydantic model
         try:

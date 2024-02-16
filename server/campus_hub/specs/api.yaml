@@ -1345,8 +1345,6 @@ components:
           maxItems: 2
         store_address:
           type: string
-        stripe_public_key:
-          type: string
         timings:
           type: array
           items:
@@ -1416,6 +1414,7 @@ components:
       required:
         - product_categories
         - product_name
+        - product_description
         - store_id
         - service_id
         - product_cost

@@ -27,7 +27,7 @@ class Product(BaseModel):
     service_id: str
     product_images: List[str]
     product_cost: float
-    product_description: Optional[str]
+    product_description: str
     stock: int
     product_specifications: Optional[Dict]
     offer_id: str
