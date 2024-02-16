@@ -25,3 +25,18 @@ export default async function addOrder(
     return errorResponse(error, 'api.orders.addOrder');
   }
 }
+
+/**
+ * Get Order by ID
+ *
+ * @param {number} orderId - The order ID
+ * @returns {Promise<Order | ErrorResponse>} A promise that resolves to the order or an error response.
+ */
+export async function getOrderById(orderId: number): Promise<Order | ErrorResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(`${ordersURL}/${orderId}`);
+    return response.data;
+  } catch (error: unknown) {
+    return errorResponse(error, 'api.orders.getOrderById');
+  }
+}
