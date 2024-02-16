@@ -86,7 +86,7 @@ export async function updateUserCart(
 
 /**
  * Fetches the user's orders.
- * 
+ *
  * @param {string} user_id - The ID of the user.
  * @returns {Promise<Order[] | ErrorResponse | MessageResponse>} A promise
  * that resolves to the user's orders or an error response.

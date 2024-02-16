@@ -171,8 +171,6 @@ function Cart() {
     fetchProductDetails();
   }, [cart]);
 
-  
-
   return (
     <div className="lg:pt-10 pt-2">
       <div className="mx-auto max-w-8xl justify-center mx-8 xl:flex xl:space-x-6 xl:px-0">

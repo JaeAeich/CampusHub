@@ -323,14 +323,13 @@ def get_orders_by_user_id(user_id: str) -> APIResponse:
 
         # validate the incoming data using Pydantic model
         try:
-            orders: list[Order] = [Order(**order) for order in orders]
+            orderslist: list[Order] = [Order(**order) for order in orders]
         except ValidationError as ve:
             return response(
                 Status.INTERNAL_SERVER_ERROR, **message(f"Invalid order data in DB: {str(ve)}")
             )
         
-        print(orders)
-        return response(Status.SUCCESS, orders=[order.model_dump() for order in orders])
+        return response(Status.SUCCESS, orders=[order.model_dump() for order in orderslist])
     except PyMongoError as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
