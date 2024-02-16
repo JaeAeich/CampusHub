@@ -33,8 +33,6 @@ function Cart() {
   const navigate = useNavigate();
   const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({});
   const user_Email = useSelector((state: RootState) => state.auth.userEmail);
-  const user_id = useSelector((state: RootState) => state.auth.user_id);
-  console.log('User ID:', user_id);
   const [SubTotal, setSubTotal] = useState<number>(0);
   // const [Shipping, _setShipping] = useState<number>(4.99);
   const Shipping = 4.99;

@@ -4,6 +4,7 @@ import User from './types';
 import errorResponse, { ErrorResponse } from '../../utils/response';
 import { IdResponse, MessageResponse } from '../types';
 import Cart from '../cart/types';
+import Order from '../orders/types';
 
 /**
  * Represents the base URL for the sellers API.
@@ -80,5 +81,23 @@ export async function updateUserCart(
     return response.data;
   } catch (error) {
     return errorResponse(Error.toString(), 'api.users.updateUserCart');
+  }
+}
+
+/**
+ * Fetches the user's orders.
+ * 
+ * @param {string} user_id - The ID of the user.
+ * @returns {Promise<Order[] | ErrorResponse | MessageResponse>} A promise
+ * that resolves to the user's orders or an error response.
+ */
+export async function getUserOrders(
+  user_id: string,
+): Promise<Order[] | ErrorResponse | MessageResponse> {
+  try {
+    const response: AxiosResponse = await axios.get(`${usersURL}/${user_id}/orders`);
+    return response.data;
+  } catch (error) {
+    return errorResponse(Error.toString(), 'api.users.getUserOrders');
   }
 }
