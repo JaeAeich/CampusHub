@@ -1,16 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
-import React, { useState, ChangeEvent } from 'react';
-
-interface UploadFileProps {
-  preset_key: string;
-  cloud_name: string;
-}
-
-function UploadFile(props: UploadFileProps) {
-  const { preset_key, cloud_name } = props;
-  const [image, setImage] = useState<File | undefined>();
-
-  function handleFile(event: ChangeEvent<HTMLInputElement>) {
+import React, { ChangeEvent } from 'react';
+const cloud_name = import.meta.env.VITE_CLOUD_NAME
+const preset_key = import.meta.env.VITE_PRESET_KEY
+function handleFile(event: ChangeEvent<HTMLInputElement>) {
+if(event.target.files){
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
@@ -19,6 +12,8 @@ function UploadFile(props: UploadFileProps) {
       .post(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, formData)
       .then((res: AxiosResponse) => console.log(res.data.secure_url))
       .catch((err: Error) => console.log(err));
-  }
+  }else{
+        console.error("No file uploaded")
+    }
 }
-export default UploadFile
+export default handleFile
