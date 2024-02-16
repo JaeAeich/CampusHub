@@ -33,6 +33,8 @@ function Cart() {
   const navigate = useNavigate();
   const [product_details, setProductDetails] = useState<{ [key: string]: Product }>({});
   const user_Email = useSelector((state: RootState) => state.auth.userEmail);
+  const user_id = useSelector((state: RootState) => state.auth.user_id);
+  console.log('User ID:', user_id);
   const [SubTotal, setSubTotal] = useState<number>(0);
   // const [Shipping, _setShipping] = useState<number>(4.99);
   const Shipping = 4.99;
@@ -54,11 +56,11 @@ function Cart() {
   const [Razorpay] = useRazorpay();
 
   const handlePayment = async (orderData: Omit<Order, 'order_id'>) => {
-    // Prepare order data
-
     try {
       // Send order to backend
       const response = await addOrder(orderData);
+      appDispatch(clearCartAsync());
+
       if ('id' in response) {
         const options = {
           key: razorpay_id,
@@ -94,7 +96,7 @@ function Cart() {
 
         rzp1.on('payment.failed', () => {
           // TODO: Cart values are reset to zero always. Order is created regardless of payment status. Pay again option must be available in orders in case of failure.
-          appDispatch(clearCartAsync());
+
           toast({
             title: 'Payment Failed, Please try again',
             action: <ToastAction altText="Try Again">View Cart</ToastAction>,
@@ -171,24 +173,19 @@ function Cart() {
     fetchProductDetails();
   }, [cart]);
 
-  if (cart.carts.length === 0) {
-    return (
-      <div className="my-auto item-center mx-auto text-center">
-        <NotFound item="Products" />
-      </div>
-    );
-  }
+  
 
   return (
     <div className="lg:pt-10 pt-2">
       <div className="mx-auto max-w-8xl justify-center mx-8 xl:flex xl:space-x-6 xl:px-0">
         <div className="rounded-lg xl:w-2/3">
-          {cart.carts &&
+          {cart.carts.length !== 0 ? (
             cart.carts.map((item) => (
               <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
                 <img
                   src={
                     product_details[item.product_id] &&
+                    product_details[item.product_id].product_images &&
                     product_details[item.product_id].product_images[0]
                   }
                   alt={item.product_id}
@@ -238,7 +235,12 @@ function Cart() {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <div className="my-auto item-center mx-auto text-center">
+              <NotFound item="Products" />
+            </div>
+          )}
         </div>
         <div className="mt-6 h-full rounded-lg border bg-background p-6 shadow-md xl:mt-0 xl:w-1/3">
           <div className="mb-2 flex justify-between">

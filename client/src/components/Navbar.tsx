@@ -46,6 +46,7 @@ import {
   setSellerId,
 } from '../store/seller/sellerSlice';
 import { unauthenticated, authenticated, setUserEmail } from '../store/auth/authSlice';
+import NotFound from './NotFound';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = '1';
@@ -136,7 +137,6 @@ function Navbar() {
       return;
     }
     navigate(`/products/${searchValue}`);
-    // window.location.reload();
   };
 
   const handleEnterSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -295,24 +295,25 @@ function Navbar() {
               </DrawerTrigger>
               <DrawerContent>
                 <div className="mx-auto justify-center lg:w-4/6 sm:w-4/5 w-full sm:p-3 px-10">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="font-subheading sm:text-lgg text-smm font-semibold items-center">
-                        <TableHead>Image</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Quantity</TableHead>
-                        <TableHead>Amount</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {cart.carts &&
-                        cart.carts.map((item) => (
+                  {cart.carts.length !== 0 ? (
+                    cart.carts.map((item) => (
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="font-subheading sm:text-lgg text-smm font-semibold items-center">
+                            <TableHead>Image</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Quantity</TableHead>
+                            <TableHead>Amount</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
                           <TableRow className="font-body sm:text-base text-smm">
                             <TableCell>
                               <img
                                 className="object-cover"
                                 src={
                                   product_details[item.product_id] &&
+                                  product_details[item.product_id].product_images &&
                                   product_details[item.product_id].product_images[0]
                                 }
                                 alt={item.product_id}
@@ -341,9 +342,14 @@ function Navbar() {
                                 product_details[item.product_id].product_cost * item.quantity}
                             </TableCell>
                           </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
+                        </TableBody>
+                      </Table>
+                    ))
+                  ) : (
+                    <div className="my-auto item-center mx-auto text-center">
+                      <NotFound item="Products" />
+                    </div>
+                  )}
                 </div>
               </DrawerContent>
             </Drawer>

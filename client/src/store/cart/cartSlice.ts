@@ -64,7 +64,7 @@ export const cartSlice: Slice = createSlice({
     },
     clear: (state) => ({
       ...state,
-      carts: {},
+      carts: [],
     }),
   },
 });

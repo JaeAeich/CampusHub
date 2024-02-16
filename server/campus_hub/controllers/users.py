@@ -1,4 +1,5 @@
 from campus_hub.models.carts import Cart
+from campus_hub.models.orders import Order
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import response, message, Status, APIResponse
 from flask import request
@@ -296,6 +297,41 @@ def update_cart_by_id(user_id: str) -> APIResponse:
 
         return response(Status.SUCCESS, **{"id": query["cart_id"]})
     except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )
+
+def get_orders_by_user_id(user_id: str) -> APIResponse:
+    """
+    fetches order history of a user
+
+    Arguments:
+        user_id: str
+    
+    Returns:
+        Flask response: JSON response containing the list of orders.
+    """
+
+    orders_collection_name = "orders"
+    query = {"user_id": user_id}
+    projection = {"_id": False}
+
+    try:
+        orders = db_connector.query_data(orders_collection_name, query, projection)
+        if not orders or len(orders) == 0:
+            return response(Status.NOT_FOUND, **message("No orders found."))
+
+        # validate the incoming data using Pydantic model
+        try:
+            orders: list[Order] = [Order(**order) for order in orders]
+        except ValidationError as ve:
+            return response(
+                Status.INTERNAL_SERVER_ERROR, **message(f"Invalid order data in DB: {str(ve)}")
+            )
+        
+        print(orders)
+        return response(Status.SUCCESS, orders=[order.model_dump() for order in orders])
+    except PyMongoError as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
