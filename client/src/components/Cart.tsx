@@ -130,7 +130,7 @@ function Cart() {
       const orderData = await {
         amount_paid: Total,
         delivery_address: user.user_address,
-        delivery_status: false,
+        delivery_status: true,
         email_id: user_Email,
         product_list: cart.carts,
         seller_id: store.seller_id,
