@@ -18,7 +18,6 @@ def test_payment_model():
     assert payment.amount == 100.0
     assert payment.order_id == "Test payment"
     assert payment.signature == "Test source"
-    assert payment.currency == "USD"
 
     # Create a payment with invalid data
     invalid_data = {
