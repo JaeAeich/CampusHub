@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import {
@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 import Service from '@/api/services/types';
 import { getServices } from '@/api/services/services';
 import Store from '@/api/stores/types';
@@ -35,9 +35,11 @@ function AccountDetails() {
     product_ids: [],
     seller_id: seller_id as string,
     service_id: '',
-    coordinates: [0,0],
+    coordinates: [0, 0],
     store_address: '',
-    timings: [0,0], overall_rating: 0, offer_available: false
+    timings: [0, 0],
+    overall_rating: 0,
+    offer_available: false,
   });
 
   const handleChange = (field: string, value: number | string | string[]) => {
@@ -61,36 +63,34 @@ function AccountDetails() {
         ...prevDetails,
         timings: [prevDetails.timings[0], Number(value) as number],
       }));
-    }else {
+    } else {
       setStoreDetails((prevDetails) => ({
         ...prevDetails,
         [field]: value,
       }));
     }
   };
-  
-  const handleFileChange = async (event) => {
-      const imageUrl:string|undefined = await handleFile(event);
-      setStoreDetails((prevDetails: Store[]) => ({
-        ...prevDetails,
-        store_images: [imageUrl],
-      }));  
-  }; 
+
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const imageUrl: string | undefined = await handleFile(event);
+    setStoreDetails((prevDetails) => ({
+      ...prevDetails,
+      store_images: [imageUrl],
+    }));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-        const response = await getServices();
-        if ('error' in response) {
-          setServices(services); 
-        } else if ('services' in response) {
-          setServices(response.services as Service[]);
-        }
+      const response = await getServices();
+      if ('error' in response) {
+        setServices(services);
+      } else if ('services' in response) {
+        setServices(response.services as Service[]);
+      }
     };
 
-    fetchData(); 
-  }, []);  
-   
-  
+    fetchData();
+  }, []);
 
   async function handleSubmit(): Promise<void> {
     const response = await add_store(seller_id, storeDetails);
@@ -112,7 +112,9 @@ function AccountDetails() {
   return (
     <div className="px-2 md:p-4 flex justify-center w-screen">
       <div className="w-full px-6 pb-2 mt-2 sm:max-w-3xl sm:rounded-lg">
-        <h2 className="mx-auto md:text-xl font-subheading font-bold text-lgg text-center">Enter Store Details</h2>
+        <h2 className="mx-auto md:text-xl font-subheading font-bold text-lgg text-center">
+          Enter Store Details
+        </h2>
         <div className="items-center mt-2 text-primary">
           <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
             <div className="w-full">
@@ -134,23 +136,27 @@ function AccountDetails() {
           </div>
 
           <div className="mb-2 sm:mb-6 w-full">
-          <label
-                htmlFor="service"
-                className="block mb-2 text-base font-medium text-primary dark:text-background"
-              >
-                Service
-              </label>
-              <Select required onValueChange={(e) => handleChange('service_id', e)}>
-                <SelectTrigger className="w-full text-smm">
-                  <SelectValue placeholder="service" />
-                </SelectTrigger>
-                <SelectContent className="text-base">
-                  <SelectGroup>
-                  {service.map((ser)=><SelectItem className="text-smm" key={ser.service_id} value={ser.service_id}>{ser.service_name}</SelectItem>)}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            <label
+              htmlFor="service"
+              className="block mb-2 text-base font-medium text-primary dark:text-background"
+            >
+              Service
+            </label>
+            <Select required onValueChange={(e) => handleChange('service_id', e)}>
+              <SelectTrigger className="w-full text-smm">
+                <SelectValue placeholder="service" />
+              </SelectTrigger>
+              <SelectContent className="text-base">
+                <SelectGroup>
+                  {service.map((ser) => (
+                    <SelectItem className="text-smm" key={ser.service_id} value={ser.service_id}>
+                      {ser.service_name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
 
           <div className="mb-2 sm:mb-6">
             <label
@@ -209,80 +215,80 @@ function AccountDetails() {
               Address
             </label>
             <textarea
-            required
+              required
               id="address"
               rows={4}
               className="block p-2.5 w-full text-base text-primary bg-background rounded-lg border darkgray focus:ring-primary focus:border-primary "
-              placeholder="Address 1" onChange={(e) => handleChange('store_address', String(e.target.value))}
-
+              placeholder="Address 1"
+              onChange={(e) => handleChange('store_address', String(e.target.value))}
             />
           </div>
           <div className="mb-2 justify-between sm:mb-6 sm:space-x-5 sm:space-y-0 space-y-5 flex sm:flex-row flex-col">
-            <div className='flex'>
-            <label
-              htmlFor="x-coordie"
-              className="block mb-2 text-base font-medium text-primary dark:text-background"
-            >
-              Address X-Coordinate
-            </label>
-            <input
-              type="number"
-              id="x-coordie"
-              className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-              placeholder="Enter X-Coordinate of your store"
-              required
-              onChange={(e) => handleChange('coordinates[0]', e.target.value)}
-            />
+            <div className="flex">
+              <label
+                htmlFor="x-coordie"
+                className="block mb-2 text-base font-medium text-primary dark:text-background"
+              >
+                Address X-Coordinate
+              </label>
+              <input
+                type="number"
+                id="x-coordie"
+                className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+                placeholder="Enter X-Coordinate of your store"
+                required
+                onChange={(e) => handleChange('coordinates[0]', e.target.value)}
+              />
             </div>
-            <div className='flex'>
-            <label
-              htmlFor="y-coordie"
-              className="block mb-2 text-base font-medium text-primary dark:text-background"
-            >
-              Address Y-Coordinate
-            </label>
-            <input
-              type="number"
-              id="y-coordie"
-              className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-              placeholder="Enter Y-Coordinate of your store"
-              required
-              onChange={(e) => handleChange('coordinates[1]', e.target.value)}
-            />
+            <div className="flex">
+              <label
+                htmlFor="y-coordie"
+                className="block mb-2 text-base font-medium text-primary dark:text-background"
+              >
+                Address Y-Coordinate
+              </label>
+              <input
+                type="number"
+                id="y-coordie"
+                className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+                placeholder="Enter Y-Coordinate of your store"
+                required
+                onChange={(e) => handleChange('coordinates[1]', e.target.value)}
+              />
             </div>
           </div>
           <div className="mb-2 justify-between sm:mb-6 sm:space-x-5 sm:space-y-0 space-y-5 flex sm:flex-row flex-col">
-            <div className='flex'>
-            <label
-              htmlFor="opening-hours"
-              className="block mb-2 text-base font-medium text-primary dark:text-background"
-            >
-              Opening Hours
-            </label>
-            <input
-              type="number"
-              id="opening-hours"
-              className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-              placeholder="Enter opening time in 24 hour format"
-              required
-              onChange={(e) => handleChange('timings[0]', e.target.value)}
-            />
+            <div className="flex">
+              <label
+                htmlFor="opening-hours"
+                className="block mb-2 text-base font-medium text-primary dark:text-background"
+              >
+                Opening Hours
+              </label>
+              <input
+                type="number"
+                id="opening-hours"
+                className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+                placeholder="Enter opening time in 24 hour format"
+                required
+                onChange={(e) => handleChange('timings[0]', e.target.value)}
+              />
             </div>
-            <div className='flex'>
-            <label
-              htmlFor="closing-hours"
-              className="block mb-2 text-base font-medium text-primary dark:text-background"
-            >
-              Closing Hours
-            </label>
-            <input
-              type="number"
-              id="closing-hours"
-              className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-              placeholder="Enter closing time in 24 hour format"
-              required
-              onChange={(e) => handleChange('timings[1]', e.target.value)}
-            />
+            <div className="flex">
+              <label
+                htmlFor="closing-hours"
+                className="block mb-2 text-base font-medium text-primary dark:text-background"
+              >
+                Closing Hours
+              </label>
+              <input
+                type="number"
+                id="closing-hours"
+                className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+                placeholder="Enter closing time in 24 hour format"
+                required
+                onChange={(e) => handleChange('timings[1]', e.target.value)}
+              />
             </div>
           </div>
           <div className="mb-2 sm:mb-6 w-full">
@@ -295,7 +301,8 @@ function AccountDetails() {
             <input
               type="file"
               id="storeImage"
-              accept="image/*" required
+              accept="image/*"
+              required
               className="bg-background border darkgray text-primary text-base rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
               onChange={(e) => handleFileChange(e)}
             />

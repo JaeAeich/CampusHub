@@ -17,6 +17,6 @@ export default interface Store {
   timings: [number, number];
 }
 
-export interface StoreList{
+export interface StoreList {
   sellers: Store[];
 }

@@ -214,7 +214,7 @@ export async function addOffer(
  * that resolves to the added product or an error response.
  */
 export async function addProduct(
-  store_id: string,
+  store_id: string | undefined,
   product: Product,
 ): Promise<{ stores: Store[] } | ErrorResponse | MessageResponse> {
   try {

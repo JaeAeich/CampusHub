@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import baseURL from '../config';
 import Seller, { SellerList } from './types';
-import  Store, {StoreList} from '../stores/types'
+import Store, { StoreList } from '../stores/types';
 import errorResponse, { ErrorResponse } from '../../utils/response';
 import { IdResponse, MessageResponse } from '../types';
 
@@ -52,7 +52,8 @@ export async function addSeller(
  * that resolves to the added store or an error response.
  */
 export async function add_store(
-  seller_id: string, store: Store
+  seller_id: string,
+  store: Store,
 ): Promise<ErrorResponse | MessageResponse> {
   try {
     const response: AxiosResponse = await axios.post(`${baseURL}/seller/${seller_id}/store`, store);
@@ -78,13 +79,15 @@ export async function getSellerById(
     return errorResponse(Error.toString(), 'api.sellers.getSellerById');
   }
 }
-    /** Fetches a list of stores.
+/** Fetches a list of stores.
  *
  * @param {string} seller_id - The ID of the seller.
  * @returns {Promise<StoreList | ErrorResponse | MessageResponse>} A promise
  * that resolves to a list of stores or an error response.
  */
-export async function getStoresBySellerId(seller_id: string): Promise<StoreList | ErrorResponse | MessageResponse> {
+export async function getStoresBySellerId(
+  seller_id: string,
+): Promise<StoreList | ErrorResponse | MessageResponse> {
   try {
     const response: AxiosResponse = await axios.get(`${sellersURL}/${seller_id}/stores`);
     return response.data;
@@ -100,5 +103,5 @@ export default {
   addSeller,
   add_store,
   getSellerById,
-  getStoresBySellerId
+  getStoresBySellerId,
 };
