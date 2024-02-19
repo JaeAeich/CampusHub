@@ -275,11 +275,9 @@ def update_cart_by_id(user_id: str) -> APIResponse:
         projection = {"_id": False, "cart_id": True}
         cart_id = db_connector.query_data("users", query, projection)
         if not cart_id or len(cart_id) == 0:
-            return response(
-                Status.NOT_FOUND, **message(f"User {user_id} not found")
-            )
+            return response(Status.NOT_FOUND, **message(f"User {user_id} not found"))
 
-        query = {"cart_id": cart_id[0]['cart_id']}
+        query = {"cart_id": cart_id[0]["cart_id"]}
 
         print(cart.model_dump())
         print(query)
@@ -301,13 +299,14 @@ def update_cart_by_id(user_id: str) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
+
 def get_orders_by_user_id(user_id: str) -> APIResponse:
     """
     fetches order history of a user
 
     Arguments:
         user_id: str
-    
+
     Returns:
         Flask response: JSON response containing the list of orders.
     """
@@ -326,10 +325,13 @@ def get_orders_by_user_id(user_id: str) -> APIResponse:
             orderslist: list[Order] = [Order(**order) for order in orders]
         except ValidationError as ve:
             return response(
-                Status.INTERNAL_SERVER_ERROR, **message(f"Invalid order data in DB: {str(ve)}")
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid order data in DB: {str(ve)}"),
             )
-        
-        return response(Status.SUCCESS, orders=[order.model_dump() for order in orderslist])
+
+        return response(
+            Status.SUCCESS, orders=[order.model_dump() for order in orderslist]
+        )
     except PyMongoError as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

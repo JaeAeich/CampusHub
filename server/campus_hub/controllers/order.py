@@ -8,7 +8,7 @@ from typing import MutableMapping, Any
 from pymongo import UpdateOne
 from datetime import datetime
 from campus_hub.utils.payment.main import rz_client
-from typing import Optional  
+from typing import Optional
 
 
 def add_order() -> APIResponse:
@@ -118,7 +118,7 @@ def add_order() -> APIResponse:
 def get_all_orders():
     """
     fetches all orders
-    
+
     Returns:
         Flask response: JSON response containing the list of orders.
     """
@@ -128,20 +128,21 @@ def get_all_orders():
         orders = db_connector.query_data(orders_collection_name, {}, projection)
         if not orders or len(orders) == 0:
             return response(Status.NOT_FOUND, **message("No orders found."))
-        
+
         return response(Status.SUCCESS, orders=orders)
     except PyMongoError as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
 
+
 def get_order_by_id(order_id):
     """
     fetches order details by order_id
-    
+
     Arguments:
         order_id: str
-        
+
     Returns:
         Flask response: JSON response containing the order details.
     """
@@ -152,7 +153,7 @@ def get_order_by_id(order_id):
         order = db_connector.query_data(orders_collection_name, query, projection)
         if not order or len(order) == 0:
             return response(Status.NOT_FOUND, **message("Order not found."))
-        
+
         # validate the incoming data using Pydantic model
         try:
             order: Order = Order(**order[0])
@@ -160,7 +161,7 @@ def get_order_by_id(order_id):
             return response(
                 Status.BAD_REQUEST, **message(f"Invalid order data: {str(ve)}")
             )
-        
+
         return response(Status.SUCCESS, order.model_dump())
     except PyMongoError as e:
         return response(
