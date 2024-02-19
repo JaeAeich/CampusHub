@@ -18,7 +18,6 @@ class Store(BaseModel):
         service_id: Identifier for the service related to the store.
         coordinates: Coordinates representing the location of the store.
         store_address: Address of the store.
-        stripe_public_key: Store's unique stripe key that can be published.
         timings: Timings associated with the store.
         overall_rating: Overall rating of the store.
     """
@@ -36,7 +35,6 @@ class Store(BaseModel):
     service_id: str
     coordinates: Tuple[float, float]
     store_address: str
-    stripe_public_key: str
     timings: Optional[Tuple[float, float]]
     overall_rating: Optional[float]
     offer_available: Optional[bool]

@@ -19,7 +19,7 @@ def get_products() -> APIResponse:
     """
 
     products_collection_name = "products"
-    
+
     product_id = request.args.get("product_id")
     service_id = request.args.get("service_id")
     store_id = request.args.get("store_id")

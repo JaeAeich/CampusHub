@@ -11,10 +11,16 @@ import StorePage from './components/StoresPage';
 import { Toaster } from './components/ui/toaster';
 import UserProfile from './components/UserProfile';
 import { RootState } from './store/store';
-import SellerDashboard from './components/SellerDashboard';
 import NotFound from './components/NotFound';
 import EnterDetails from './components/EnterDetails';
 import CreateAccount from './components/CreateAccount';
+import SellerDashboard from './components/SellerDashboard';
+// import SellerProfile from './components/SellerProfile';
+import StoreDetails from './components/StoreDetails';
+import SellerStoreListPage from './components/SellerStoreList';
+import StoreOrderList from './components/StoreOrderList';
+import StoreReviews from './components/StoreReviews';
+import StoreInventory from './components/StoreInventory';
 
 function App() {
   // const isVisible = !window.location.pathname.includes('/login');
@@ -52,6 +58,12 @@ function App() {
               <>
                 <Route path="/sellers/:seller_id/dashboard" element={<SellerDashboard />} />
                 <Route path="/user/register" element={<CreateAccount />} />
+                <Route path="/sellers/:seller_id/createstore" element={<StoreDetails />} />
+                <Route path="/stores/:store_id/dashboard" element={<SellerDashboard />} />
+                <Route path="/stores/:store_id/orders" element={<StoreOrderList />} />
+                <Route path="/stores/:store_id/reviews" element={<StoreReviews />} />
+                <Route path="/stores/:store_id/inventory" element={<StoreInventory />} />
+                <Route path="/sellers/:seller_id/stores" element={<SellerStoreListPage />} />
               </>
             )}
             <Route path="/stores/:store_id/products" element={<ProductsPage />} />

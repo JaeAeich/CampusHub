@@ -242,7 +242,7 @@ function Navbar() {
                     {isAuthenticated &&
                       (sellerAuth ? (
                         <Button className="w-full bg-accent">
-                          <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
+                          <Link to={`/sellers/${sellerId}/stores`}>Dashboard</Link>
                         </Button>
                       ) : (
                         <Button className="w-full bg-accent">

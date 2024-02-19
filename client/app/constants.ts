@@ -99,7 +99,6 @@ export const stores: Store[] = [
     store_images: ['/stores/ccd.png'],
     store_name: 'Cafe Coffee Day',
     store_phone_number: '9876543210',
-    stripe_public_key: 'your_stripe_public_key',
     timings: [9, 21],
   },
   {
@@ -118,7 +117,6 @@ export const stores: Store[] = [
     store_images: ['/stores/amul.jpg'],
     store_name: 'Amul Store',
     store_phone_number: '9876543211',
-    stripe_public_key: 'your_stripe_public_key',
     timings: [10, 20],
   },
 ];

@@ -103,7 +103,7 @@ function ProfileButton() {
             {sellerAuth ? (
               <>
                 <DropdownMenuItem key="/login" className="cursor-pointer w-48 text-smm font-medium">
-                  <Link to={`/sellers/${sellerId}/dashboard`}>Dashboard</Link>
+                  <Link to={`/sellers/${sellerId}/stores`}>Dashboard</Link>
                 </DropdownMenuItem>
                 {!userExists && (
                   <DropdownMenuItem

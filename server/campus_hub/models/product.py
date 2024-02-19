@@ -24,10 +24,10 @@ class Product(BaseModel):
     product_categories: List[str]
     product_name: str
     store_id: str
-    service_id: str
+    service_id: Optional[str]
     product_images: List[str]
     product_cost: float
-    product_description: Optional[str]
+    product_description: str
     stock: int
     product_specifications: Optional[Dict]
     offer_id: str

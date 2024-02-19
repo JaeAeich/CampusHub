@@ -14,6 +14,9 @@ export default interface Store {
   store_images: string[];
   store_name: string;
   store_phone_number: string;
-  stripe_public_key: string;
   timings: [number, number];
+}
+
+export interface StoreList {
+  sellers: Store[];
 }
