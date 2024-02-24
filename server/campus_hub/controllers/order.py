@@ -115,7 +115,8 @@ def add_order() -> APIResponse:
         )
 
 
-def get_all_orders():
+# TODO: Add the following function to the API spec with filters and pagination
+def get_all_orders(): #! NOT IN API.YAML
     """
     fetches all orders
 
@@ -167,8 +168,3 @@ def get_order_by_id(order_id):
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
-
-
-def cancel_order(order_id):
-    # Placeholder logic to cancel an order by ID
-    return {"message": "Order canceled successfully"}

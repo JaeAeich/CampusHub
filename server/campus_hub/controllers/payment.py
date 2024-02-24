@@ -96,6 +96,7 @@ def add_payment() -> APIResponse:
         )
 
 
+# TODO: Why do we need this method?
 def verify_payment(request_data):
     # Placeholder logic to verify payment status
     return {"message": "Payment status verified successfully"}

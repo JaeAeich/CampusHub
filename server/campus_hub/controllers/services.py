@@ -99,11 +99,6 @@ def add_service() -> APIResponse:
         )
 
 
-def get_service_by_id(service_id):
-    # Placeholder logic to get details of a specific service by ID
-    return {"id": service_id, "name": "Service", "description": "Description"}
-
-
 def update_service(service_id: str) -> APIResponse:
     """
     Updates a service to the MongoDB database.
@@ -253,22 +248,7 @@ def get_stores_by_service_id(service_id: str) -> APIResponse:
         )
 
 
-def update_store_by_service_id(service_id, request_data):
-    # Placeholder logic to update a service by ID
-    return {"message": "Service updated successfully"}
-
-
-def delete_store_by_service_id(service_id):
-    # Placeholder logic to delete a service by ID
-    return {"message": "Service deleted successfully"}
-
-
 def get_products_by_service_id(service_id):
-    # Placeholder logic to get details of a specific service by ID
-    return {"id": service_id, "name": "Service", "description": "Description"}
-
-
-def add_store_by_service_id(service_id):
     # Placeholder logic to get details of a specific service by ID
     return {"id": service_id, "name": "Service", "description": "Description"}
 
