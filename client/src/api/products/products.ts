@@ -64,6 +64,8 @@ export async function getProductByProductId(
     });
     return response.data.products[0] as Product;
   } catch (error: unknown) {
-    return errorResponse(error, 'api.products.getProductById') as MessageResponse | ErrorResponse;
+    return errorResponse(error, 'api.products.getProductByProductId') as
+      | MessageResponse
+      | ErrorResponse;
   }
 }

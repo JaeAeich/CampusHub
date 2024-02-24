@@ -163,7 +163,7 @@ def get_order_by_id(order_id):
                 Status.BAD_REQUEST, **message(f"Invalid order data: {str(ve)}")
             )
 
-        return response(Status.SUCCESS, order.model_dump())
+        return response(Status.SUCCESS, **order.model_dump())
     except PyMongoError as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

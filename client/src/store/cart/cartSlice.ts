@@ -82,13 +82,10 @@ export default cartSlice.reducer;
 export const setCartDataAsync = (user_id: string) => async (dispatch: AppDispatch) => {
   try {
     const cart = await getUserCart(user_id);
-    if ('cart' in cart) {
-      const cartData = cart.cart;
-      if (cartData) {
-        dispatch(set(cartData as Cart));
-      } else {
-        errorResponse('Invalid cart data received', 'store.cart.setCartDataAsync');
-      }
+    if (cart) {
+      dispatch(set(cart as Cart));
+    } else {
+      errorResponse('Invalid cart data received', 'store.cart.setCartDataAsync');
     }
   } catch (error) {
     errorResponse(Error.toString(), 'store.cart.setCartDataAsync');

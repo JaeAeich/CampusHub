@@ -120,26 +120,21 @@ function Cart() {
   };
 
   const handleBuy = async () => {
-    const userres = await getUserById(user_Email);
-    // console.log('User:', user.user.user_address);
+    const user = (await getUserById(user_Email)) as User;
     const { store_id } = product_details[cart.carts[0].product_id];
-    const storeres = await getStoreById(store_id);
-    if ('user' in userres && 'store' in storeres) {
-      const user = userres.user as User;
-      const store = storeres.store as Store;
-      const orderData = await {
-        amount_paid: Total,
-        delivery_address: user.user_address,
-        delivery_status: true,
-        email_id: user_Email,
-        product_list: cart.carts,
-        seller_id: store.seller_id,
-        store_id,
-        store_name: store.store_name,
-        user_id: user.user_id,
-      };
-      handlePayment(orderData as Omit<Order, 'order_id'>);
-    }
+    const store = (await getStoreById(store_id)) as Store;
+    const orderData = await {
+      amount_paid: Total,
+      delivery_address: user.user_address,
+      delivery_status: true,
+      email_id: user_Email,
+      product_list: cart.carts,
+      seller_id: store.seller_id,
+      store_id,
+      store_name: store.store_name,
+      user_id: user.user_id,
+    };
+    handlePayment(orderData as Omit<Order, 'order_id'>);
   };
 
   useEffect(() => {

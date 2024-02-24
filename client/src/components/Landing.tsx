@@ -76,7 +76,7 @@ export default function Landing() {
 
               if ('product' in response) {
                 const productWithDiscount: Product & { discount?: number } = {
-                  ...(response.product as Product),
+                  ...(response as Product),
                   discount: offer.discount,
                 };
 

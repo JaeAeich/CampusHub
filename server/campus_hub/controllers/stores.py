@@ -44,7 +44,7 @@ def get_store_by_id(store_id) -> APIResponse:
             )
 
         # If stores are found, return a JSON response
-        return response(Status.SUCCESS, store=store.model_dump())
+        return response(Status.SUCCESS, **store.model_dump())
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
@@ -566,7 +566,7 @@ def get_product_by_id(store_id, product_id) -> APIResponse:
             )
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, product=product.model_dump())
+        return response(Status.SUCCESS, **product.model_dump())
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

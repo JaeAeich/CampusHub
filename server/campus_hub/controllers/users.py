@@ -104,7 +104,7 @@ def get_user_by_id(user_email: str) -> APIResponse:
                 Status.BAD_REQUEST, **message(f"Invalid user data in DB: {str(e)}")
             )
 
-        return response(Status.SUCCESS, user=user.model_dump())
+        return response(Status.SUCCESS, **user.model_dump())
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,
@@ -234,7 +234,7 @@ def get_cart_by_id(user_id: str) -> APIResponse:
                 Status.BAD_REQUEST, **message(f"Invalid cart data: {str(e)}")
             )
 
-        return response(Status.SUCCESS, cart=cart.model_dump())
+        return response(Status.SUCCESS, **cart.model_dump())
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

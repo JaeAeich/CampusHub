@@ -101,20 +101,20 @@ function Navbar() {
         if ('error' in userResponse && 'error' in sellerResponse) {
           navigate(`/createuser/${user.email}`);
         } else if ('user' in userResponse && 'seller' in sellerResponse) {
-          appDispatch(setCartDataAsync(userResponse.user.user_id as string));
-          dispatch(authenticated(userResponse.user.user_id));
+          appDispatch(setCartDataAsync(userResponse.user_id as string));
+          dispatch(authenticated(userResponse.user_id));
 
-          dispatch(setUserEmail(userResponse.user.user_email));
+          dispatch(setUserEmail(userResponse.user_email));
           dispatch(sellerAuthenticated());
-          dispatch(setSellerId(sellerResponse.seller.seller_id));
+          dispatch(setSellerId(sellerResponse.seller_id));
         } else if ('user' in userResponse) {
-          appDispatch(setCartDataAsync(userResponse.user.user_id as string));
-          dispatch(authenticated(userResponse.user.user_id));
-          dispatch(setUserEmail(userResponse.user.user_email));
+          appDispatch(setCartDataAsync(userResponse.user_id as string));
+          dispatch(authenticated(userResponse.user_id));
+          dispatch(setUserEmail(userResponse.user_email));
           navigate('/');
         } else if ('seller' in sellerResponse) {
           dispatch(sellerAuthenticated());
-          dispatch(setSellerId(sellerResponse.seller.seller_id));
+          dispatch(setSellerId(sellerResponse.seller_id));
         }
       });
     }
