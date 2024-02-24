@@ -135,7 +135,7 @@ def get_seller_by_id(seller_email: str) -> APIResponse:
                 Status.BAD_REQUEST, **message(f"Invalid seller data in DB: {str(e)}")
             )
 
-        return response(Status.SUCCESS, seller=seller.model_dump())
+        return response(Status.SUCCESS, **seller.model_dump())
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

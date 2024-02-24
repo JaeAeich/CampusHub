@@ -10,12 +10,7 @@ from datetime import datetime, timedelta
 from collections import Counter
 
 
-def add_offer(request_data):
-    # Placeholder logic to add a new service
-    return {"message": "Offer added successfully"}
-
-
-def get_offers() -> APIResponse:
+def get_offers() -> APIResponse: 
     """
     Get a list of all offers from the MongoDB database.
     Returns:

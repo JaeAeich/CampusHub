@@ -35,7 +35,7 @@ export default function ProductPage() {
           setErrorProduct(true);
           setIsLoading(false);
         } else if ('product' in response) {
-          setProduct(response.product as Product);
+          setProduct(response as Product);
           setIsLoading(false);
         }
       }
