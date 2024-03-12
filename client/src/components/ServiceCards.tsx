@@ -55,16 +55,16 @@ export default function ServiceCards({ services, error }: { services: Service[];
               ))}
             </CarouselContent>
           </Carousel>
-          <div className='md:hidden flex flex-col w-full'>
-              {services.map((service) => (
-                <div
-                  key={service.service_name}
-                  // onClick={() => handleRouteToStore()}
-                  className="w-full"
-                >
-                  <Link to={`/services/${service.service_id}/stores`}>
-                    {/* TODO: Route to the store path onClick */}
-                    <div className="relative group">
+          <div className="md:hidden flex flex-col w-full">
+            {services.map((service) => (
+              <div
+                key={service.service_name}
+                // onClick={() => handleRouteToStore()}
+                className="w-full"
+              >
+                <Link to={`/services/${service.service_id}/stores`}>
+                  {/* TODO: Route to the store path onClick */}
+                  <div className="relative group">
                     <Card className="bg-gradient-to-r from-secondaryLight to-secondary h-36 relative overflow-hidden mt-3">
                       <div className="flex-row flex justify-between">
                         <h1 className="px-4 pt-4 xl:text-xl md:text-lg sm:text-md font-subheading font-semibold">
@@ -79,10 +79,10 @@ export default function ServiceCards({ services, error }: { services: Service[];
                         />
                       </CardContent>
                     </Card>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                  </div>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       )}
