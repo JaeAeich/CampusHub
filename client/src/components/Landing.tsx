@@ -43,8 +43,8 @@ export default function Landing() {
         setErrorTrendingStore(true);
       } else if ('stores' in response) {
         setTrendingStores(response.stores);
-        setLoaded1(true);
       }
+      setLoaded1(true);
     }
 
     fetchTrendingStores();
@@ -57,8 +57,8 @@ export default function Landing() {
         setErrorTrendingOffer(true);
       } else if ('offers' in response) {
         setTrendingOffersid(response.offers);
-        setLoaded2(true);
       }
+      setLoaded2(true);
     }
 
     fetchTrendingOffers();
