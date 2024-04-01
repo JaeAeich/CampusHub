@@ -4,6 +4,32 @@ from connexion import FlaskApp
 from connexion.resolver import RelativeResolver
 from flask_cors import CORS
 from dotenv import load_dotenv
+import socket
+
+# Create a socket object
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Get local machine name
+host = socket.gethostname()
+port = 12345
+
+# Bind to the port
+server_socket.bind((host, port))
+
+# Wait for client connection
+server_socket.listen(5)
+
+while True:
+    # Establish connection with client
+    client_socket, addr = server_socket.accept()
+    print('Got connection from', addr)
+
+    # Send a notification to the client
+    message = "Hello! This is a push notification."
+    client_socket.send(message.encode())
+
+    # Close the connection
+    client_socket.close()
 
 
 def create_app():
