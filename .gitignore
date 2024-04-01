@@ -148,6 +148,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.metaflow/
 .dmypy.json
 dmypy.json
 
