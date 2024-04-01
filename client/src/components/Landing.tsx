@@ -4,9 +4,11 @@ import Product from '@/api/products/types';
 import Store from '@/api/stores/types';
 import Offers from '@/api/offers/types';
 import { getProductById, getTrendingStore } from '@/api/stores/stores';
+import { products } from '../../app/constants';
 import TrendingStores from './TrendingStores';
 import DealOfTheDay from './DealOfTheDay';
 import ServiceCards from './ServiceCards';
+import TopPicks from './TopPicks';
 import { getServices } from '../api/services/services';
 import Loading from './Loading';
 import { getTrendingOffers } from '../api/offers/offers';
@@ -102,6 +104,7 @@ export default function Landing() {
     <div className="mx-auto w-full px-1 sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out lg:mb-7">
       <TrendingStores trendingStores={trendingStores} error={errorTrendingStore} />
       <DealOfTheDay trendingOffersProducts={trendingOffersProducts} error={errorTrendingOffer} />
+      <TopPicks TopPicks={products} error={false} />
       <ServiceCards services={services} error={errorService} />
     </div>
   );
