@@ -370,9 +370,8 @@ paths:
           content:
             application/json:
               schema:
-
-                $ref: '#/components/schemas/Response'
-  '/sellers/{seller_id}/stores':
+                $ref: "#/components/schemas/Response"
+  "/sellers/{seller_id}/stores":
     get:
       summary: Get a list of all stores of a seller.
       operationId: sellers.get_stores_by_seller_id
@@ -386,25 +385,25 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StoreList'
-        '404':
+                $ref: "#/components/schemas/StoreList"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
-        '500':
+                $ref: "#/components/schemas/Response"
+        "500":
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Response'
-  '/stores/{store_id}/offers':
+                $ref: "#/components/schemas/Response"
+  "/stores/{store_id}/offers":
     get:
       summary: Get a list of all offers from a store.
       operationId: stores.get_offers_by_store_id
@@ -1300,6 +1299,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseID"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+  "/reviews":
+    get:
+      summary: Get a list of all reviews.
+      operationId: reviews.get_reviews
+      tags:
+        - Reviews
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/store_id"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewList"
         "404":
           description: Not Found
           content:
