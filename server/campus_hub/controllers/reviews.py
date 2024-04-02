@@ -1,4 +1,4 @@
-from campus_hub.models.review import Reviews, ReviewList, Review    
+from campus_hub.models.review import Reviews    
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from flask import request
@@ -38,7 +38,7 @@ def get_reviews() -> APIResponse:
             )
 
         try:
-            reviews = ReviewList(_reviews)
+            reviews = [Reviews(**review) for review in _reviews]
         except Exception as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
