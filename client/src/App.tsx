@@ -21,6 +21,8 @@ import SellerStoreListPage from './components/SellerStoreList';
 import StoreOrderList from './components/StoreOrderList';
 import StoreReviews from './components/StoreReviews';
 import StoreInventory from './components/StoreInventory';
+import NotificationDashboard from './components/NotificationDashboard';
+import NotificationSender from './components/NotificationSender';
 
 function App() {
   // const isVisible = !window.location.pathname.includes('/login');
@@ -36,6 +38,8 @@ function App() {
         <div className="flex grow">
           <Toaster />
           <Routes>
+            <Route path="/notification" element={<NotificationDashboard />} />
+            <Route path="/notificationSend" element={<NotificationSender />} />
             {isAuthenticated && !userExists && !sellerAuth && (
               <>
                 <Route path="/createuser/:email_id" element={<EnterDetails active="user" />} />

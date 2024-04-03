@@ -11,47 +11,47 @@ tags:
       Operations related to user authentication (Register, Login, Forgot
       Password)
   - name: Services
-    description: "Operations related to services (Get, Add, Update, Delete)"
+    description: 'Operations related to services (Get, Add, Update, Delete)'
   - name: Stores
-    description: "Operations related to stores (Get, Add, Update, Delete)"
+    description: 'Operations related to stores (Get, Add, Update, Delete)'
   - name: Products
-    description: "Operations related to products (Get, Add, Update, Delete)"
+    description: 'Operations related to products (Get, Add, Update, Delete)'
   - name: Orders
-    description: "Operations related to orders (Get History, Place Order, Cancel Order)"
+    description: 'Operations related to orders (Get History, Place Order, Cancel Order)'
   - name: Payments
-    description: "Operations related to payments (Initiate Payment, Verify Payment)"
+    description: 'Operations related to payments (Initiate Payment, Verify Payment)'
   - name: Notifications
-    description: "Operations related to notifications (Get, Get by ID)"
+    description: 'Operations related to notifications (Get, Get by ID)'
   - name: Offers
-    description: "Operations related to offers (Get, Get by Id, Get trending)"
+    description: 'Operations related to offers (Get, Get by Id, Get trending)'
   - name: Users
-    description: "Operations related to users (Get, Update, Delete)"
+    description: 'Operations related to users (Get, Update, Delete)'
 paths:
-  "/services":
+  '/services':
     get:
       summary: Get a list of all services.
       operationId: services.get_services
       tags:
         - Services
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceList"
-        "404":
+                $ref: '#/components/schemas/ServiceList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new service
       operationId: services.add_service
@@ -63,27 +63,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostService"
+              $ref: '#/components/schemas/PostService'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/services/{service_id}":
+                $ref: '#/components/schemas/Response'
+  '/services/{service_id}':
     put:
       summary: Update a service
       operationId: services.update_service
@@ -100,26 +100,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Service"
+              $ref: '#/components/schemas/Service'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a service
       operationId: services.delete_service
@@ -133,25 +133,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/services/{service_id}/stores":
+                $ref: '#/components/schemas/Response'
+  '/services/{service_id}/stores':
     get:
       summary: Get a list of all stores of a service.
       operationId: services.get_stores_by_service_id
@@ -165,25 +165,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StoreList"
-        "404":
+                $ref: '#/components/schemas/StoreList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/services/{service_id}/products": #need to check if this is supposed to be in service or products.
+                $ref: '#/components/schemas/Response'
+  '/services/{service_id}/products': #need to check if this is supposed to be in service or products.
     get:
       summary: Get a list of all products of a service.
       operationId: services.get_products_by_service_id
@@ -197,25 +197,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductList"
-        "404":
+                $ref: '#/components/schemas/ProductList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/services/{service_id}/offers":
+                $ref: '#/components/schemas/Response'
+  '/services/{service_id}/offers':
     get:
       summary: Get a list of all offers of a service.
       operationId: services.get_offers_by_service_id
@@ -229,25 +229,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OfferList"
-        "404":
+                $ref: '#/components/schemas/OfferList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/stores/{store_id}":
+                $ref: '#/components/schemas/Response'
+  '/stores/{store_id}':
     get:
       summary: Get a specific store.
       operationId: stores.get_store_by_id
@@ -261,24 +261,24 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Store"
-        "404":
+                $ref: '#/components/schemas/Store'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a store
       operationId: stores.update_store
@@ -295,26 +295,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Store"
+              $ref: '#/components/schemas/Store'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a store
       operationId: stores.delete_store
@@ -328,49 +328,48 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/stores/trending":
+                $ref: '#/components/schemas/Response'
+  '/stores/trending':
     get:
       summary: Get trending stores.
       operationId: stores.get_trending_stores
       tags:
         - Stores
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StoreList"
-        "404":
+                $ref: '#/components/schemas/StoreList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-
                 $ref: '#/components/schemas/Response'
   '/sellers/{seller_id}/stores':
     get:
@@ -418,24 +417,24 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OfferList"
-        "404":
+                $ref: '#/components/schemas/OfferList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new offer
       operationId: stores.add_offer
@@ -454,27 +453,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostOffer"
+              $ref: '#/components/schemas/PostOffer'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "405":
+                $ref: '#/components/schemas/ResponseID'
+        '405':
           description: Invalid Input.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/stores/{store_id}/reviews":
+                $ref: '#/components/schemas/Response'
+  '/stores/{store_id}/reviews':
     get:
       summary: Get a list of all reviews of a store.
       operationId: stores.get_reviews_by_store_id
@@ -488,25 +487,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReviewList"
-        "404":
+                $ref: '#/components/schemas/ReviewList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/stores/{store_id}/orders":
+                $ref: '#/components/schemas/Response'
+  '/stores/{store_id}/orders':
     get:
       summary: Get a list of all orders of a store.
       operationId: stores.get_orders_by_store_id
@@ -520,25 +519,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderList"
-        "404":
+                $ref: '#/components/schemas/OrderList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/stores/{store_id}/products":
+                $ref: '#/components/schemas/Response'
+  '/stores/{store_id}/products':
     get:
       summary: Get a list of all products of a store.
       operationId: stores.get_products_by_store_id
@@ -552,24 +551,24 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductList"
-        "404":
+                $ref: '#/components/schemas/ProductList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new product
       operationId: stores.add_product
@@ -588,27 +587,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostProduct"
+              $ref: '#/components/schemas/PostProduct'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "405":
+                $ref: '#/components/schemas/ResponseID'
+        '405':
           description: Invalid Input
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/stores/{store_id}/products/{product_id}":
+                $ref: '#/components/schemas/Response'
+  '/stores/{store_id}/products/{product_id}':
     get:
       summary: Get a specific product.
       operationId: stores.get_product_by_id
@@ -628,24 +627,24 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
-        "404":
+                $ref: '#/components/schemas/Product'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a product
       operationId: stores.update_product
@@ -662,26 +661,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Product"
+              $ref: '#/components/schemas/Product'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a product
       operationId: stores.delete_product
@@ -695,76 +694,76 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/products":
+                $ref: '#/components/schemas/Response'
+  '/products':
     get:
       summary: Get a list of all products.
       operationId: products.get_products
       tags:
         - Products
       parameters:
-        - $ref: "#/components/parameters/product_id"
-        - $ref: "#/components/parameters/service_id"
-        - $ref: "#/components/parameters/store_id"
-        - $ref: "#/components/parameters/max_rating"
-        - $ref: "#/components/parameters/max_price"
-        - $ref: "#/components/parameters/search_query"
+        - $ref: '#/components/parameters/product_id'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/store_id'
+        - $ref: '#/components/parameters/max_rating'
+        - $ref: '#/components/parameters/max_price'
+        - $ref: '#/components/parameters/search_query'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductList"
-        "404":
+                $ref: '#/components/schemas/ProductList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/offers":
+                $ref: '#/components/schemas/Response'
+  '/offers':
     get:
       summary: Get a list of all offers.
       operationId: offers.get_offers
       tags:
         - Offers
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OfferList"
-        "404":
+                $ref: '#/components/schemas/OfferList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/offers/{offer_id}":
+                $ref: '#/components/schemas/Response'
+  '/offers/{offer_id}':
     put:
       summary: Update an offer
       operationId: offers.update_offer
@@ -781,26 +780,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Offer"
+              $ref: '#/components/schemas/Offer'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a offer
       operationId: offers.delete_offer
@@ -814,68 +813,68 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        '204':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/offers/trending":
+                $ref: '#/components/schemas/Response'
+  '/offers/trending':
     get:
       summary: Get trending offers.
       operationId: offers.get_trending_offers
       tags:
         - Offers
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OfferList"
-        "404":
+                $ref: '#/components/schemas/OfferList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/sellers":
+                $ref: '#/components/schemas/Response'
+  '/sellers':
     get:
       summary: Get a list of all sellers.
       operationId: sellers.get_sellers
       tags:
         - Sellers
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SellerList"
-        "404":
+                $ref: '#/components/schemas/SellerList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     post:
       summary: Add a new seller
       operationId: sellers.add_seller
@@ -887,33 +886,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostSeller"
+              $ref: '#/components/schemas/PostSeller'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "405":
+                $ref: '#/components/schemas/ResponseID'
+        '405':
           description: Invalid Input
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "409":
+                $ref: '#/components/schemas/Response'
+        '409':
           description: Data Conflict
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/sellers/{seller_email}":
+                $ref: '#/components/schemas/Response'
+  '/sellers/{seller_email}':
     get:
       summary: Get a specific seller.
       operationId: sellers.get_seller_by_id
@@ -927,25 +926,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Seller"
-        "404":
+                $ref: '#/components/schemas/Seller'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/seller/{seller_id}/store":
+                $ref: '#/components/schemas/Response'
+  '/seller/{seller_id}/store':
     post:
       summary: Add a new store
       operationId: sellers.add_store
@@ -964,27 +963,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostStore"
+              $ref: '#/components/schemas/PostStore'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "405":
+                $ref: '#/components/schemas/Response'
+        '405':
           description: Invalid Input
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/users":
+                $ref: '#/components/schemas/Response'
+  '/users':
     post:
       summary: Add a new user
       operationId: users.add_user
@@ -996,27 +995,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostUser"
+              $ref: '#/components/schemas/PostUser'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "405":
+                $ref: '#/components/schemas/ResponseID'
+        '405':
           description: Invalid Input
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/users/{user_email}":
+                $ref: '#/components/schemas/Response'
+  '/users/{user_email}':
     get:
       summary: Get a specific user.
       operationId: users.get_user_by_id
@@ -1030,25 +1029,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "404":
+                $ref: '#/components/schemas/User'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/users/{user_id}":
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}':
     put:
       summary: Update a user
       operationId: users.update_user_by_id
@@ -1065,26 +1064,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: '#/components/schemas/User'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     delete:
       summary: Delete a user
       operationId: users.delete_user_by_id
@@ -1098,25 +1097,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/users/{user_id}/cart":
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}/cart':
     get:
       summary: Get a specific cart.
       operationId: users.get_cart_by_id
@@ -1130,24 +1129,24 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cart"
-        "404":
+                $ref: '#/components/schemas/Cart'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
     put:
       summary: Update a cart
       operationId: users.update_cart_by_id
@@ -1164,27 +1163,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Cart"
+              $ref: '#/components/schemas/Cart'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/users/{user_id}/orders":
+                $ref: '#/components/schemas/Response'
+  '/users/{user_id}/orders':
     get:
       summary: Get a list of all orders of a user.
       operationId: users.get_orders_by_user_id
@@ -1198,25 +1197,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderList"
-        "404":
+                $ref: '#/components/schemas/OrderList'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/orders":
+                $ref: '#/components/schemas/Response'
+  '/orders':
     post:
       summary: Add a new order
       operationId: order.add_order
@@ -1228,27 +1227,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PostOrder"
+              $ref: '#/components/schemas/PostOrder'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/orders/{order_id}":
+                $ref: '#/components/schemas/Response'
+  '/orders/{order_id}':
     get:
       summary: Get a specific order.
       operationId: order.get_order_by_id
@@ -1262,25 +1261,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
-        "404":
+                $ref: '#/components/schemas/Order'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-  "/payments":
+                $ref: '#/components/schemas/Response'
+  '/payments':
     post:
       summary: Add a new payment
       operationId: payment.add_payment
@@ -1292,26 +1291,47 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Payment"
+              $ref: '#/components/schemas/Payment'
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseID"
-        "404":
+                $ref: '#/components/schemas/ResponseID'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
-        "500":
+                $ref: '#/components/schemas/Response'
+        '500':
           description: Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response"
+                $ref: '#/components/schemas/Response'
+  # '/notification':
+  #   post:
+  #     summary: Add a new payment
+  #     x-openapi-router-controller: campus_hub.app
+  #     operationId: send_notification
+  #     tags:
+  #       - Notifications
+  #     requestBody:
+  #       description: Send notification
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/Notification'
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ResponseID'
 components:
   schemas:
     ServiceList:
@@ -1320,14 +1340,14 @@ components:
         services:
           type: array
           items:
-            $ref: "#/components/schemas/Service"
+            $ref: '#/components/schemas/Service'
     Service:
       allOf:
         - type: object
           properties:
             service_id:
               type: string
-        - $ref: "#/components/schemas/PostService"
+        - $ref: '#/components/schemas/PostService'
       required:
         - service_id
     PostService:
@@ -1360,14 +1380,14 @@ components:
         stores:
           type: array
           items:
-            $ref: "#/components/schemas/Store"
+            $ref: '#/components/schemas/Store'
     Store:
       allOf:
         - type: object
           properties:
             store_id:
               type: string
-        - $ref: "#/components/schemas/PostStore"
+        - $ref: '#/components/schemas/PostStore'
       required:
         - store_id
     PostStore:
@@ -1441,7 +1461,7 @@ components:
           properties:
             product_id:
               type: string
-        - $ref: "#/components/schemas/PostProduct"
+        - $ref: '#/components/schemas/PostProduct'
       required:
         - product_id
     PostProduct:
@@ -1490,21 +1510,21 @@ components:
         products:
           type: array
           items:
-            $ref: "#/components/schemas/Product"
+            $ref: '#/components/schemas/Product'
     OfferList:
       type: object
       properties:
         offers:
           type: array
           items:
-            $ref: "#/components/schemas/Offer"
+            $ref: '#/components/schemas/Offer'
     Offer:
       allOf:
         - type: object
           properties:
             offer_id:
               type: string
-        - $ref: "#/components/schemas/PostOffer"
+        - $ref: '#/components/schemas/PostOffer'
     PostOffer:
       type: object
       properties:
@@ -1563,7 +1583,7 @@ components:
         reviews:
           type: array
           items:
-            $ref: "#/components/schemas/Review"
+            $ref: '#/components/schemas/Review'
       required:
         - product_id
         - reviews
@@ -1571,14 +1591,14 @@ components:
     OrderList:
       type: array
       items:
-        $ref: "#/components/schemas/Order"
+        $ref: '#/components/schemas/Order'
     Order:
       allOf:
         - type: object
           properties:
             order_id:
               type: string
-        - $ref: "#/components/schemas/PostOrder"
+        - $ref: '#/components/schemas/PostOrder'
     PostOrder:
       type: object
       properties:
@@ -1590,7 +1610,7 @@ components:
         product_list:
           type: array
           items:
-            $ref: "#/components/schemas/CartItems"
+            $ref: '#/components/schemas/CartItems'
         store_id:
           type: string
         store_name:
@@ -1620,7 +1640,7 @@ components:
           properties:
             payment_id:
               type: string
-        - $ref: "#/components/schemas/PostPayment"
+        - $ref: '#/components/schemas/PostPayment'
     PostPayment:
       type: object
       properties:
@@ -1646,9 +1666,18 @@ components:
           properties:
             seller_id:
               type: string
-        - $ref: "#/components/schemas/PostSeller"
+        - $ref: '#/components/schemas/PostSeller'
       required:
         - seller_id
+    Notification:
+      type: object
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+        message:
+          type: string
     PostSeller:
       type: object
       properties:
@@ -1686,7 +1715,7 @@ components:
         sellers:
           type: array
           items:
-            $ref: "#/components/schemas/Seller"
+            $ref: '#/components/schemas/Seller'
     ResponseID:
       type: object
       properties:
@@ -1737,7 +1766,7 @@ components:
               type: array
               items:
                 type: string
-        - $ref: "#/components/schemas/PostUser"
+        - $ref: '#/components/schemas/PostUser'
 
       required:
         - user_id
@@ -1749,7 +1778,7 @@ components:
         cart_items:
           type: array
           items:
-            $ref: "#/components/schemas/CartItems"
+            $ref: '#/components/schemas/CartItems'
     CartItems:
       type: object
       properties:
