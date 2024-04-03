@@ -2,7 +2,7 @@ from flask import request
 from campus_hub.utils.db import db_connector
 from campus_hub.models.offers import Offers, OffersList
 from campus_hub.models.store import Store, StoreList
-from campus_hub.models.review import Review, Reviews, ReviewList
+from campus_hub.models.review import Reviews, ReviewList
 from campus_hub.models.orders import OrderList, Order
 from campus_hub.models.product import ProductList, Product
 from typing import List, MutableMapping, Any, Sequence, Mapping

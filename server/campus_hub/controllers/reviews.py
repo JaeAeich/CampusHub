@@ -1,4 +1,3 @@
-from typing import Any, MutableMapping
 from campus_hub.models.review import Reviews    
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status

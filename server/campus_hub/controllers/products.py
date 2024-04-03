@@ -273,7 +273,7 @@ def add_review_to_product(product_id: str) -> APIResponse:
         store_id = _products[0]["store_id"]
         
         # Query the review data from the database
-        query: dict = {"store_id": store_id,
+        query = {"store_id": store_id,
                    "product_id": product_id}
         _reviews = db_connector.query_data(reviews_collection_name, query, projection)
 
@@ -314,7 +314,7 @@ def add_review_to_product(product_id: str) -> APIResponse:
 
         # update the review data to the database
         try:
-            db_connector.update_data(reviews_collection_name, reviews.model_dump())
+            db_connector.update_data(reviews_collection_name, query, reviews.model_dump())
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
