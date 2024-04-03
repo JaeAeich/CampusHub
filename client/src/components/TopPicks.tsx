@@ -22,7 +22,6 @@ export default function ServiceCards({ TopPicks, error }: { TopPicks: Product[];
               align: 'start',
             }}
             className="w-full md:block hidden"
-            plugins={[Autoplay({ delay: 5000 })]}
           >
             <CarouselContent>
               {TopPicks.map((product) => (

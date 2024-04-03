@@ -41,7 +41,7 @@ export default function DealOfTheDay({
         {error || trendingOffersProducts.length === 0 ? (
           <NotFound item="Trending offers" />
         ) : (
-          <Carousel plugins={[Autoplay({ delay: 6000 })]}>
+          <Carousel>
             <CarouselContent>
               {trendingOffersProducts.map((deal) => (
                 <CarouselItem key={deal.product_name} className="w-full">
