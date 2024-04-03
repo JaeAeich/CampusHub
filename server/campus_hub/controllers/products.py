@@ -1,9 +1,12 @@
 import re
-from campus_hub.models.review import Reviews
+from typing import Any, MutableMapping
+from campus_hub.models.review import Review, Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
 from flask import request
+from pydantic import ValidationError
+from pymongo.errors import PyMongoError
 
 
 def get_products() -> APIResponse:
@@ -244,4 +247,83 @@ def search_products(str_query, service_id) -> APIResponse:
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
+        )
+
+def add_review_to_product(product_id: str) -> APIResponse:
+    """
+    Adds a new review to the MongoDB database.
+
+    Returns:
+        Flask response: JSON response containing the status of the operation.
+    """
+    reviews_collection_name = "reviews"
+    request_json = request.json
+    projection = {"_id": False}
+    product_collection_name = "products"
+
+    try:
+
+        # Query the product data from the database
+        query: dict = {"product_id": product_id}
+        _products = db_connector.query_data(product_collection_name, query, projection)
+
+        # If there are no products, return 404 error
+        if not _products or len(_products) == 0:
+            return response(Status.NOT_FOUND, **message("Product does not exist."))
+        store_id = _products[0]["store_id"]
+        
+        # Query the review data from the database
+        query: dict = {"store_id": store_id,
+                   "product_id": product_id}
+        _reviews = db_connector.query_data(reviews_collection_name, query, projection)
+
+        # Check if request.json is not None before assignment
+        if request_json is not None:
+            review_data: MutableMapping[Any, Any] = request_json
+        else:
+            # Handle the case when request.json is None
+            review_data = {}
+
+        # If there are no reviews
+        if not _reviews or len(_reviews) == 0:
+            # Create a new entry for the store and product
+            review_data = {"store_id": store_id,
+                           "product_id": product_id,
+                           "reviews": []}
+            db_connector.insert_data(reviews_collection_name, review_data)
+            _reviews = db_connector.query_data(reviews_collection_name, query, projection)
+
+        # Validate the incoming data using Pydantic model
+        try:
+            review = Review(**review_data)
+        except ValidationError as ve:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid review data: {str(ve)}")
+            )
+
+        # add review to the list of reviews
+        _reviews[0]["reviews"].append(review.model_dump())
+
+        # validate reviews
+        try:
+            reviews = Reviews(**_reviews[0])
+        except ValidationError as ve:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid review data: {str(ve)}")
+            )
+
+        # update the review data to the database
+        try:
+            db_connector.update_data(reviews_collection_name, reviews.model_dump())
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
+            )
+
+        # Return a success response
+        return response(Status.SUCCESS)
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )

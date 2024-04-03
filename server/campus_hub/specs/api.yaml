@@ -1339,6 +1339,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Response"
+  "/products/{product_id}/reviews":
+    post:
+      summary: Add a new review
+      operationId: products.add_review_to_product
+      tags:
+        - Products
+      requestBody:
+        description: Review object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Review"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseID"
+        "405":
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
 components:
   schemas:
     ServiceList:
