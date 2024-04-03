@@ -71,10 +71,10 @@ export async function getProductByProductId(
 
 /**
  * Add a new Review to Product.
- * 
+ *
  * @param {string} product_id - The ID of the product.
  * @param {Review} review - The review data to add.
- * 
+ *
  * @returns {Promise<Product | ErrorResponse | MessageResponse>} A promise
  * that resolves to the product data or an error response.
  */
@@ -83,9 +83,14 @@ export async function addReviewToProduct(
   review: Review,
 ): Promise<Product | ErrorResponse | MessageResponse> {
   try {
-    const response: AxiosResponse = await axios.post(`${productsURL}/${product_id}/reviews`, review);
+    const response: AxiosResponse = await axios.post(
+      `${productsURL}/${product_id}/reviews`,
+      review,
+    );
     return response.data;
   } catch (error: unknown) {
-    return errorResponse(error, 'api.products.addReviewToProduct') as MessageResponse | ErrorResponse;
+    return errorResponse(error, 'api.products.addReviewToProduct') as
+      | MessageResponse
+      | ErrorResponse;
   }
 }

@@ -21,8 +21,8 @@ export default async function getReviews(
   product_id: string,
 ): Promise<User[] | ErrorResponse> {
   try {
-    const response: AxiosResponse = await axios.get(`${reviewsURL}`,{
-        params: { store_id, product_id },
+    const response: AxiosResponse = await axios.get(`${reviewsURL}`, {
+      params: { store_id, product_id },
     });
     return response.data;
   } catch (error) {
