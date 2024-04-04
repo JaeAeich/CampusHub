@@ -25,9 +25,15 @@ import NotFound from './NotFound';
 import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
 import { Button } from './ui/button';
+// import { io } from 'socket.io-client';
 
 const razorpay_id = import.meta.env.VITE_RAZORPAY_ID;
+const notif_url = import.meta.env.VITE_NOTIFICATIONS_BASE_URL;
+
+// const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATIONS_BASE_URL;
+
 function Cart() {
+  // const socket = io(NOTIFICATION_BASE_URL, { transports: ['websocket'] });
   const cart = useSelector((state: RootState) => state.cart) as iCart;
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -99,12 +105,35 @@ function Cart() {
             title: 'Payment Failed, Please try again',
             action: <ToastAction altText="Try Again">View Cart</ToastAction>,
           });
+
+          fetch(`${notif_url}/send_notification`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: `Order creation failed`,
+              eventName: orderData.seller_id,
+            }),
+          });
+          
           setTimeout(() => {
             navigate(`/`);
           }, 3000);
         });
 
         rzp1.open();
+
+        fetch(`${notif_url}/send_notification`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `Order created successfully`,
+            eventName: orderData.seller_id,
+          }),
+        });
       } else {
         throw new Error('Order creation failed: No order ID in the response');
       }

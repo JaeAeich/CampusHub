@@ -74,7 +74,7 @@ const routes = [
     content: null,
   },
   {
-    to: '/',
+    to: '/notifications',
     label: 'Notifications',
     content: null,
   },
