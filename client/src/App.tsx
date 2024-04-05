@@ -22,6 +22,7 @@ import StoreOrderList from './components/StoreOrderList';
 import StoreReviews from './components/StoreReviews';
 import StoreInventory from './components/StoreInventory';
 import Notifications from './components/Notifications';
+import ProductDetails from './components/ProductDetails';
 
 function App() {
   // const isVisible = !window.location.pathname.includes('/login');
@@ -61,6 +62,7 @@ function App() {
                 <Route path="/sellers/:seller_id/dashboard" element={<SellerDashboard />} />
                 <Route path="/user/register" element={<CreateAccount />} />
                 <Route path="/sellers/:seller_id/createstore" element={<StoreDetails />} />
+                <Route path="/stores/:store_id/createproduct" element={<ProductDetails />} />
                 <Route path="/stores/:store_id/dashboard" element={<SellerDashboard />} />
                 <Route path="/stores/:store_id/orders" element={<StoreOrderList />} />
                 <Route path="/stores/:store_id/reviews" element={<StoreReviews />} />
