@@ -112,11 +112,18 @@ function Cart() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              message: `Order creation failed`,
+              fail: true,
+              message: {
+                title: 'Payment Failed',
+                order_id: response.id,
+                amount: Math.ceil(orderData.amount_paid * 100).toString(),
+                store_name: orderData.store_name,
+                orderData,
+              },
               eventName: orderData.seller_id,
             }),
           });
-          
+
           setTimeout(() => {
             navigate(`/`);
           }, 3000);
@@ -124,13 +131,20 @@ function Cart() {
 
         rzp1.open();
 
-        fetch(`${notif_url}/send_notification`, {
+        fetch(`${notif_url}/send-notification`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: `Order created successfully`,
+            fail: false,
+            message: {
+              title: 'Payment Successful',
+              order_id: response.id,
+              amount: Math.ceil(orderData.amount_paid * 100).toString(),
+              store_name: orderData.store_name,
+            },
+            orderData,
             eventName: orderData.seller_id,
           }),
         });
