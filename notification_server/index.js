@@ -1,5 +1,5 @@
 const express = require('express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
@@ -29,13 +29,12 @@ app.post('/send-notification', (req, res) => {
 	const id = req.body.eventName;
 	const message = req.body.message;
 
-
 	if (!id) {
 		return res.status(400).send('Senders id is required');
 	}
 
 	// Logic to send push notification
-	io.emit(id, { message });
+	io.emit('seller', { message });
 	res.status(200).send(`message from sent successful`);
 });
 
@@ -46,11 +45,11 @@ io.on('connection', (socket) => {
 	// Store connection
 	connections[socket.id] = socket;
 
-	// Disconnect event
-	socket.on('disconnect', () => {
-		delete connections[socket.id];
-		console.log('Client disconnected');
-	});
+	// // Disconnect event
+	// socket.on('disconnect', () => {
+	// 	delete connections[socket.id];
+	// 	console.log('Client disconnected');
+	// });
 });
 
 // Start listening to incoming connections
