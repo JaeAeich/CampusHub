@@ -719,6 +719,7 @@ paths:
       tags:
         - Products
       parameters:
+        - $ref: "#/components/parameters/user_id"
         - $ref: "#/components/parameters/product_id"
         - $ref: "#/components/parameters/service_id"
         - $ref: "#/components/parameters/store_id"
@@ -1789,6 +1790,13 @@ components:
           format: float
 
   parameters:
+    user_id:
+      name: user_id
+      in: query
+      description: user_id of the entity
+      required: false
+      schema:
+        type: string
     service_id:
       name: service_id
       in: query

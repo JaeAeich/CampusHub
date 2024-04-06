@@ -3,8 +3,8 @@ from campus_hub.models.review import Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
+from campus_hub.utils.rEngine.recommendationEngine import flow
 from flask import request
-
 
 def get_products() -> APIResponse:
     """
@@ -20,6 +20,7 @@ def get_products() -> APIResponse:
 
     products_collection_name = "products"
 
+    user_id = request.args.get("user_id")
     product_id = request.args.get("product_id")
     service_id = request.args.get("service_id")
     store_id = request.args.get("store_id")
@@ -57,6 +58,7 @@ def get_products() -> APIResponse:
                 Status.NOT_FOUND, **message("No products found in the database.")
             )
 
+        # Convert fetched products to Product objects
         try:
             products = [Product(**product) for product in _products]
         except Exception as e:
@@ -64,6 +66,36 @@ def get_products() -> APIResponse:
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
+        
+        # # If user_id is provided, generate recommendations
+        # if user_id:
+        #     flow.user_id = user_id  # Set the user_id input for the flow
+        #     run = flow.run()  # Execute the flow
+
+        #     # Log the result of the flow execution
+        #     print("Flow execution status:", run.status)
+
+        #     # Fetch the recommended product IDs from the flow
+        #     product_ids = run.data.get_recommendations.product_ids
+        #     print("Recommended product IDs:", product_ids)
+
+        #     for product_id in product_ids:
+        #         product_query = {"product_id": product_id}
+        #         product_data = db_connector.query_data(products_collection_name, product_query, projection)
+
+        #         if not product_data or len(product_data) == 0:
+        #             continue
+
+        #         try:
+        #             product_data = [Product(**product) for product in product_data]
+        #         except Exception as e:
+        #             return response(
+        #                 Status.INTERNAL_SERVER_ERROR,
+        #                 **message(f"Invalid product data in DB: {str(e)}"),
+        #             )
+                
+        #         if product_data:
+        #             products.append(Product(**product_data[0]))
 
         # If products are found, return a JSON response
         return response(
@@ -245,3 +277,30 @@ def search_products(str_query, service_id) -> APIResponse:
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
+
+# class GenerateRecommendationsFlow(metaflow.FlowSpec):
+#     @metaflow.step
+#     def start(self):
+#         self.user_id = self.input('user_id') 
+#         self.next(self.load_precomputed_recommendations)
+
+#     @metaflow.step
+#     def load_precomputed_recommendations(self):
+#         self.preds_df = pd.read_csv('precomputed_recommendations.csv', index_col='userId')
+#         self.next(self.get_recommendations)
+
+#     @metaflow.step
+#     def get_recommendations(self):
+#         user_id = self.user_id  # Use the provided user ID
+#         num_recommendations = 5  # Number of recommendations to generate
+#         recommendations = self.preds_df.loc[user_id].sort_values(ascending=False).head(num_recommendations)
+#         print(recommendations)
+#         self.next(self.end)
+
+#     @metaflow.step
+#     def end(self):
+#         pass
+
+# if __name__ == '__main__':
+#     GenerateRecommendationsFlow()
+
