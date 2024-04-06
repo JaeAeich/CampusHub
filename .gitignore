@@ -278,7 +278,3 @@ sketch
 
 # ignore mongo data
 data/
-
-# ignore package.json and lock files
-package.json
-package-lock.json
