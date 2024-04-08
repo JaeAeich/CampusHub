@@ -27,8 +27,8 @@ def get_products() -> APIResponse:
     min_rating = request.args.get("min_rating")
     category = request.args.get("category")
     search_query = request.args.get("search_query")
-    current_page_number=request.args.get("current_page_number", 1)
-    page_size=request.args.get("page_size", 10)
+    current_page_number = int(request.args.get("current_page_number", 1))
+    page_size = int(request.args.get("page_size", 10))
 
     # Query without including _id field in the result
     query: dict = {}
@@ -62,6 +62,7 @@ def get_products() -> APIResponse:
         try:
             products = [Product(**product) for product in _products]
         except Exception as e:
+            print("ERROR:", e)
             return response(
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Invalid product data in DB: {str(e)}"),
@@ -76,6 +77,7 @@ def get_products() -> APIResponse:
         # If products are found, return a JSON response
         return response(Status.SUCCESS, page_size=page_size, current_page_number=current_page_number, total_pages=total_pages, **product_list.model_dump())
     except Exception as e:
+        print("ERROR:", e)
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),

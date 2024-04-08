@@ -293,8 +293,8 @@ def get_products_by_store_id(store_id) -> APIResponse:
     query: dict = {"store_id": store_id}
     projection = {"_id": False}
 
-    current_page_number = request.args.get("current_page_number", 1)
-    page_size = request.args.get("page_size", 10)
+    current_page_number = int(request.args.get("current_page_number", 1))
+    page_size = int(request.args.get("page_size", 10))
 
     try:
         _stores = db_connector.query_data(stores_collection_name, query, projection)

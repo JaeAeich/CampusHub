@@ -59,7 +59,7 @@ function ProductCard({ product, wishlisted }: { product: Product; wishlisted: bo
       </div>
 
       <div className="mt-4 md:px-5 md:pb-5 pb-3 px-5 ">
-        <Link key={product_id} to={`/stores/${store_id}/products/${product_id}`} state={product}>
+        <Link to={`/stores/${store_id}/products/${product_id}`} state={product}>
           <div>
             <h5 className="md:text-lgg text-lg font-subheading tracking-tight text-primary">
               {product_name}

@@ -27,6 +27,7 @@ import getProductsByQuery from '@/api/products/products';
 import ProductCard from './ProductCard';
 import NotFound from './NotFound';
 import Loading from './Loading';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/pagination';
 
 function ProductsPage() {
   const { store_id } = useParams();
@@ -37,7 +38,8 @@ function ProductsPage() {
   const [sliderValue, setSliderValue] = useState([500]);
   const [selectedRating, setSelectedRating] = useState(0);
   const [current_page_number, setCurrentPageNumber] = useState(1);
-  const [page_size, setPageSize] = useState(10);
+  const [total_pages, setTotalPages] = useState(10);
+  const page_size = 10;
 
   useEffect(() => {
     async function fetchProductsByStoreId() {
@@ -46,8 +48,9 @@ function ProductsPage() {
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
-        } else if ('products' in response) {
+        } else if ('products' in response && 'total_pages' in response) {
           setProducts(response.products);
+          setTotalPages(response.total_pages as number);
           setIsLoading(false);
         }
       } else if (search_query !== '') {
@@ -56,14 +59,15 @@ function ProductsPage() {
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
-        } else if ('products' in response) {
+        } else if ('products' in response && 'total_pages' in response) {
           setProducts(response.products);
+          setTotalPages(response.total_pages as number);
           setIsLoading(false);
         }
       }
     }
     fetchProductsByStoreId();
-  }, [search_query, store_id]);
+  }, [search_query, store_id, current_page_number]);
 
   if (isLoading) {
     return <Loading />;
@@ -118,7 +122,7 @@ function ProductsPage() {
                       <Checkbox
                         id="option1"
                         className="m-1"
-                        // onClick= {handleCategoryChange}
+                      // onClick= {handleCategoryChange}
                       />
 
                       <label htmlFor="option1">Category 1</label>
@@ -127,7 +131,7 @@ function ProductsPage() {
                       <Checkbox
                         id="option2"
                         className="m-1"
-                        // onClick={handleCategoryChange}
+                      // onClick={handleCategoryChange}
                       />
 
                       <label htmlFor="option2">Category 2</label>
@@ -189,7 +193,7 @@ function ProductsPage() {
                       <RadioGroupItem
                         value="default"
                         id="option3"
-                        // onClick={handleOfferAvailableChange}
+                      // onClick={handleOfferAvailableChange}
                       />
                       <Label htmlFor="option3">Offers-only</Label>
                     </div>
@@ -197,7 +201,7 @@ function ProductsPage() {
                       <RadioGroupItem
                         value="comfortable"
                         id="option4"
-                        // onClick={handleOfferAvailableChange}
+                      // onClick={handleOfferAvailableChange}
                       />
                       <Label htmlFor="option4">Show all</Label>
                     </div>
@@ -248,7 +252,7 @@ function ProductsPage() {
                                 <Checkbox
                                   id="option1"
                                   className="m-1"
-                                  // onClick={handleCategoryChange}
+                                // onClick={handleCategoryChange}
                                 />
 
                                 <label htmlFor="option1">Category 1</label>
@@ -257,7 +261,7 @@ function ProductsPage() {
                                 <Checkbox
                                   id="option2"
                                   className="m-1"
-                                  // onClick={handleCategoryChange}
+                                // onClick={handleCategoryChange}
                                 />
 
                                 <label htmlFor="option2">Category 2</label>
@@ -332,7 +336,7 @@ function ProductsPage() {
                     <div className="flex justify-center mt-6">
                       <Button
                         className="bg-accentLight hover:bg-accent"
-                        // onClick={handleSubmit}
+                      // onClick={handleSubmit}
                       >
                         Apply Filters
                       </Button>
@@ -355,13 +359,38 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      <div className="flex h-full w-full p-3 my-auto justify-center lg:justify-start">
+      <div className="flex h-full w-full p-3 my-auto justify-center lg:justify-start flex-col space">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
           {store_products.map((prod: Product) => (
             // TODO: Fetch wishlist status.
             <ProductCard product={prod} wishlisted={false} />
           ))}
         </div>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious className={
+                current_page_number === 1
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              } onClick={() => { setCurrentPageNumber(current_page_number - 1) }} />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink className='pointer-events-none'>{current_page_number}</PaginationLink>
+            </PaginationItem>
+            {/* <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem> */}
+            <PaginationItem>
+              <PaginationNext className={
+                current_page_number === total_pages
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              } onClick={() => { setCurrentPageNumber(current_page_number + 1) }} />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+
       </div>
     </div>
   );
