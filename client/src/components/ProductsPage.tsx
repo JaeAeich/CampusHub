@@ -36,11 +36,13 @@ function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [sliderValue, setSliderValue] = useState([500]);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [current_page_number, setCurrentPageNumber] = useState(1);
+  const [page_size, setPageSize] = useState(10);
 
   useEffect(() => {
     async function fetchProductsByStoreId() {
       if (store_id !== undefined) {
-        const response = await getProductsByStoreId(store_id);
+        const response = await getProductsByStoreId(store_id, page_size, current_page_number);
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
