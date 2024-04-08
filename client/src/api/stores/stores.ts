@@ -143,7 +143,7 @@ export async function getProductsByStoreId(
 ): Promise<{ products: Product[] } | ErrorResponse | MessageResponse> {
   try {
     const response: AxiosResponse = await axios.get(`${storeURL}/${store_id}/products`, {
-      params: { page_size, current_page_number},
+      params: { page_size, current_page_number },
     });
     return response.data;
   } catch (error) {

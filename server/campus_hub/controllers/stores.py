@@ -303,7 +303,13 @@ def get_products_by_store_id(store_id) -> APIResponse:
         if not _stores or len(_stores) == 0:
             return response(Status.NOT_FOUND, **message("Store does not exist."))
 
-        _products = db_connector.query_data(products_collection_name, query, projection, page_size=page_size, current_page_number=current_page_number)
+        _products = db_connector.query_data(
+            products_collection_name,
+            query,
+            projection,
+            page_size=page_size,
+            current_page_number=current_page_number,
+        )
 
         # If there are no products, return 404 error
         if not _products or len(_products) == 0:
@@ -327,7 +333,13 @@ def get_products_by_store_id(store_id) -> APIResponse:
             total_pages += 1
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, page_size=page_size, current_page_number=current_page_number, total_pages=total_pages, **product_list.model_dump())
+        return response(
+            Status.SUCCESS,
+            page_size=page_size,
+            current_page_number=current_page_number,
+            total_pages=total_pages,
+            **product_list.model_dump(),
+        )
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

@@ -51,7 +51,13 @@ def get_products() -> APIResponse:
     projection = {"_id": False}
 
     try:
-        _products = db_connector.query_data(products_collection_name, query, projection, current_page_number=current_page_number, page_size=page_size)
+        _products = db_connector.query_data(
+            products_collection_name,
+            query,
+            projection,
+            current_page_number=current_page_number,
+            page_size=page_size,
+        )
 
         # If there are no products, return 404 error
         if not _products or len(_products) == 0:
@@ -67,7 +73,7 @@ def get_products() -> APIResponse:
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
-        
+
         product_list: ProductList = ProductList(products=products)
         total_items = db_connector.get_count(products_collection_name, query)
         total_pages = total_items // page_size
@@ -75,7 +81,13 @@ def get_products() -> APIResponse:
             total_pages += 1
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, page_size=page_size, current_page_number=current_page_number, total_pages=total_pages, **product_list.model_dump())
+        return response(
+            Status.SUCCESS,
+            page_size=page_size,
+            current_page_number=current_page_number,
+            total_pages=total_pages,
+            **product_list.model_dump(),
+        )
     except Exception as e:
         print("ERROR:", e)
         return response(

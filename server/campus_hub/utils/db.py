@@ -197,7 +197,12 @@ class DBConnector:
             raise CollectionCreationError(collection_name)
 
     def query_data(
-        self, collection_name: str, query: dict, projection: dict = {}, page_size: int = 10, current_page_number: int = 1
+        self,
+        collection_name: str,
+        query: dict,
+        projection: dict = {},
+        page_size: int = 10,
+        current_page_number: int = 1,
     ) -> list:
         """
         Queries data from the specified MongoDB collection.
@@ -217,9 +222,17 @@ class DBConnector:
 
             # Apply projection if provided
             if projection:
-                result = list(collection.find(query, projection).skip(page_size * (current_page_number - 1)).limit(page_size))
+                result = list(
+                    collection.find(query, projection)
+                    .skip(page_size * (current_page_number - 1))
+                    .limit(page_size)
+                )
             else:
-                result = list(collection.find(query).skip(page_size * (current_page_number - 1)).limit(page_size))
+                result = list(
+                    collection.find(query)
+                    .skip(page_size * (current_page_number - 1))
+                    .limit(page_size)
+                )
 
             return result
         except PyMongoError as e:
@@ -291,7 +304,7 @@ class DBConnector:
                 e,
             )
             raise DBDeletionError(str(e))
-        
+
     def get_count(self, collection_name: str, query: dict) -> int:
         """
         Get the number of documents.
@@ -315,7 +328,6 @@ class DBConnector:
                 e,
             )
             raise DBQueryError(str(e))
-        
 
 
 db_connector = DBConnector()

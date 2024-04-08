@@ -27,7 +27,14 @@ import getProductsByQuery from '@/api/products/products';
 import ProductCard from './ProductCard';
 import NotFound from './NotFound';
 import Loading from './Loading';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/pagination';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from './ui/pagination';
 
 function ProductsPage() {
   const { store_id } = useParams();
@@ -122,7 +129,7 @@ function ProductsPage() {
                       <Checkbox
                         id="option1"
                         className="m-1"
-                      // onClick= {handleCategoryChange}
+                        // onClick= {handleCategoryChange}
                       />
 
                       <label htmlFor="option1">Category 1</label>
@@ -131,7 +138,7 @@ function ProductsPage() {
                       <Checkbox
                         id="option2"
                         className="m-1"
-                      // onClick={handleCategoryChange}
+                        // onClick={handleCategoryChange}
                       />
 
                       <label htmlFor="option2">Category 2</label>
@@ -193,7 +200,7 @@ function ProductsPage() {
                       <RadioGroupItem
                         value="default"
                         id="option3"
-                      // onClick={handleOfferAvailableChange}
+                        // onClick={handleOfferAvailableChange}
                       />
                       <Label htmlFor="option3">Offers-only</Label>
                     </div>
@@ -201,7 +208,7 @@ function ProductsPage() {
                       <RadioGroupItem
                         value="comfortable"
                         id="option4"
-                      // onClick={handleOfferAvailableChange}
+                        // onClick={handleOfferAvailableChange}
                       />
                       <Label htmlFor="option4">Show all</Label>
                     </div>
@@ -252,7 +259,7 @@ function ProductsPage() {
                                 <Checkbox
                                   id="option1"
                                   className="m-1"
-                                // onClick={handleCategoryChange}
+                                  // onClick={handleCategoryChange}
                                 />
 
                                 <label htmlFor="option1">Category 1</label>
@@ -261,7 +268,7 @@ function ProductsPage() {
                                 <Checkbox
                                   id="option2"
                                   className="m-1"
-                                // onClick={handleCategoryChange}
+                                  // onClick={handleCategoryChange}
                                 />
 
                                 <label htmlFor="option2">Category 2</label>
@@ -336,7 +343,7 @@ function ProductsPage() {
                     <div className="flex justify-center mt-6">
                       <Button
                         className="bg-accentLight hover:bg-accent"
-                      // onClick={handleSubmit}
+                        // onClick={handleSubmit}
                       >
                         Apply Filters
                       </Button>
@@ -369,28 +376,31 @@ function ProductsPage() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious className={
-                current_page_number === 1
-                  ? 'pointer-events-none opacity-50'
-                  : ''
-              } onClick={() => { setCurrentPageNumber(current_page_number - 1) }} />
+              <PaginationPrevious
+                className={current_page_number === 1 ? 'pointer-events-none opacity-50' : ''}
+                onClick={() => {
+                  setCurrentPageNumber(current_page_number - 1);
+                }}
+              />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink className='pointer-events-none'>{current_page_number}</PaginationLink>
+              <PaginationLink className="pointer-events-none">{current_page_number}</PaginationLink>
             </PaginationItem>
             {/* <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem> */}
             <PaginationItem>
-              <PaginationNext className={
-                current_page_number === total_pages
-                  ? 'pointer-events-none opacity-50'
-                  : ''
-              } onClick={() => { setCurrentPageNumber(current_page_number + 1) }} />
+              <PaginationNext
+                className={
+                  current_page_number === total_pages ? 'pointer-events-none opacity-50' : ''
+                }
+                onClick={() => {
+                  setCurrentPageNumber(current_page_number + 1);
+                }}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-
       </div>
     </div>
   );

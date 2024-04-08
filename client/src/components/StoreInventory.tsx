@@ -55,7 +55,7 @@ function StoreInventory() {
   useEffect(() => {
     async function fetchStoreProducts() {
       if (store_id !== undefined) {
-        const response = await getProductsByStoreId(store_id);
+        const response = await getProductsByStoreId(store_id, 1000, 1);
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
