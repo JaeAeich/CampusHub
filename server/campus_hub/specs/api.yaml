@@ -551,6 +551,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/current_page_number'
       responses:
         "200":
           description: Success
@@ -726,6 +728,8 @@ paths:
         - $ref: "#/components/parameters/max_rating"
         - $ref: "#/components/parameters/max_price"
         - $ref: "#/components/parameters/search_query"
+        - $ref: "#/components/parameters/page_size"
+        - $ref: "#/components/parameters/current_page_number"
       responses:
         "200":
           description: Success
@@ -1490,6 +1494,15 @@ components:
     ProductList:
       type: object
       properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
         products:
           type: array
           items:
