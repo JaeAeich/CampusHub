@@ -33,6 +33,8 @@ app.post('/send-notification', (req, res) => {
 		return res.status(400).send('Senders id is required');
 	}
 
+	console.log("message", message);
+
 	// Logic to send push notification
 	io.emit('seller', { message });
 	res.status(200).send(`message from sent successful`);

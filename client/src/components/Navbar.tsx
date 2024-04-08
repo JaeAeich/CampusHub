@@ -27,6 +27,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { setNotifications } from '@/store/notification/notificationSlice';
+import { io } from 'socket.io-client';
 import { getUserById } from '@/api/users/users';
 import {
   addProductToCartAsync,
@@ -90,6 +92,37 @@ function Navbar() {
   const userExists = useSelector((state: RootState) => state.auth.value);
   const sellerId = useSelector((state: RootState) => state.seller.sellerId);
   const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
+
+  // notificaiton stuff
+  const sellerExists = useSelector((state: RootState) => state.seller.sellerId);
+  const notif = useSelector((state: RootState) => state.Notification.notification);
+
+  useEffect(() => {
+    const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATIONS_BASE_URL;
+    const socket = io(NOTIFICATION_BASE_URL, { transports: ['websocket'] });
+
+    let eventName = '';
+    if (sellerExists) {
+      eventName = 'user';
+    } else {
+      eventName = 'seller';
+    }
+
+    // Listen for notifications
+    socket.on(eventName, (data) => {
+      const newData = [];
+      newData.push(data.message);
+      notif.map((n) => newData.push(n));
+      // Use the updater function to ensure the latest state
+      dispatch(setNotifications(newData));
+    });
+
+    // Clean up socket listeners on component unmount
+    return () => {
+      socket.off(eventName);
+    };
+  }, []);
+  // notification stuff ends
 
   useEffect(() => {
     if (user && user.email && !sellerAuth && !userExists) {
