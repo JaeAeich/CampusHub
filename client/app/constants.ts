@@ -123,24 +123,25 @@ export const stores: Store[] = [
 
 export const products: Product[] = [
   {
-  product_id: 'product11',
+    product_id: 'product11',
     offer_id: 'offer11',
-    product_categories: [ 'Pharmacy' ],
+    product_categories: ['Pharmacy'],
     product_description: 'Moisturizing lotion for soft and hydrated skin.',
-    product_images: [ '/products/moisturizer.jpg' ],
+    product_images: ['/products/moisturizer.jpg'],
     product_name: 'Hydrating Moisturizer',
     product_cost: 15,
     stock: 150,
     store_id: 'store6',
     product_specifications: { size: '200ml', brand: 'SkinCarePlus' },
     service_id: 'service5',
-    rating: 4.8,},
+    rating: 4.8,
+  },
   {
     product_id: 'product12',
     offer_id: 'offer12',
-    product_categories: [ 'Stationery' ],
+    product_categories: ['Stationery'],
     product_description: 'High-quality ballpoint pens for smooth writing.',
-    product_images: [ '/products/pens.jpg' ],
+    product_images: ['/products/pens.jpg'],
     product_name: 'Ballpoint Pens',
     product_cost: 5,
     stock: 200,
@@ -152,23 +153,24 @@ export const products: Product[] = [
   {
     product_id: 'product3',
     offer_id: 'offer3',
-    product_categories: [ 'Food', 'Beverages' ],
-    product_description: 'A thin crisp pancake of Indian origin, typically made from rice flour, stuffed with mashed potatoes and served with chutney.',
-    product_images: [ '/products/dosa.png' ],
+    product_categories: ['Food', 'Beverages'],
+    product_description:
+      'A thin crisp pancake of Indian origin, typically made from rice flour, stuffed with mashed potatoes and served with chutney.',
+    product_images: ['/products/dosa.png'],
     product_name: 'Crispy Masala Dosa',
     product_cost: 50,
     stock: 100,
     store_id: 'store2',
     product_specifications: { size: 'Regular', brand: 'Local Kitchen' },
     service_id: 'service1',
-    rating: 4.8
+    rating: 4.8,
   },
   {
     product_id: 'product7',
     offer_id: 'offer7',
-    product_categories: [ 'Electronics' ],
+    product_categories: ['Electronics'],
     product_description: 'High-quality wireless headphones for an immersive audio experience.',
-    product_images: [ '/products/headphones.png' ],
+    product_images: ['/products/headphones.png'],
     product_name: 'Wireless Headphones',
     product_cost: 120,
     stock: 50,
@@ -179,15 +181,16 @@ export const products: Product[] = [
   },
   {
     product_id: 'products_B3h7VH2LZWaXefwCBPXjnV',
-    product_categories: [ 'fast food' ],
+    product_categories: ['fast food'],
     product_name: 'Burger',
     store_id: 'stores_G6w2tPiTGTzYFugocuDEuw',
     service_id: '',
     product_images: [
-      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1998&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1998&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ],
     product_cost: 100,
-    product_description: 'Health Drink that has nutrients to support immunity. Horlicks is clinically proven to improve 5 signs of growth. Clinically proven to make kids Taller, Stronger & Sharper. Scientifically proven to improve the Power of Milk.',
+    product_description:
+      'Health Drink that has nutrients to support immunity. Horlicks is clinically proven to improve 5 signs of growth. Clinically proven to make kids Taller, Stronger & Sharper. Scientifically proven to improve the Power of Milk.',
     stock: 100,
     product_specifications: {
       Brand: 'HORLICKS',
@@ -198,10 +201,10 @@ export const products: Product[] = [
       'Maximum Shelf Life': '12 Months',
       Ingredients: 'NA',
       'Nutrient Content': 'NA',
-      'Net Quantity': '500 g'
+      'Net Quantity': '500 g',
     },
     offer_id: '',
-    rating: 0
+    rating: 0,
   },
 ];
 

@@ -1,10 +1,14 @@
 import re
-from campus_hub.models.review import Reviews
+from typing import Any, MutableMapping
+from campus_hub.models.review import Review, Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
-from campus_hub.utils.rEngine.recommendationEngine import flow
+from pydantic import ValidationError
+from pymongo.errors import PyMongoError
 from flask import request
+import pandas as pd
+
 
 def get_products() -> APIResponse:
     """
@@ -29,8 +33,50 @@ def get_products() -> APIResponse:
     category = request.args.get("category")
     search_query = request.args.get("search_query")
 
-    # Query without including _id field in the result
     query: dict = {}
+    projection = {"_id": False}
+
+    if user_id:
+        try:
+            recommendations = (
+                pd.read_csv("precomputed_recommendations.csv", index_col="userId")
+                .loc[user_id]
+                .sort_values(ascending=False)
+                .head(5)
+            )
+            productsList = recommendations.index.tolist()
+            products = []
+            for productId in productsList:
+                query["product_id"] = productId
+                _product = db_connector.query_data(
+                    products_collection_name, query, projection
+                )
+
+                # If there are no products, return 404 error
+                if not _product:
+                    continue
+
+                # Convert fetched products to Product objects
+                try:
+                    product: Product = Product(**_product[0])
+                except Exception as e:
+                    return response(
+                        Status.INTERNAL_SERVER_ERROR,
+                        **message(f"Invalid product data in DB: {str(e)}"),
+                    )
+                products.append(product)
+
+            return response(
+                Status.SUCCESS, products=[product.model_dump() for product in products]
+            )
+
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Error retrieving product from MongoDB: {e}"),
+            )
+
+    # Query without including _id field in the result
     if product_id:
         query["product_id"] = product_id
     if service_id:
@@ -46,8 +92,6 @@ def get_products() -> APIResponse:
     if search_query:
         regex_pattern = re.compile(re.escape(search_query), re.IGNORECASE)
         query["product_name"] = {"$regex": regex_pattern}
-
-    projection = {"_id": False}
 
     try:
         _products = db_connector.query_data(products_collection_name, query, projection)
@@ -66,38 +110,7 @@ def get_products() -> APIResponse:
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
-        
-        # # If user_id is provided, generate recommendations
-        # if user_id:
-        #     flow.user_id = user_id  # Set the user_id input for the flow
-        #     run = flow.run()  # Execute the flow
 
-        #     # Log the result of the flow execution
-        #     print("Flow execution status:", run.status)
-
-        #     # Fetch the recommended product IDs from the flow
-        #     product_ids = run.data.get_recommendations.product_ids
-        #     print("Recommended product IDs:", product_ids)
-
-        #     for product_id in product_ids:
-        #         product_query = {"product_id": product_id}
-        #         product_data = db_connector.query_data(products_collection_name, product_query, projection)
-
-        #         if not product_data or len(product_data) == 0:
-        #             continue
-
-        #         try:
-        #             product_data = [Product(**product) for product in product_data]
-        #         except Exception as e:
-        #             return response(
-        #                 Status.INTERNAL_SERVER_ERROR,
-        #                 **message(f"Invalid product data in DB: {str(e)}"),
-        #             )
-                
-        #         if product_data:
-        #             products.append(Product(**product_data[0]))
-
-        # If products are found, return a JSON response
         return response(
             Status.SUCCESS, products=[product.model_dump() for product in products]
         )
@@ -278,29 +291,85 @@ def search_products(str_query, service_id) -> APIResponse:
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
 
-# class GenerateRecommendationsFlow(metaflow.FlowSpec):
-#     @metaflow.step
-#     def start(self):
-#         self.user_id = self.input('user_id') 
-#         self.next(self.load_precomputed_recommendations)
 
-#     @metaflow.step
-#     def load_precomputed_recommendations(self):
-#         self.preds_df = pd.read_csv('precomputed_recommendations.csv', index_col='userId')
-#         self.next(self.get_recommendations)
+def add_review_to_product(product_id: str) -> APIResponse:
+    """
+    Adds a new review to the MongoDB database.
+    Returns:
+        Flask response: JSON response containing the status of the operation.
+    """
+    reviews_collection_name = "reviews"
+    request_json = request.json
+    projection = {"_id": False}
+    product_collection_name = "products"
 
-#     @metaflow.step
-#     def get_recommendations(self):
-#         user_id = self.user_id  # Use the provided user ID
-#         num_recommendations = 5  # Number of recommendations to generate
-#         recommendations = self.preds_df.loc[user_id].sort_values(ascending=False).head(num_recommendations)
-#         print(recommendations)
-#         self.next(self.end)
+    try:
+        # Query the product data from the database
+        query: dict = {"product_id": product_id}
+        _products = db_connector.query_data(product_collection_name, query, projection)
 
-#     @metaflow.step
-#     def end(self):
-#         pass
+        # If there are no products, return 404 error
+        if not _products or len(_products) == 0:
+            return response(Status.NOT_FOUND, **message("Product does not exist."))
+        store_id = _products[0]["store_id"]
 
-# if __name__ == '__main__':
-#     GenerateRecommendationsFlow()
+        # Query the review data from the database
+        query = {"store_id": store_id, "product_id": product_id}
+        _reviews = db_connector.query_data(reviews_collection_name, query, projection)
 
+        # Check if request.json is not None before assignment
+        if request_json is not None:
+            review_data: MutableMapping[Any, Any] = request_json
+        else:
+            # Handle the case when request.json is None
+            review_data = {}
+
+        # If there are no reviews
+        if not _reviews or len(_reviews) == 0:
+            # Create a new entry for the store and product
+            review_data = {
+                "store_id": store_id,
+                "product_id": product_id,
+                "reviews": [],
+            }
+            db_connector.insert_data(reviews_collection_name, review_data)
+            _reviews = db_connector.query_data(
+                reviews_collection_name, query, projection
+            )
+
+        # Validate the incoming data using Pydantic model
+        try:
+            review = Review(**review_data)
+        except ValidationError as ve:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid review data: {str(ve)}")
+            )
+
+        # add review to the list of reviews
+        _reviews[0]["reviews"].append(review.model_dump())
+
+        # validate reviews
+        try:
+            reviews = Reviews(**_reviews[0])
+        except ValidationError as ve:
+            return response(
+                Status.BAD_REQUEST, **message(f"Invalid review data: {str(ve)}")
+            )
+
+        # update the review data to the database
+        try:
+            db_connector.update_data(
+                reviews_collection_name, query, reviews.model_dump()
+            )
+        except PyMongoError as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Internal Server Error: {str(e)}"),
+            )
+
+        # Return a success response
+        return response(Status.SUCCESS, **{"review": review.model_dump()})
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
+        )

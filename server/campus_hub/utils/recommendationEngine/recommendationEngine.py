@@ -1,23 +1,30 @@
 import metaflow
-import pandas as pd 
+import pandas as pd
+
 
 class GenerateRecommendationsFlow(metaflow.FlowSpec):
     @metaflow.step
     def start(self):
-        self.user_id = "users_L4ciTXoXrL9ufsRTuX4Lc2" 
+        self.user_id = "users_L4ciTXoXrL9ufsRTuX4Lc2"
         self.next(self.load_precomputed_recommendations)
 
     @metaflow.step
     def load_precomputed_recommendations(self):
         # Load precomputed recommendations from CSV
-        self.preds_df = pd.read_csv('precomputed_recommendations.csv', index_col='userId')
+        self.preds_df = pd.read_csv(
+            "precomputed_recommendations.csv", index_col="userId"
+        )
         self.next(self.get_recommendations)
 
     @metaflow.step
     def get_recommendations(self):
         user_id = self.user_id  # Use the provided user ID
         num_recommendations = 5  # Number of recommendations to generate
-        recommendations = self.preds_df.loc[user_id].sort_values(ascending=False).head(num_recommendations)
+        recommendations = (
+            self.preds_df.loc[user_id]
+            .sort_values(ascending=False)
+            .head(num_recommendations)
+        )
         print(recommendations)
         self.next(self.end)
 
@@ -25,7 +32,8 @@ class GenerateRecommendationsFlow(metaflow.FlowSpec):
     def end(self):
         pass
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     GenerateRecommendationsFlow()
 
 # metadata = metaflow.get_metadata()
@@ -66,11 +74,11 @@ if __name__ == '__main__':
 #         for entry in reviewsList:
 #             product_id = entry['product_id']
 #             reviews = entry['reviews']
-            
+
 #             for review_item in reviews:
 #                 user_id = review_item['user_id']
 #                 rating = review_item['rating']
-                
+
 #                 reviews_data.append({
 #                     'userId': user_id,
 #                     'productId': product_id,
@@ -85,7 +93,7 @@ if __name__ == '__main__':
 
 #         # Perform data preprocessing
 #         self.counts = self.data['userId'].value_counts()
-#         self.data = self.data[self.data['userId'].isin(self.counts[self.counts >= 15].index)] 
+#         self.data = self.data[self.data['userId'].isin(self.counts[self.counts >= 15].index)]
 #         self.data = self.data.groupby(['userId', 'productId']).mean().reset_index()
 #         self.data = self.data.pivot(index='userId', columns='productId', values='ratings').fillna(0)
 
@@ -124,7 +132,7 @@ if __name__ == '__main__':
 #     def return_recommendations(self, user_id, pivot_df, preds_df, num_recommendations):
 #         # Convert the sparse matrix to a DataFrame
 #         pivot_df = pd.DataFrame(pivot_df.todense(), columns=preds_df.columns)
-        
+
 #         # Generate and display recommendations for the specified user ID
 #         user_idx = user_id - 1
 #         sorted_user_ratings = pivot_df.iloc[user_idx].sort_values(ascending=False)

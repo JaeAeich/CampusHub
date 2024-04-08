@@ -1216,6 +1216,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Response"
+  "/users":
+    get:
+      summary: Get all users
+      operationId: users.get_users
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserIDs"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
   "/orders":
     post:
       summary: Add a new order
@@ -1340,8 +1365,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Response"
+  "/reviews":
+    get:
+      summary: Get a list of all reviews.
+      operationId: reviews.get_reviews
+      tags:
+        - Reviews
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/store_id"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewList"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+  "/products/{product_id}/reviews":
+    post:
+      summary: Add a new review
+      operationId: products.add_review_to_product
+      tags:
+        - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to add review
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Review object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Review"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseID"
+        "405":
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
 components:
   schemas:
+    UserIDs:
+      type: array
+      items:
+        type: string
     ServiceList:
       type: object
       properties:

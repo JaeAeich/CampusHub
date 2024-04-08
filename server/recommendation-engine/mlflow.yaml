@@ -1,7 +1,0 @@
-name: my_project
-
-entry_points:
-  main:
-    parameters:
-      schedule_interval: {type: string}
-    command: "python precompute.py --schedule_interval {schedule_interval}"
