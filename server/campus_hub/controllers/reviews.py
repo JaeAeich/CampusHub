@@ -1,4 +1,4 @@
-from campus_hub.models.review import Reviews    
+from campus_hub.models.review import Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from flask import request
@@ -46,9 +46,7 @@ def get_reviews() -> APIResponse:
             )
 
         # If reviews are found, return a JSON response
-        return response(
-            Status.SUCCESS, **reviews[0].model_dump()
-        )
+        return response(Status.SUCCESS, **reviews[0].model_dump())
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

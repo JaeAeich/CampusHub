@@ -29,11 +29,7 @@ function Reviews(props: { store_id: string; product_id: string }) {
   }
 
   if (errorReviews) {
-    return (
-      <div className="mx-auto items-center my-auto">
-       No Reviews found.
-      </div>
-    );
+    return <div className="mx-auto items-center my-auto">No Reviews found.</div>;
   }
 
   return (

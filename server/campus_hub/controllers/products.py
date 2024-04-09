@@ -78,6 +78,7 @@ def get_products() -> APIResponse:
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
 
+
 def get_product_cost(product_id) -> APIResponse:
     """
     Get cost of a product by its product_id from the MongoDB database.
@@ -203,6 +204,7 @@ def search_products(str_query, service_id) -> APIResponse:
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
 
+
 def add_review_to_product(product_id: str) -> APIResponse:
     """
     Adds a new review to the MongoDB database.
@@ -216,7 +218,6 @@ def add_review_to_product(product_id: str) -> APIResponse:
     product_collection_name = "products"
 
     try:
-
         # Query the product data from the database
         query: dict = {"product_id": product_id}
         _products = db_connector.query_data(product_collection_name, query, projection)
@@ -225,10 +226,9 @@ def add_review_to_product(product_id: str) -> APIResponse:
         if not _products or len(_products) == 0:
             return response(Status.NOT_FOUND, **message("Product does not exist."))
         store_id = _products[0]["store_id"]
-        
+
         # Query the review data from the database
-        query = {"store_id": store_id,
-                   "product_id": product_id}
+        query = {"store_id": store_id, "product_id": product_id}
         _reviews = db_connector.query_data(reviews_collection_name, query, projection)
 
         # Check if request.json is not None before assignment
@@ -241,11 +241,15 @@ def add_review_to_product(product_id: str) -> APIResponse:
         # If there are no reviews
         if not _reviews or len(_reviews) == 0:
             # Create a new entry for the store and product
-            review_data = {"store_id": store_id,
-                           "product_id": product_id,
-                           "reviews": []}
+            review_data = {
+                "store_id": store_id,
+                "product_id": product_id,
+                "reviews": [],
+            }
             db_connector.insert_data(reviews_collection_name, review_data)
-            _reviews = db_connector.query_data(reviews_collection_name, query, projection)
+            _reviews = db_connector.query_data(
+                reviews_collection_name, query, projection
+            )
 
         # Validate the incoming data using Pydantic model
         try:
@@ -268,7 +272,9 @@ def add_review_to_product(product_id: str) -> APIResponse:
 
         # update the review data to the database
         try:
-            db_connector.update_data(reviews_collection_name, query, reviews.model_dump())
+            db_connector.update_data(
+                reviews_collection_name, query, reviews.model_dump()
+            )
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
