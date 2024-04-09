@@ -26,7 +26,7 @@ import ProductDetails from './components/ProductDetails';
 
 function App() {
   // const isVisible = !window.location.pathname.includes('/login');
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const userExists = useSelector((state: RootState) => state.auth.value);
   const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
 
@@ -48,13 +48,22 @@ function App() {
             {isAuthenticated && userExists && (
               <>
                 <Route path="/seller/register" element={<Login />} />
-                <Route path="/users/:user_id/details" element={<UserProfile active="account" />} />
+                <Route
+                  path="/users/:user_id/details"
+                  element={<UserProfile userEmail={user?.email} active="account" />}
+                />
                 <Route
                   path="/users/:user_id/wishlist"
-                  element={<UserProfile active="wishlist" />}
+                  element={<UserProfile userEmail={user?.email} active="wishlist" />}
                 />
-                <Route path="/users/:user_id/cart" element={<UserProfile active="cart" />} />
-                <Route path="/users/:user_id/orders" element={<UserProfile active="orders" />} />
+                <Route
+                  path="/users/:user_email/cart"
+                  element={<UserProfile userEmail={user?.email} active="cart" />}
+                />
+                <Route
+                  path="/users/:user_id/orders"
+                  element={<UserProfile userEmail={user?.email} active="orders" />}
+                />
               </>
             )}
             {isAuthenticated && sellerAuth && (

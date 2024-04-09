@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 
 const user_id = 1;
 
-function UserProfile({ active }: { active: string }) {
+function UserProfile({ active, userEmail }: { active: string; userEmail: string | undefined }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(active);
 
@@ -50,7 +50,7 @@ function UserProfile({ active }: { active: string }) {
             className={`flex m-1 hover:bg-accentDark hover:text-background items-center px-3 py-2.5 font-bold bg-background  text-primary border  ${
               activeTab === 'cart' ? 'bg-accent text-background' : ''
             }`}
-            onClick={() => handleTabClick(`/users/${user_id}/cart`)}
+            onClick={() => handleTabClick(`/users/${userEmail}/cart`)}
           >
             Cart
           </Button>

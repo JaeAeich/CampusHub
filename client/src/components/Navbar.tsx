@@ -48,7 +48,6 @@ import {
   setSellerId,
 } from '../store/seller/sellerSlice';
 import { unauthenticated, authenticated, setUserEmail } from '../store/auth/authSlice';
-import NotFound from './NotFound';
 
 // TODO: ADD ID AFTER AUTH
 const user_id = '1';
@@ -329,7 +328,7 @@ function Navbar() {
               <DrawerContent>
                 <div className="mx-auto justify-center lg:w-4/6 sm:w-4/5 w-full sm:p-3 px-10">
                   {cart.carts.length !== 0 ? (
-                    cart.carts.map((item) => (
+                    <>
                       <Table>
                         <TableHeader>
                           <TableRow className="font-subheading sm:text-lgg text-smm font-semibold items-center">
@@ -340,47 +339,59 @@ function Navbar() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow className="font-body sm:text-base text-smm">
-                            <TableCell>
-                              <img
-                                className="object-cover"
-                                src={
-                                  product_details[item.product_id] &&
-                                  product_details[item.product_id].product_images &&
-                                  product_details[item.product_id].product_images[0]
-                                }
-                                alt={item.product_id}
-                                width={100}
-                                height={100}
-                              />
-                            </TableCell>
-                            <TableCell>
-                              {product_details[item.product_id] &&
-                                product_details[item.product_id].product_name}
-                            </TableCell>
-                            <TableCell className="flex flex-row items-center mt-4">
-                              <Minus
-                                className="m-1"
-                                onClick={() => handleDecrement(item.product_id)}
-                              />
-                              {item.quantity}
-                              <Plus
-                                className="m-1"
-                                onClick={() => handleIncrement(item.product_id)}
-                              />
-                            </TableCell>
-                            <TableCell className="font-bold font-heading sm:text-lgg text-base">
-                              &#8377;{' '}
-                              {product_details[item.product_id] &&
-                                product_details[item.product_id].product_cost * item.quantity}
-                            </TableCell>
-                          </TableRow>
+                          {cart.carts.map((item) => (
+                            <TableRow className="font-body sm:text-base text-smm">
+                              <TableCell>
+                                <img
+                                  className="object-cover"
+                                  src={
+                                    product_details[item.product_id] &&
+                                    product_details[item.product_id].product_images &&
+                                    product_details[item.product_id].product_images[0]
+                                  }
+                                  alt={item.product_id}
+                                  width={100}
+                                  height={100}
+                                />
+                              </TableCell>
+                              <TableCell>
+                                {product_details[item.product_id] &&
+                                  product_details[item.product_id].product_name}
+                              </TableCell>
+                              <TableCell className="flex flex-row items-center mt-4">
+                                <Minus
+                                  className="m-1"
+                                  onClick={() => handleDecrement(item.product_id)}
+                                />
+                                {item.quantity}
+                                <Plus
+                                  className="m-1"
+                                  onClick={() => handleIncrement(item.product_id)}
+                                />
+                              </TableCell>
+                              <TableCell className="font-bold font-heading sm:text-lgg text-base">
+                                &#8377;{' '}
+                                {product_details[item.product_id] &&
+                                  product_details[item.product_id].product_cost * item.quantity}
+                              </TableCell>
+                            </TableRow>
+                          ))}
                         </TableBody>
                       </Table>
-                    ))
+                      <div className="mb-3 item-center mx-auto text-center font-bold text-lg">
+                        <Link
+                          to={`/users/${user.email}/cart`}
+                          className="item-center mx-auto text-center"
+                        >
+                          <Button className="text-sm font-bold ml-3 bg-secondary hover:bg-accent text-primary">
+                            Buy Now
+                          </Button>
+                        </Link>
+                      </div>
+                    </>
                   ) : (
-                    <div className="my-auto item-center mx-auto text-center">
-                      <NotFound item="Products" />
+                    <div className="my-10 item-center mx-auto text-center font-bold text-lg">
+                      No items in cart.
                     </div>
                   )}
                 </div>
@@ -388,7 +399,7 @@ function Navbar() {
             </Drawer>
 
             <div className="sm:block hidden">
-              <ProfileButton />
+              <ProfileButton userEmail={user?.email} />
             </div>
           </div>
         </div>

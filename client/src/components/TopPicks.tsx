@@ -1,19 +1,18 @@
-import { Link } from 'react-router-dom';
 import { RootState } from '@/store/store';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Product from '@/api/products/types';
 import { getProductsByUserId } from '@/api/products/products';
-import Loading from './Loading';
 import Container from './ui/container';
-import NotFound from './NotFound';
 import ProductCard from './ProductCard';
 // import { services } from '../../app/constants';
 
 export default function ServiceCards() {
   const [products, setProducts] = useState<Product[]>([]);
   const user_id = useSelector((state: RootState) => state.auth.user_id);
+  const { isAuthenticated } = useAuth0();
   const [errorProducts, setErrorProducts] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,15 +31,18 @@ export default function ServiceCards() {
   }, [user_id]);
 
   if (isLoading) {
-    return <Loading />;
-  }
-
-  if (products.length === 0 || errorProducts) {
     return (
-      <div className="mx-auto items-center my-auto">
-        <NotFound item="Trending Products" />
+      <div className="flex flex-col items-center justify-center m-10 mb-20">
+        <img src="/noresult.gif" alt="noResults" className="h-16 w-42 md:h-48 md:w-92" />
+        <h2 className="align-center text-darkgray text-smm md:text-lg">
+          Curating most accurate picks for you. Please wait...
+        </h2>
       </div>
     );
+  }
+
+  if (products.length === 0 || errorProducts || !isAuthenticated) {
+    return null;
   }
 
   return (
@@ -54,20 +56,18 @@ export default function ServiceCards() {
             opts={{
               align: 'start',
             }}
-            className="w-full md:block hidden"
+            className="w-full"
           >
             <CarouselContent>
               {products.map((product) => (
                 <CarouselItem
                   key={product.product_id}
-                  className="md:basis-1/2 lg:basis-1/3 sm:basis-1/2"
+                  className="md:basis-1/2 lg:basis-1/3 basis-full justify-center"
                 >
-                  <Link to={`/products/${product.product_id}`}>
-                    {/* TODO: Route to the store path onClick */}
-                    <div className="relative group">
-                      <ProductCard product={product} wishlisted={false} />
-                    </div>
-                  </Link>
+                  <div className="relative group">
+                    <ProductCard product={product} wishlisted={false} />
+                  </div>
+                  {/* </Link> */}
                 </CarouselItem>
               ))}
             </CarouselContent>
