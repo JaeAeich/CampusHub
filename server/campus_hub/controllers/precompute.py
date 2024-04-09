@@ -5,8 +5,8 @@ import requests
 from scipy.sparse.linalg import svds
 from scipy.sparse import csr_matrix
 
-
-@metaflow.schedule(daily=True)
+# type: ignore[attr-defined]
+@metaflow.schedule(daily=True)   
 class PrecomputeRecommendationsFlow(metaflow.FlowSpec):
     @metaflow.step
     def start(self):

@@ -41,7 +41,7 @@ def get_products() -> APIResponse:
             recommendations = (
                 pd.read_csv("precomputed_recommendations.csv", index_col="userId")
                 .loc[user_id]
-                .sort_values(ascending=False)
+                .sort_values(ascending=False) # type: ignore[call-overload]
                 .head(5)
             )
             productsList = recommendations.index.tolist()

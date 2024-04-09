@@ -104,7 +104,7 @@ export default function Landing() {
     <div className="mx-auto w-full px-1 sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out lg:mb-7">
       <TrendingStores trendingStores={trendingStores} error={errorTrendingStore} />
       <DealOfTheDay trendingOffersProducts={trendingOffersProducts} error={errorTrendingOffer} />
-      <TopPicks TopPicks={products} error={false} />
+      <TopPicks />
       <ServiceCards services={services} error={errorService} />
     </div>
   );
