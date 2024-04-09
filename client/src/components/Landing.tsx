@@ -4,7 +4,6 @@ import Product from '@/api/products/types';
 import Store from '@/api/stores/types';
 import Offers from '@/api/offers/types';
 import { getProductById, getTrendingStore } from '@/api/stores/stores';
-import { products } from '../../app/constants';
 import TrendingStores from './TrendingStores';
 import DealOfTheDay from './DealOfTheDay';
 import ServiceCards from './ServiceCards';
