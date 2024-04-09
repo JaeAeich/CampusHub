@@ -341,3 +341,38 @@ def get_orders_by_user_id(user_id: str) -> APIResponse:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")
         )
+
+
+def get_users() -> APIResponse:
+    """
+    Get a user from the database using the user ID.
+
+    Args:
+        user_email (str): Unique identifier for the user.
+
+    Returns:
+        Flask response: Response containing the user data
+    """
+
+    users_collection_name = "users"
+    query: dict = {}
+    projection = {"_id": False}
+
+    try:
+        _users = db_connector.query_data(users_collection_name, query, projection)
+
+        try:
+            user_ids = [User(**user).user_id for user in _users]
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Invalid product data in DB: {str(e)}"),
+            )
+
+        return response(Status.SUCCESS, **{"user_ids": user_ids})
+
+    except Exception as e:
+        return response(
+            Status.INTERNAL_SERVER_ERROR,
+            **message(f"Error retrieving user from MongoDB: {str(e)}"),
+        )

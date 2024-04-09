@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   Accordion,
   AccordionContent,
@@ -353,12 +353,21 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      <div className="flex h-full w-full p-3 my-auto justify-center lg:justify-start">
+      <div className="flex flex-col h-full w-full p-3 my-auto justify-center lg:justify-start">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
           {store_products.map((prod: Product) => (
             // TODO: Fetch wishlist status.
             <ProductCard product={prod} wishlisted={false} />
           ))}
+        </div>
+        <div className="mx-auto mt-20">
+          {store_id === 'store3' && (
+            <Link to="/stores/store3/createproduct">
+              <Button className="text-sm font-bold ml-3 bg-secondary hover:bg-accent text-primary">
+                Add a Product
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

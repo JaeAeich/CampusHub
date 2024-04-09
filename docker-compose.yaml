@@ -24,6 +24,16 @@ services:
     env_file:
       - server.env
 
+  # Push notification server container
+  notification_server:
+    build:
+      context: ./notification_server
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    env_file:
+      - push.env
+
   # Client container
   client:
     build:

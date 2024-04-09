@@ -4,10 +4,11 @@ from campus_hub.models.review import Review, Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
 from campus_hub.models.product import Product
-from flask import request
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
-
+from flask import request
+import pandas as pd
+from pathlib import Path
 
 def get_products() -> APIResponse:
     """
@@ -23,6 +24,7 @@ def get_products() -> APIResponse:
 
     products_collection_name = "products"
 
+    user_id = request.args.get("user_id")
     product_id = request.args.get("product_id")
     service_id = request.args.get("service_id")
     store_id = request.args.get("store_id")
@@ -31,8 +33,51 @@ def get_products() -> APIResponse:
     category = request.args.get("category")
     search_query = request.args.get("search_query")
 
-    # Query without including _id field in the result
     query: dict = {}
+    projection = {"_id": False}
+
+    if user_id:
+        csv_path = Path(__file__).parent / "precomputed_recommendations.csv"
+        try:
+            recommendations = (
+                pd.read_csv(csv_path, index_col="userId")
+                .loc[user_id]
+                .sort_values(ascending=False)  # type: ignore[call-overload]
+                .head(5)
+            )
+            productsList = recommendations.index.tolist()
+            products = []
+            for productId in productsList:
+                query["product_id"] = productId
+                _product = db_connector.query_data(
+                    products_collection_name, query, projection
+                )
+
+                # If there are no products, return 404 error
+                if not _product:
+                    continue
+
+                # Convert fetched products to Product objects
+                try:
+                    product: Product = Product(**_product[0])
+                except Exception as e:
+                    return response(
+                        Status.INTERNAL_SERVER_ERROR,
+                        **message(f"Invalid product data in DB: {str(e)}"),
+                    )
+                products.append(product)
+
+            return response(
+                Status.SUCCESS, products=[product.model_dump() for product in products]
+            )
+
+        except Exception as e:
+            return response(
+                Status.INTERNAL_SERVER_ERROR,
+                **message(f"Error retrieving product from MongoDB: {e}"),
+            )
+
+    # Query without including _id field in the result
     if product_id:
         query["product_id"] = product_id
     if service_id:
@@ -49,8 +94,6 @@ def get_products() -> APIResponse:
         regex_pattern = re.compile(re.escape(search_query), re.IGNORECASE)
         query["product_name"] = {"$regex": regex_pattern}
 
-    projection = {"_id": False}
-
     try:
         _products = db_connector.query_data(products_collection_name, query, projection)
 
@@ -60,6 +103,7 @@ def get_products() -> APIResponse:
                 Status.NOT_FOUND, **message("No products found in the database.")
             )
 
+        # Convert fetched products to Product objects
         try:
             products = [Product(**product) for product in _products]
         except Exception as e:
@@ -68,7 +112,6 @@ def get_products() -> APIResponse:
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
 
-        # If products are found, return a JSON response
         return response(
             Status.SUCCESS, products=[product.model_dump() for product in products]
         )
@@ -203,6 +246,7 @@ def search_products(str_query, service_id) -> APIResponse:
             **message(f"Error retrieving product from MongoDB: {e}"),
         )
 
+
 def add_review_to_product(product_id: str) -> APIResponse:
     """
     Adds a new review to the MongoDB database.
@@ -216,7 +260,6 @@ def add_review_to_product(product_id: str) -> APIResponse:
     product_collection_name = "products"
 
     try:
-
         # Query the product data from the database
         query: dict = {"product_id": product_id}
         _products = db_connector.query_data(product_collection_name, query, projection)
@@ -224,11 +267,11 @@ def add_review_to_product(product_id: str) -> APIResponse:
         # If there are no products, return 404 error
         if not _products or len(_products) == 0:
             return response(Status.NOT_FOUND, **message("Product does not exist."))
-        store_id = _products[0]["store_id"]
-        
+        store_id = _products[0]["store_id"]      
         # Query the review data from the database
         query = {"store_id": store_id,
                    "product_id": product_id}
+
         _reviews = db_connector.query_data(reviews_collection_name, query, projection)
 
         # Check if request.json is not None before assignment
@@ -246,6 +289,7 @@ def add_review_to_product(product_id: str) -> APIResponse:
                            "reviews": []}
             db_connector.insert_data(reviews_collection_name, review_data)
             _reviews = db_connector.query_data(reviews_collection_name, query, projection)
+
 
         # Validate the incoming data using Pydantic model
         try:
@@ -269,6 +313,7 @@ def add_review_to_product(product_id: str) -> APIResponse:
         # update the review data to the database
         try:
             db_connector.update_data(reviews_collection_name, query, reviews.model_dump())
+
         except PyMongoError as e:
             return response(
                 Status.INTERNAL_SERVER_ERROR,
@@ -277,6 +322,7 @@ def add_review_to_product(product_id: str) -> APIResponse:
 
         # Return a success response
         return response(Status.SUCCESS, **message("Review added successfully."))
+
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

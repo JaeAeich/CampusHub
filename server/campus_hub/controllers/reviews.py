@@ -48,6 +48,7 @@ def get_reviews() -> APIResponse:
         # If reviews are found, return a JSON response
         return response(
             Status.SUCCESS, **reviews[0].model_dump()
+
         )
     except Exception as e:
         return response(
