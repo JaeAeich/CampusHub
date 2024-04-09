@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Service from '@/api/services/types';
+import Autoplay from 'embla-carousel-autoplay';
 import Container from './ui/container';
 import NotFound from './NotFound';
 // import { services } from '../../app/constants';
@@ -21,7 +22,8 @@ export default function ServiceCards({ services, error }: { services: Service[];
             opts={{
               align: 'start',
             }}
-            className="w-full"
+            className="w-full md:block hidden"
+            plugins={[Autoplay({ delay: 5000 })]}
           >
             <CarouselContent>
               {services.map((service) => (
