@@ -44,6 +44,11 @@ jobs:
           cp mongo.env.sample mongo.env
           sed -i '1,2d' mongo.env
 
+      - name: Add push env file
+        run: |
+          cp push.env.sample mongo.env
+          sed -i '1,2d' push.env
+
       - name: Deploy app
         run: docker-compose up -d --build
 
