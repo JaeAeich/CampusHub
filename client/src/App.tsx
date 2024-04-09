@@ -21,6 +21,7 @@ import SellerStoreListPage from './components/SellerStoreList';
 import StoreOrderList from './components/StoreOrderList';
 import StoreReviews from './components/StoreReviews';
 import StoreInventory from './components/StoreInventory';
+import Notifications from './components/Notifications';
 import ProductDetails from './components/ProductDetails';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <div className="flex grow">
           <Toaster />
           <Routes>
+            <Route path="/notifications" element={<Notifications />} />
             {isAuthenticated && !userExists && !sellerAuth && (
               <>
                 <Route path="/createuser/:email_id" element={<EnterDetails active="user" />} />
