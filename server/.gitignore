@@ -52,6 +52,7 @@ coverage.xml
 *.cover
 *.py,cover
 .hypothesis/
+.metaflow/
 .pytest_cache/
 cover/
 

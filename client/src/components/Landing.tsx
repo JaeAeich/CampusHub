@@ -7,6 +7,7 @@ import { getProductById, getTrendingStore } from '@/api/stores/stores';
 import TrendingStores from './TrendingStores';
 import DealOfTheDay from './DealOfTheDay';
 import ServiceCards from './ServiceCards';
+import TopPicks from './TopPicks';
 import { getServices } from '../api/services/services';
 import Loading from './Loading';
 import { getTrendingOffers } from '../api/offers/offers';
@@ -43,8 +44,8 @@ export default function Landing() {
         setErrorTrendingStore(true);
       } else if ('stores' in response) {
         setTrendingStores(response.stores);
-        setLoaded1(true);
       }
+      setLoaded1(true);
     }
 
     fetchTrendingStores();
@@ -57,8 +58,8 @@ export default function Landing() {
         setErrorTrendingOffer(true);
       } else if ('offers' in response) {
         setTrendingOffersid(response.offers);
-        setLoaded2(true);
       }
+      setLoaded2(true);
     }
 
     fetchTrendingOffers();
@@ -102,6 +103,7 @@ export default function Landing() {
     <div className="mx-auto w-full px-1 sm:w-lg md:w-3xl lg:w-4xl xl:w-6xl 2xl:w-7xl opacity-100 transition-opacity duration-500 ease-in-out lg:mb-7">
       <TrendingStores trendingStores={trendingStores} error={errorTrendingStore} />
       <DealOfTheDay trendingOffersProducts={trendingOffersProducts} error={errorTrendingOffer} />
+      <TopPicks />
       <ServiceCards services={services} error={errorService} />
     </div>
   );

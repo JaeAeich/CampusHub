@@ -12,7 +12,7 @@ import { Plus, Minus, X } from 'lucide-react';
 import addOrder from '@/api/orders/orders';
 import { Toaster } from '@/components/ui/toaster';
 import useRazorpay from 'react-razorpay';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProductByProductId } from '@/api/products/products';
 import Product from '@/api/products/types';
@@ -25,9 +25,15 @@ import NotFound from './NotFound';
 import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
 import { Button } from './ui/button';
+// import { io } from 'socket.io-client';
 
 const razorpay_id = import.meta.env.VITE_RAZORPAY_ID;
+const notif_url = import.meta.env.VITE_NOTIFICATIONS_BASE_URL;
+
+// const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATIONS_BASE_URL;
+
 function Cart() {
+  // const socket = io(NOTIFICATION_BASE_URL, { transports: ['websocket'] });
   const cart = useSelector((state: RootState) => state.cart) as iCart;
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -68,7 +74,7 @@ function Cart() {
           order_id: response.id,
           amount: Math.ceil(orderData.amount_paid * 100).toString(),
           currency: 'INR',
-          handler: () => {
+          handler: async () => {
             toast({
               title: 'Order created successfully',
               action: <ToastAction altText="View My Order">My Orders</ToastAction>,
@@ -92,18 +98,65 @@ function Cart() {
 
         const rzp1 = new Razorpay(options);
 
-        rzp1.on('payment.failed', () => {
+        rzp1.on('payment.failed', async () => {
           // TODO: Cart values are reset to zero always. Order is created regardless of payment status. Pay again option must be available in orders in case of failure.
-
           toast({
             title: 'Payment Failed, Please try again',
             action: <ToastAction altText="Try Again">View Cart</ToastAction>,
           });
+
+          await fetch(`${notif_url}/send_notification`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fail: true,
+              message: {
+                title: 'Payment Failed',
+                order_id: response.id,
+                amount: Math.ceil(orderData.amount_paid * 100).toString(),
+                store_name: orderData.store_name,
+                orderData,
+              },
+              eventName: orderData.seller_id,
+            }),
+          });
+
           setTimeout(() => {
             navigate(`/`);
           }, 3000);
         });
 
+        rzp1.on('payment.submit', async () => {
+          toast({
+            title: 'Payment successful, check notification for more details ',
+            action: (
+              <ToastAction altText="Try Again">
+                <Button type="button">
+                  <Link to="/notifications">Notifications</Link>
+                </Button>
+              </ToastAction>
+            ),
+          });
+          await fetch(`${notif_url}/send-notification`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fail: false,
+              message: {
+                title: 'Payment Successful',
+                order_id: response.id,
+                amount: Math.ceil(orderData.amount_paid * 100).toString(),
+                store_name: orderData.store_name,
+              },
+              orderData,
+              eventName: orderData.seller_id,
+            }),
+          });
+        });
         rzp1.open();
       } else {
         throw new Error('Order creation failed: No order ID in the response');
@@ -127,7 +180,7 @@ function Cart() {
     if ('user' in userres && 'store' in storeres) {
       const user = userres.user as User;
       const store = storeres.store as Store;
-      const orderData = await {
+      const orderData = {
         amount_paid: Total,
         delivery_address: user.user_address,
         delivery_status: true,
@@ -138,7 +191,7 @@ function Cart() {
         store_name: store.store_name,
         user_id: user.user_id,
       };
-      handlePayment(orderData as Omit<Order, 'order_id'>);
+      await handlePayment(orderData as Omit<Order, 'order_id'>);
     }
   };
 

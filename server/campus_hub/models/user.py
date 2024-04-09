@@ -29,3 +29,7 @@ class User(BaseModel):
     user_address: str
     cart_id: str
     wishlist_cart_id: str
+
+
+class UserIDs(BaseModel):
+    user_ids: List[str]
