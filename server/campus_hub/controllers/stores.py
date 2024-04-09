@@ -293,6 +293,9 @@ def get_products_by_store_id(store_id) -> APIResponse:
     query: dict = {"store_id": store_id}
     projection = {"_id": False}
 
+    current_page_number = int(request.args.get("current_page_number", 1))
+    page_size = int(request.args.get("page_size", 10))
+
     try:
         _stores = db_connector.query_data(stores_collection_name, query, projection)
 
@@ -300,7 +303,13 @@ def get_products_by_store_id(store_id) -> APIResponse:
         if not _stores or len(_stores) == 0:
             return response(Status.NOT_FOUND, **message("Store does not exist."))
 
-        _products = db_connector.query_data(products_collection_name, query, projection)
+        _products = db_connector.query_data(
+            products_collection_name,
+            query,
+            projection,
+            page_size=page_size,
+            current_page_number=current_page_number,
+        )
 
         # If there are no products, return 404 error
         if not _products or len(_products) == 0:
@@ -317,10 +326,20 @@ def get_products_by_store_id(store_id) -> APIResponse:
                 **message(f"Invalid order data in DB: {str(e)}"),
             )
 
-        order_list: ProductList = ProductList(products=products)
+        product_list: ProductList = ProductList(products=products)
+        total_items = db_connector.get_count(products_collection_name, query)
+        total_pages = total_items // page_size
+        if total_items % page_size > 0:
+            total_pages += 1
 
         # If products are found, return a JSON response
-        return response(Status.SUCCESS, **order_list.model_dump())
+        return response(
+            Status.SUCCESS,
+            page_size=page_size,
+            current_page_number=current_page_number,
+            total_pages=total_pages,
+            **product_list.model_dump(),
+        )
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR,

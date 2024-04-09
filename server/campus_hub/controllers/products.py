@@ -3,7 +3,7 @@ from typing import Any, MutableMapping
 from campus_hub.models.review import Review, Reviews
 from campus_hub.utils.db import db_connector
 from campus_hub.utils.response import APIResponse, response, message, Status
-from campus_hub.models.product import Product
+from campus_hub.models.product import Product, ProductList
 from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from flask import request
@@ -33,6 +33,8 @@ def get_products() -> APIResponse:
     min_rating = request.args.get("min_rating")
     category = request.args.get("category")
     search_query = request.args.get("search_query")
+    current_page_number = int(request.args.get("current_page_number", 1))
+    page_size = int(request.args.get("page_size", 10))
 
     query: dict = {}
     projection = {"_id": False}
@@ -96,7 +98,13 @@ def get_products() -> APIResponse:
         query["product_name"] = {"$regex": regex_pattern}
 
     try:
-        _products = db_connector.query_data(products_collection_name, query, projection)
+        _products = db_connector.query_data(
+            products_collection_name,
+            query,
+            projection,
+            current_page_number=current_page_number,
+            page_size=page_size,
+        )
 
         # If there are no products, return 404 error
         if not _products or len(_products) == 0:
@@ -108,15 +116,28 @@ def get_products() -> APIResponse:
         try:
             products = [Product(**product) for product in _products]
         except Exception as e:
+            print("ERROR:", e)
             return response(
                 Status.INTERNAL_SERVER_ERROR,
                 **message(f"Invalid product data in DB: {str(e)}"),
             )
 
+
+        product_list: ProductList = ProductList(products=products)
+        total_items = db_connector.get_count(products_collection_name, query)
+        total_pages = total_items // page_size
+        if total_items % page_size > 0:
+            total_pages += 1
+
         return response(
-            Status.SUCCESS, products=[product.model_dump() for product in products]
+            Status.SUCCESS,
+            page_size=page_size,
+            current_page_number=current_page_number,
+            total_pages=total_pages,
+            **product_list.model_dump(),
         )
     except Exception as e:
+        print("ERROR:", e)
         return response(
             Status.INTERNAL_SERVER_ERROR,
             **message(f"Error retrieving product from MongoDB: {e}"),

@@ -27,6 +27,14 @@ import getProductsByQuery from '@/api/products/products';
 import ProductCard from './ProductCard';
 import NotFound from './NotFound';
 import Loading from './Loading';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from './ui/pagination';
 
 function ProductsPage() {
   const { store_id } = useParams();
@@ -36,16 +44,20 @@ function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [sliderValue, setSliderValue] = useState([500]);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [current_page_number, setCurrentPageNumber] = useState(1);
+  const [total_pages, setTotalPages] = useState(10);
+  const page_size = 10;
 
   useEffect(() => {
     async function fetchProductsByStoreId() {
       if (store_id !== undefined) {
-        const response = await getProductsByStoreId(store_id);
+        const response = await getProductsByStoreId(store_id, page_size, current_page_number);
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
-        } else if ('products' in response) {
+        } else if ('products' in response && 'total_pages' in response) {
           setProducts(response.products);
+          setTotalPages(response.total_pages as number);
           setIsLoading(false);
         }
       } else if (search_query !== '') {
@@ -54,14 +66,15 @@ function ProductsPage() {
         if ('error' in response) {
           setErrorProducts(true);
           setIsLoading(false);
-        } else if ('products' in response) {
+        } else if ('products' in response && 'total_pages' in response) {
           setProducts(response.products);
+          setTotalPages(response.total_pages as number);
           setIsLoading(false);
         }
       }
     }
     fetchProductsByStoreId();
-  }, [search_query, store_id]);
+  }, [search_query, store_id, current_page_number]);
 
   if (isLoading) {
     return <Loading />;
@@ -369,6 +382,35 @@ function ProductsPage() {
             </Link>
           )}
         </div>
+
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={current_page_number === 1 ? 'pointer-events-none opacity-50' : ''}
+                onClick={() => {
+                  setCurrentPageNumber(current_page_number - 1);
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink className="pointer-events-none">{current_page_number}</PaginationLink>
+            </PaginationItem>
+            {/* <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem> */}
+            <PaginationItem>
+              <PaginationNext
+                className={
+                  current_page_number === total_pages ? 'pointer-events-none opacity-50' : ''
+                }
+                onClick={() => {
+                  setCurrentPageNumber(current_page_number + 1);
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

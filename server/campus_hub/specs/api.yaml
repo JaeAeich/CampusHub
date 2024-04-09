@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: CampusHub
   description: API documentation for CampusHub
-  version: 1.1.2
+  version: 1.1.3
 servers:
   - url: /campus_hub/v1
 tags:
@@ -554,6 +554,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/current_page_number'
       responses:
         "200":
           description: Success
@@ -730,6 +732,8 @@ paths:
         - $ref: "#/components/parameters/max_rating"
         - $ref: "#/components/parameters/max_price"
         - $ref: "#/components/parameters/search_query"
+        - $ref: "#/components/parameters/page_size"
+        - $ref: "#/components/parameters/current_page_number"
       responses:
         "200":
           description: Success
@@ -867,6 +871,9 @@ paths:
       operationId: sellers.get_sellers
       tags:
         - Sellers
+      parameters:
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/current_page_number'
       responses:
         "200":
           description: Success
@@ -1615,6 +1622,15 @@ components:
     ProductList:
       type: object
       properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
         products:
           type: array
           items:
@@ -1972,3 +1988,17 @@ components:
       schema:
         type: number
         format: float
+    page_size:
+      name: page_size
+      in: query
+      description: no of docs each page
+      required: false
+      schema:
+        type: integer
+    current_page_number:
+      name: current_page_number
+      in: query
+      description: current page no
+      required: false
+      schema:
+        type: integer

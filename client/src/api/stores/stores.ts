@@ -138,9 +138,13 @@ export async function getOrdersByStoreId(
  */
 export async function getProductsByStoreId(
   store_id: string,
+  page_size: number,
+  current_page_number: number,
 ): Promise<{ products: Product[] } | ErrorResponse | MessageResponse> {
   try {
-    const response: AxiosResponse = await axios.get(`${storeURL}/${store_id}/products`);
+    const response: AxiosResponse = await axios.get(`${storeURL}/${store_id}/products`, {
+      params: { page_size, current_page_number },
+    });
     return response.data;
   } catch (error) {
     return errorResponse(Error.toString(), 'api.store.getProductsByStoreId');
