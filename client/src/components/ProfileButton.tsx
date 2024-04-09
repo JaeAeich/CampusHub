@@ -35,7 +35,7 @@ const routes = [
     label: 'Past Orders',
   },
   {
-    to: '/',
+    to: '/notifications',
     label: 'Notifications',
   },
 ];

@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Product from '@/api/products/types';
 import { useAuth0 } from '@auth0/auth0-react';
-import Autoplay from 'embla-carousel-autoplay';
 import { Link } from 'react-router-dom';
 import { addProductToCartAsync } from '@/store/cart/cartSlice';
 import { useAppDispatch } from '@/utils/hooks';
@@ -41,7 +40,7 @@ export default function DealOfTheDay({
         {error || trendingOffersProducts.length === 0 ? (
           <NotFound item="Trending offers" />
         ) : (
-          <Carousel plugins={[Autoplay({ delay: 6000 })]}>
+          <Carousel>
             <CarouselContent>
               {trendingOffersProducts.map((deal) => (
                 <CarouselItem key={deal.product_name} className="w-full">

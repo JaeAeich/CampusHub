@@ -12,6 +12,7 @@ instance/*
 __pycache__/
 *.py[cod]
 *$py.class
+server/.metaflow/
 
 # C extensions
 *.so
@@ -148,6 +149,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.metaflow/
 .dmypy.json
 dmypy.json
 
@@ -278,7 +280,3 @@ sketch
 
 # ignore mongo data
 data/
-
-# ignore package.json and lock files
-package.json
-package-lock.json
