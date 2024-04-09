@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 from flask import request
 import pandas as pd
+from pathlib import Path
 
 
 def get_products() -> APIResponse:
@@ -37,11 +38,12 @@ def get_products() -> APIResponse:
     projection = {"_id": False}
 
     if user_id:
+        csv_path = Path(__file__).parent / "precomputed_recommendations.csv"
         try:
             recommendations = (
-                pd.read_csv("precomputed_recommendations.csv", index_col="userId")
+                pd.read_csv(csv_path, index_col="userId")
                 .loc[user_id]
-                .sort_values(ascending=False) # type: ignore[call-overload]
+                .sort_values(ascending=False)  # type: ignore[call-overload]
                 .head(5)
             )
             productsList = recommendations.index.tolist()

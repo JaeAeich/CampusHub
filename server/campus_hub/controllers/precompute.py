@@ -5,8 +5,9 @@ import requests
 from scipy.sparse.linalg import svds
 from scipy.sparse import csr_matrix
 
+
 # type: ignore[attr-defined]
-@metaflow.schedule(daily=True)   
+@metaflow.schedule(daily=True)
 class PrecomputeRecommendationsFlow(metaflow.FlowSpec):
     @metaflow.step
     def start(self):
@@ -19,6 +20,7 @@ class PrecomputeRecommendationsFlow(metaflow.FlowSpec):
         # user_ids = self.retrieve_data_from_api('users')
         # print(user_ids['user_ids'])
         user_ids = [
+            "users_5f2PyhRyrML4PWLTEKJ8xP",
             "users_duyLeaLGQXEokpixHvouVo",
             "users_L4ciTXoXrL9ufsRTuX4Lc2",
             "users_KcvovsBLexiDwBKW9RjioU",
@@ -100,7 +102,9 @@ class PrecomputeRecommendationsFlow(metaflow.FlowSpec):
     @metaflow.step
     def save_recommendations(self):
         # Save precomputed recommendations to CSV
-        self.preds_df.to_csv("precomputed_recommendations.csv")
+        file_path = "precomputed_recommendations.csv"
+        # Save precomputed recommendations to CSV
+        self.preds_df.to_csv(file_path)
         self.next(self.end)
 
     @metaflow.step
