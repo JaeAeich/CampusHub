@@ -17,7 +17,7 @@ function StoreOrderList() {
         const storeResponse = await getStoreById(store_id);
         if ('store' in storeResponse) {
           const store = storeResponse.store as Store;
-          setStoreImage(store.store_images[0])
+          setStoreImage(store.store_images[0]);
         }
         const response = await getOrdersByStoreId(store_id);
         if ('error' in response) {
@@ -62,10 +62,10 @@ function StoreOrderList() {
                   storeOrders.map((order: Order) => (
                     <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
                       <img
-                  src={storeImage}
-                  alt="store"
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg"
-                />
+                        src={storeImage}
+                        alt="store"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg"
+                      />
                       <div className="flex flex-col w-full sm:ml-4">
                         <div className="sm:flex sm:w-full sm:justify-between">
                           <div className="mt-5 sm:mt-0">
