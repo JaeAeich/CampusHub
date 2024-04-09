@@ -12,9 +12,6 @@ RUN npm install
 # Copy the rest of the application files
 COPY . .
 
-# Build the application
-RUN npm run build
-
 # Command to run the application
 # TODO: vite preview is for development only, change to vite build for production
 CMD ["npm", "run", "start"]

@@ -12,6 +12,7 @@ instance/*
 __pycache__/
 *.py[cod]
 *$py.class
+server/.metaflow/
 
 # C extensions
 *.so
