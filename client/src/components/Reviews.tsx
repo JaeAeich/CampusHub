@@ -2,7 +2,6 @@ import getReviews from '@/api/reviews/reviews';
 import ReviewList from '@/api/reviews/types';
 import { useEffect, useState } from 'react';
 import Loading from './Loading';
-import NotFound from './NotFound';
 import ReviewCard from './ReviewCard';
 
 function Reviews(props: { store_id: string; product_id: string }) {
