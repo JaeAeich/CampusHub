@@ -10,6 +10,7 @@ from flask import request
 import pandas as pd
 from pathlib import Path
 
+
 def get_products() -> APIResponse:
     """
     Get all products from the MongoDB database with filters based on query parameters.
@@ -293,7 +294,6 @@ def add_review_to_product(product_id: str) -> APIResponse:
             _reviews = db_connector.query_data(
                 reviews_collection_name, query, projection
             )
-
 
         # Validate the incoming data using Pydantic model
         try:
