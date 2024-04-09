@@ -63,7 +63,6 @@ function Cart() {
     try {
       // Send order to backend
       const response = await addOrder(orderData);
-      appDispatch(clearCartAsync());
 
       if ('id' in response) {
         const options = {
@@ -82,6 +81,7 @@ function Cart() {
             setTimeout(() => {
               navigate(`/`);
             }, 3000);
+            appDispatch(clearCartAsync());
           },
           prefill: {
             name: 'Your Name',
@@ -115,7 +115,7 @@ function Cart() {
               message: {
                 title: 'Payment Failed',
                 order_id: response.id,
-                amount: Math.ceil(orderData.amount_paid * 100).toString(),
+                amount: Math.ceil(orderData.amount_paid).toString(),
                 store_name: orderData.store_name,
                 orderData,
               },
@@ -130,7 +130,7 @@ function Cart() {
 
         rzp1.on('payment.submit', async () => {
           toast({
-            title: 'Payment successful, check notification for more details ',
+            title: 'Payment initiated, check notification for more details ',
             action: (
               <ToastAction altText="Try Again">
                 <Button type="button">
@@ -149,7 +149,7 @@ function Cart() {
               message: {
                 title: 'Payment Successful',
                 order_id: response.id,
-                amount: Math.ceil(orderData.amount_paid * 100).toString(),
+                amount: Math.ceil(orderData.amount_paid).toString(),
                 store_name: orderData.store_name,
               },
               orderData,

@@ -6,6 +6,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   Select,
   SelectContent,
@@ -30,6 +31,7 @@ import Loading from './Loading';
 
 function ProductsPage() {
   const { store_id } = useParams();
+  const { isAuthenticated} = useAuth0();
   const { search_query } = useParams();
   const [store_products, setProducts] = useState<Product[]>([]);
   const [errorProducts, setErrorProducts] = useState(false);
@@ -361,7 +363,7 @@ function ProductsPage() {
           ))}
         </div>
         <div className="mx-auto mt-20">
-          {store_id === 'store3' && (
+          {store_id === 'store3' && isAuthenticated && (
             <Link to="/stores/store3/createproduct">
               <Button className="text-sm font-bold ml-3 bg-secondary hover:bg-accent text-primary">
                 Add a Product

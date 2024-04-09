@@ -21,7 +21,7 @@ export default function DealOfTheDay({
   trendingOffersProducts: (Product & { discount?: number })[];
   error: boolean;
 }) {
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, user } = useAuth0();
 
   const { toast } = useToast();
   const userExists = useSelector((state: RootState) => state.auth.value);
@@ -87,7 +87,7 @@ export default function DealOfTheDay({
                             if (userExists) {
                               toast({
                                 title: 'Product Added to Cart Successfully',
-                                action: <ToastAction altText="Add to cart">View Cart</ToastAction>,
+                                action: <Link to={`/users/${user?.email}/cart`}><Button><ToastAction altText="Add to cart">View Cart</ToastAction></Button></Link>,
                               });
                               handleAddToCart(deal.product_id);
                             } else {

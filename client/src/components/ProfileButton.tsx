@@ -17,34 +17,34 @@ import { unauthenticated } from '../store/auth/authSlice';
 import { sellerUnauthenticated } from '../store/seller/sellerSlice';
 
 const user_id = 1;
-const routes = [
-  {
-    to: `/users/${user_id}/details`,
-    label: 'Profile',
-  },
-  {
-    to: `/users/${user_id}/wishlist`,
-    label: 'Wishlist',
-  },
-  {
-    to: `/users/${user_id}/cart`,
-    label: 'Cart',
-  },
-  {
-    to: `/users/${user_id}/orders`,
-    label: 'Past Orders',
-  },
-  {
-    to: '/notifications',
-    label: 'Notifications',
-  },
-];
 
-function ProfileButton() {
+function ProfileButton({userEmail}: {userEmail:string}) {
   const dispatch = useDispatch();
   const sellerId = useSelector((state: RootState) => state.seller.sellerId);
   const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);
   const userExists = useSelector((state: RootState) => state.auth.value);
+  const routes = [
+    {
+      to: `/users/${user_id}/details`,
+      label: 'Profile',
+    },
+    {
+      to: `/users/${user_id}/wishlist`,
+      label: 'Wishlist',
+    },
+    {
+      to: `/users/${userEmail}/cart`,
+      label: 'Cart',
+    },
+    {
+      to: `/users/${user_id}/orders`,
+      label: 'Past Orders',
+    },
+    {
+      to: '/notifications',
+      label: 'Notifications',
+    },
+  ];
 
   // TODO: add different dropdown based on if user is logged in or not
   // TODO: get user and add its
