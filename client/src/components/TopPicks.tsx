@@ -1,11 +1,9 @@
-import { Link } from 'react-router-dom';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Product from '@/api/products/types';
 import { getProductsByUserId } from '@/api/products/products';
-import Loading from './Loading';
 import Container from './ui/container';
 import NotFound from './NotFound';
 import ProductCard from './ProductCard';
@@ -34,23 +32,23 @@ export default function ServiceCards() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center m-10 mb-20">
-      <img src="/noresult.gif" alt="noResults" className="h-16 w-42 md:h-48 md:w-92" />
-      <h2 className="align-center text-darkgray text-smm md:text-lg">
-        Curating most accurate picks for you. Please wait...
-      </h2>
-    </div>
+        <img src="/noresult.gif" alt="noResults" className="h-16 w-42 md:h-48 md:w-92" />
+        <h2 className="align-center text-darkgray text-smm md:text-lg">
+          Curating most accurate picks for you. Please wait...
+        </h2>
+      </div>
     );
   }
 
   if (products.length === 0 || errorProducts) {
-    return (  
-      <Container>  
-      <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-6 sm: mb-2">
-        Top Picks For You
-      </h2>  
-      <div className="mx-auto items-center my-auto flex flex-col">
-        <NotFound item="Trending Products" />
-      </div>
+    return (
+      <Container>
+        <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-6 sm: mb-2">
+          Top Picks For You
+        </h2>
+        <div className="mx-auto items-center my-auto flex flex-col">
+          <NotFound item="Trending Products" />
+        </div>
       </Container>
     );
   }
@@ -74,9 +72,9 @@ export default function ServiceCards() {
                   key={product.product_id}
                   className="md:basis-1/2 lg:basis-1/3 basis-full justify-center"
                 >
-                    <div className="relative group">
-                      <ProductCard product={product} wishlisted={false} />
-                    </div>
+                  <div className="relative group">
+                    <ProductCard product={product} wishlisted={false} />
+                  </div>
                   {/* </Link> */}
                 </CarouselItem>
               ))}

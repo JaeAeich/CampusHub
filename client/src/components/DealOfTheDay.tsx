@@ -87,7 +87,13 @@ export default function DealOfTheDay({
                             if (userExists) {
                               toast({
                                 title: 'Product Added to Cart Successfully',
-                                action: <Link to={`/users/${user?.email}/cart`}><Button><ToastAction altText="Add to cart">View Cart</ToastAction></Button></Link>,
+                                action: (
+                                  <Link to={`/users/${user?.email}/cart`}>
+                                    <Button>
+                                      <ToastAction altText="Add to cart">View Cart</ToastAction>
+                                    </Button>
+                                  </Link>
+                                ),
                               });
                               handleAddToCart(deal.product_id);
                             } else {

@@ -18,7 +18,7 @@ import { sellerUnauthenticated } from '../store/seller/sellerSlice';
 
 const user_id = 1;
 
-function ProfileButton({userEmail}: {userEmail:string}) {
+function ProfileButton({ userEmail }: { userEmail: string }) {
   const dispatch = useDispatch();
   const sellerId = useSelector((state: RootState) => state.seller.sellerId);
   const sellerAuth = useSelector((state: RootState) => state.seller.sellerAuth);

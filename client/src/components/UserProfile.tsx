@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 
 const user_id = 1;
 
-function UserProfile({ active, userEmail }: { active: string, userEmail: string|undefined }) {
+function UserProfile({ active, userEmail }: { active: string; userEmail: string | undefined }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(active);
 

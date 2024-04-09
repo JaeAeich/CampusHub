@@ -31,7 +31,7 @@ import Loading from './Loading';
 
 function ProductsPage() {
   const { store_id } = useParams();
-  const { isAuthenticated} = useAuth0();
+  const { isAuthenticated } = useAuth0();
   const { search_query } = useParams();
   const [store_products, setProducts] = useState<Product[]>([]);
   const [errorProducts, setErrorProducts] = useState(false);

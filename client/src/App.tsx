@@ -48,13 +48,22 @@ function App() {
             {isAuthenticated && userExists && (
               <>
                 <Route path="/seller/register" element={<Login />} />
-                <Route path="/users/:user_id/details" element={<UserProfile userEmail={user?.email} active="account" />} />
+                <Route
+                  path="/users/:user_id/details"
+                  element={<UserProfile userEmail={user?.email} active="account" />}
+                />
                 <Route
                   path="/users/:user_id/wishlist"
                   element={<UserProfile userEmail={user?.email} active="wishlist" />}
                 />
-                <Route path="/users/:user_email/cart" element={<UserProfile userEmail={user?.email} active="cart" />} />
-                <Route path="/users/:user_id/orders" element={<UserProfile userEmail={user?.email} active="orders" />} />
+                <Route
+                  path="/users/:user_email/cart"
+                  element={<UserProfile userEmail={user?.email} active="cart" />}
+                />
+                <Route
+                  path="/users/:user_id/orders"
+                  element={<UserProfile userEmail={user?.email} active="orders" />}
+                />
               </>
             )}
             {isAuthenticated && sellerAuth && (
