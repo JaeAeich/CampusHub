@@ -123,51 +123,6 @@ def get_products() -> APIResponse:
         )
 
 
-def get_reviews_by_product_id(product_id) -> APIResponse:
-    """
-    Get reviews of a product by its product_id from the MongoDB database.
-    Args:
-        product_id (str): The product_id of the product to be fetched
-    Returns:
-        Flask response: JSON response containing the list of products.
-    """
-
-    reviews_collection_name = "reviews"
-
-    # Query without including _id field in the result
-    query: dict = {}
-    query["product_id"] = product_id
-    projection = {"_id": False}
-
-    try:
-        _reviews = db_connector.query_data(reviews_collection_name, query, projection)
-
-        # If there are no products, return 404 error
-        if not _reviews or len(_reviews) == 0:
-            return response(
-                Status.NOT_FOUND,
-                **message("No reviews found for the product in the database."),
-            )
-
-        try:
-            reviews = [Reviews(**review) for review in _reviews]
-        except Exception as e:
-            return response(
-                Status.INTERNAL_SERVER_ERROR,
-                **message(f"Invalid review data in DB: {str(e)}"),
-            )
-
-        # If products are found, return a JSON response
-        return response(
-            Status.SUCCESS, reviews=[review.model_dump() for review in reviews]
-        )
-    except Exception as e:
-        return response(
-            Status.INTERNAL_SERVER_ERROR,
-            **message(f"Error retrieving product from MongoDB: {e}"),
-        )
-
-
 def get_product_cost(product_id) -> APIResponse:
     """
     Get cost of a product by its product_id from the MongoDB database.
@@ -297,6 +252,7 @@ def search_products(str_query, service_id) -> APIResponse:
 def add_review_to_product(product_id: str) -> APIResponse:
     """
     Adds a new review to the MongoDB database.
+
     Returns:
         Flask response: JSON response containing the status of the operation.
     """
@@ -370,7 +326,8 @@ def add_review_to_product(product_id: str) -> APIResponse:
             )
 
         # Return a success response
-        return response(Status.SUCCESS, **{"review": review.model_dump()})
+        return response(Status.SUCCESS, **message("Review added successfully."))
+
     except Exception as e:
         return response(
             Status.INTERNAL_SERVER_ERROR, **message(f"Internal Server Error: {str(e)}")

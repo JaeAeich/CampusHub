@@ -85,11 +85,18 @@ def get_user_by_id(user_email: str) -> APIResponse:
 
     users_collection_name = "users"
 
-    query = {"user_email": user_email}
+    query1 = {"user_email": user_email}
+    query2 = {"user_id": user_email}
     projection = {"_id": False}
 
     try:
-        _user = db_connector.query_data(users_collection_name, query, projection)
+        _user_by_email = db_connector.query_data(
+            users_collection_name, query1, projection
+        )
+
+        _user_by_id = db_connector.query_data(users_collection_name, query2, projection)
+
+        _user = _user_by_email if _user_by_email else _user_by_id
 
         if not _user or len(_user) == 0:
             return response(

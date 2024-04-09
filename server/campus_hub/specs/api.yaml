@@ -26,6 +26,10 @@ tags:
     description: "Operations related to offers (Get, Get by Id, Get trending)"
   - name: Users
     description: "Operations related to users (Get, Update, Delete)"
+  - name: Sellers
+    description: "Operations related to sellers (Get, Add, Update, Delete)"
+  - name: Reviews
+    description: "Operations related to reviews (Get, Add)"
 paths:
   "/services":
     get:
