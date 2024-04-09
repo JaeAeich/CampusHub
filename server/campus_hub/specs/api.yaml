@@ -26,6 +26,10 @@ tags:
     description: "Operations related to offers (Get, Get by Id, Get trending)"
   - name: Users
     description: "Operations related to users (Get, Update, Delete)"
+  - name: Sellers
+    description: "Operations related to sellers (Get, Add, Update, Delete)"
+  - name: Reviews
+    description: "Operations related to reviews (Get, Add)"
 paths:
   "/services":
     get:
@@ -1345,6 +1349,13 @@ paths:
       operationId: products.add_review_to_product
       tags:
         - Products
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product to add review
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Review object to be added
         required: true

@@ -15,6 +15,7 @@ import Loading from './Loading';
 import { useToast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
 import { addProductToCartAsync } from '../store/cart/cartSlice';
+import Reviews from './Reviews';
 
 export default function ProductPage() {
   const { toast } = useToast();
@@ -187,6 +188,7 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+      <Reviews product_id={product_id || ""} store_id={store_id || ""} />
     </div>
   );
 }
