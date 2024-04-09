@@ -46,7 +46,7 @@ jobs:
 
       - name: Add push env file
         run: |
-          cp push.env.sample mongo.env
+          cp push.env.sample push.env
           sed -i '1,2d' push.env
 
       - name: Deploy app
