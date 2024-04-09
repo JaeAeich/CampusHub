@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import baseURL from '../config';
-import Review from './types';
+import User from './types';
 import errorResponse, { ErrorResponse } from '../../utils/response';
-import { MessageResponse } from '../types';
 
 /**
  * Represents the base URL for the reviews API.
@@ -10,18 +9,23 @@ import { MessageResponse } from '../types';
 const reviewsURL = `${baseURL}/reviews`;
 
 /**
- * Fetches all services.
+ * Gets all reviews.
  *
- * @returns {Promise<{ reviews: Review[] } | ErrorResponse | MessageResponse>} A promise
- * that resolves to an array of services or an error response.
+ * param {string} store_id - The ID of the store.
+ * param {string} product_id - The ID of the product.
+ *
+ * @returns {Promise<User[] | ErrorResponse>} A promise that resolves to the list of reviews or an error response.
  */
-export default async function getReviews(store_id : string, product_id: string): Promise<
-  { reviews: Review[] } | ErrorResponse | MessageResponse
-> {
+export default async function getReviews(
+  store_id: string,
+  product_id: string,
+): Promise<User[] | ErrorResponse> {
   try {
-    const response: AxiosResponse = await axios.get(`${reviewsURL}`);
+    const response: AxiosResponse = await axios.get(`${reviewsURL}`, {
+      params: { store_id, product_id },
+    });
     return response.data;
-  } catch (error: unknown) {
+  } catch (error) {
     return errorResponse(error, 'api.reviews.getReviews');
   }
 }
