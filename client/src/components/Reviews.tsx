@@ -1,12 +1,11 @@
-import getReviews from "@/api/reviews/reviews";
-import ReviewList from "@/api/reviews/types";
-import { useEffect, useState } from "react";
-import Loading from "./Loading";
-import NotFound from "./NotFound";
-import ReviewCard from "./ReviewCard";
+import getReviews from '@/api/reviews/reviews';
+import ReviewList from '@/api/reviews/types';
+import { useEffect, useState } from 'react';
+import Loading from './Loading';
+import NotFound from './NotFound';
+import ReviewCard from './ReviewCard';
 
-function Reviews(  props: { store_id: string; product_id: string; }) {
-
+function Reviews(props: { store_id: string; product_id: string }) {
   const { store_id, product_id } = props;
   const [reviewsList, setReviewsList] = useState<ReviewList | null>(null);
   const [errorReviews, setErrorReviews] = useState(false);
@@ -14,8 +13,7 @@ function Reviews(  props: { store_id: string; product_id: string; }) {
 
   useEffect(() => {
     async function fetchReviews() {
-      const response = await getReviews(store_id, product_id); 
-      console.log(response);
+      const response = await getReviews(store_id, product_id);
       if ('error' in response) {
         setErrorReviews(true);
         setIsLoadingReviews(false);
@@ -31,8 +29,7 @@ function Reviews(  props: { store_id: string; product_id: string; }) {
     return <Loading />;
   }
 
-  if ( errorReviews) {
-    console.log(reviewsList);
+  if (errorReviews) {
     return (
       <div className="mx-auto items-center my-auto">
         <NotFound item="Reviews" />
@@ -46,12 +43,10 @@ function Reviews(  props: { store_id: string; product_id: string; }) {
         <h2 className="text-2xl font-bold mb-10">Reviews</h2>
       </div>
       <div className="flex flex-col">
-        {reviewsList?.reviews.map((review) => (
-          <ReviewCard review={review} /> 
-        ))}
+        {reviewsList?.reviews.map((review) => <ReviewCard review={review} />)}
       </div>
     </div>
   );
-};
+}
 
 export default Reviews;

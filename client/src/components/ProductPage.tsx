@@ -188,7 +188,7 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
-      <Reviews product_id={product_id || ""} store_id={store_id || ""} />
+      <Reviews product_id={product_id || ''} store_id={store_id || ''} />
     </div>
   );
 }
