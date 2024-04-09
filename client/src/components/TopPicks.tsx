@@ -1,17 +1,18 @@
 import { RootState } from '@/store/store';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Product from '@/api/products/types';
 import { getProductsByUserId } from '@/api/products/products';
 import Container from './ui/container';
-import NotFound from './NotFound';
 import ProductCard from './ProductCard';
 // import { services } from '../../app/constants';
 
 export default function ServiceCards() {
   const [products, setProducts] = useState<Product[]>([]);
   const user_id = useSelector((state: RootState) => state.auth.user_id);
+  const { isAuthenticated } = useAuth0();
   const [errorProducts, setErrorProducts] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,17 +41,8 @@ export default function ServiceCards() {
     );
   }
 
-  if (products.length === 0 || errorProducts) {
-    return (
-      <Container>
-        <h2 className="font-heading xl:text-xll sm:text-xl text-lgg font-semibold sm:my-4 mt-6 sm: mb-2">
-          Top Picks For You
-        </h2>
-        <div className="mx-auto items-center my-auto flex flex-col">
-          <NotFound item="Trending Products" />
-        </div>
-      </Container>
-    );
+  if (products.length === 0 || errorProducts || !isAuthenticated) {
+    return null;
   }
 
   return (
