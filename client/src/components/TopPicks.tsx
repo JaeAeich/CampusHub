@@ -37,9 +37,12 @@ export default function ServiceCards() {
 
   if (products.length === 0 || errorProducts) {
     return (
-      <div className="mx-auto items-center my-auto">
-        <NotFound item="Trending Products" />
-      </div>
+      <div className="flex flex-col items-center justify-center m-10 mb-20">
+      <img src="/noresult.gif" alt="noResults" className="h-16 w-42 md:h-48 md:w-92" />
+      <h2 className="align-center text-darkgray text-smm md:text-lg">
+         Curating top picks for you. Please wait..
+      </h2>
+    </div>
     );
   }
 
@@ -62,12 +65,10 @@ export default function ServiceCards() {
                   key={product.product_id}
                   className="md:basis-1/2 lg:basis-1/3 sm:basis-1/2"
                 >
-                  <Link to={`/products/${product.product_id}`}>
-                    {/* TODO: Route to the store path onClick */}
                     <div className="relative group">
                       <ProductCard product={product} wishlisted={false} />
                     </div>
-                  </Link>
+                  {/* </Link> */}
                 </CarouselItem>
               ))}
             </CarouselContent>

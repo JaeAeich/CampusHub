@@ -1,10 +1,12 @@
-import { getOrdersByStoreId } from '@/api/stores/stores';
+import { getOrdersByStoreId, getStoreById } from '@/api/stores/stores';
 import Order from '@/api/orders/types';
+import Store from '@/api/stores/types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 function StoreOrderList() {
   const { store_id } = useParams();
+  const [storeImage, setStoreImage] = useState(String);
   const [storeOrders, setStoreOrders] = useState<Order[]>([]);
   const [errorOrders, setErrorOrders] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,6 +14,11 @@ function StoreOrderList() {
   useEffect(() => {
     async function fetchStoreOrders() {
       if (store_id !== undefined) {
+        const storeResponse = await getStoreById(store_id);
+        if ('store' in storeResponse) {
+          const store = storeResponse.store as Store;
+          setStoreImage(store.store_images[0])
+        }
         const response = await getOrdersByStoreId(store_id);
         if ('error' in response) {
           setErrorOrders(true);
@@ -54,6 +61,11 @@ function StoreOrderList() {
                 {storeOrders &&
                   storeOrders.map((order: Order) => (
                     <div className="justify-between mb-6 rounded-lg bg-background p-6 shadow-md sm:flex sm:justify-start">
+                      <img
+                  src={storeImage}
+                  alt="store"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg"
+                />
                       <div className="flex flex-col w-full sm:ml-4">
                         <div className="sm:flex sm:w-full sm:justify-between">
                           <div className="mt-5 sm:mt-0">
@@ -66,14 +78,18 @@ function StoreOrderList() {
                           </div>
                           <div className="flex flex-col space-between">
                             <p className="flex sm:text-xl text-lg font-bold  justify-end text-accent">
-                              {order.delivery_status ? 'Delivered' : 'Pending'}
+                              {order.delivery_status ? 'Payment Successful' : 'Pending'}
                             </p>
                             <p className="flex md:text-lg text-smm justify-end font-bold">
                               &#8377; {order.amount_paid}
                             </p>
                           </div>
                         </div>
-
+                        <div className="h-full flex sm:mb-0 mb-2 justify-end">
+                          <p className="flex md:text-base text-smm text-secondary justify-end">
+                            Ordered by: {order.user_id}
+                          </p>
+                        </div>
                         <div className="h-full flex sm:mb-0 mb-2 justify-end">
                           <p className="flex md:text-base text-smm text-secondary justify-end">
                             Order Id: {order.order_id}

@@ -73,7 +73,7 @@ function Orders() {
                 <img
                   src={storeImages[order.order_id]}
                   alt="store"
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg"
+                  className="w-40 h-20 sm:w-40 sm:h-24 rounded-lg"
                 />
                 <div className="flex flex-col w-full sm:ml-4">
                   <div className="sm:flex sm:w-full sm:justify-between">
@@ -87,7 +87,7 @@ function Orders() {
                     </div>
                     <div className="flex flex-col space-between">
                       <p className="flex sm:text-xl text-lg font-bold  justify-end text-accent">
-                        {order.delivery_status ? 'Delivered' : 'Pending'}
+                        {order.delivery_status ? 'Payment Successful' : 'Pending'}
                       </p>
                       <p className="flex md:text-lg text-smm justify-end font-bold">
                         &#8377; {order.amount_paid}
