@@ -15,7 +15,7 @@ swagger-ui-bundle = "0.0.6"
 werkzeug = ">=2.2.2,<3.0.0"
 typing = "3.7.4.1"
 pydantic = "^2.5.3"
-pymongo = {version = "3.11", extras = ["srv"]}
+pymongo = {version = "4.6.3", extras = ["srv"]}
 mongo-types = "^0.15.1"
 types-pytz = "^2023.3.1.1"
 shortuuid = "^1.0.11"
